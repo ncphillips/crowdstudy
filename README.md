@@ -14,10 +14,10 @@ The React library to help create the GUIs needed.
 
 
 ## Experiments
+Each experiment is represent by an Express application located in the `experiments` directory.
 
 ## Using CrowdStudy
 To run the CrowdStudy server:
 
     $ grunt
-
 
