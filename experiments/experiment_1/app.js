@@ -7,6 +7,8 @@ app.on('mount', function childLoggerFrom(parent) {
 });
 
 app.get('/', function (req, res) {
+
+    log.info('/ woo');
     res.send('Hello Experiment 1');
 });
 

@@ -31,8 +31,8 @@ app.locals.email = config.email;
 app.locals.log = log;
 
 // Body Parsers
-app.use(body_parser.urlencoded({extended: false}));
-app.use(body_parser.json);
+app.use(body_parser.urlencoded());
+app.use(body_parser.json());
 
 // View Engine - React
 app.set('view engine', 'jsx');
@@ -41,8 +41,12 @@ app.engine('jsx', jsx_engine);
 // Database - MongoDb
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
+    log.info('What');
     MongoClient.connect(config.db, function (err, db) {
-        if (err) return next(err);
+        if (err) {
+            log.error(err);
+            return next(err);
+        }
         req.db = db;
         next();
     });
