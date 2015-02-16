@@ -15,4 +15,9 @@ The React library to help create the GUIs needed.
 
 ## Experiments
 
+## Using CrowdStudy
+To run the CrowdStudy server:
+
+    $ grunt
+
 
