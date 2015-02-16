@@ -1,12 +1,5 @@
 'use strict';
-/**
- * @module Example Experiment
- * @description
- * A simple example of an experiment Express app.
- *
- *
- *
- */
+
 var express = require('express');
 var app = express();
 
