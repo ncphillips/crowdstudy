@@ -8,9 +8,11 @@ The server is written in Javascript using the expressjs framwork. It is
 being run by io.js, a fork of Node.js which uses Chrome v8 engine and
 supports ES6. 
 
-Data is stored in a Mongo database. 
+Data is stored in a Mongo database, which is made accessible through `req.db`.
 
 The React library to help create the GUIs needed.
+
+A global `log` variable now provides access to a bunyan logger. 
 
 
 ## Experiments
@@ -27,9 +29,7 @@ Experiment sub-applications have the following structure:
         app.js
         controllers.js
         routes.js
-
-
-
+    
 ## Using CrowdStudy
 To run the CrowdStudy server:
 
