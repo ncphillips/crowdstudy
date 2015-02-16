@@ -1,15 +1,16 @@
 # CrowdStudy
-In March 2015 I will be starting a new project with Scott Bateman in the study of crowd work.
+Starting in March 2015, the UPEI HCI Lab will be conducting a number of 
+experiments related to crowd work. In order to track data gathered from 
+these experiments, we have created CrowdStudy. This application for serving
+files, and collecting results for each experiment.
 
-This repository will contain all code written for this project. 
+The server is written in Javascript using the expressjs framwork. It is
+being run by io.js, a fork of Node.js which uses Chrome v8 engine and
+supports ES6. 
 
-The server will be written using either Node.js or, it's recent fork, IO.js. Express JS will be used to make some things
-a little easier. I intend to build this server from the ground up. It is not meant to be a overwhelmingly robust system,
-it just needs to get the job done.
+Data is stored in a Mongo database. 
 
-MongoDB will be the backend. It has much flexibility compared to an RDB, which seems fitting to this sort of project.
-
-I will use the React library to help create the GUIs needed.
+The React library to help create the GUIs needed.
 
 
 ## Experiments

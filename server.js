@@ -1,27 +1,47 @@
 'use strict';
-
+var app = require('express')();
 var body_parser = require('body-parser');
 var debug = require('express-debug');
 var glob = require('glob');
+var jsx_engine = require('express-react-views').createEngine({ jsx: { harmony: true } }); // Harmony allows for ES6.
 var log = require('bunyan').createLogger({name: 'CrowdStudy'});
-var app = require('express')();
 
-debug(app);
+// Configuration
+/**
+ * @todo Put config in a separate file.
+ */
+var config = {
+    title: 'CrowdStudy',
+    email: 'ncphillips@upei.ca',
+    port: 3000,
+    _db: {
+        full: 'mongodb://127.0.0.1:27017/crowdstudy',
+        url: '127.0.0.1',
+        port: '27017',
+        name: 'crowdstudy'
+    },
+    get db () {
+        return 'mongodb://' + config._db.url + ':' + config._db.port + '/' + config._db.name;
+    }
+};
 
 // Locals
-app.locals.title = 'CrowdStudy';
-app.locals.email = 'ncphillips@upei.ca';
+app.locals.title = config.title;
+app.locals.email = config.email;
 app.locals.log = log;
 
-// Middleware
+// Body Parsers
 app.use(body_parser.urlencoded({extended: false}));
 app.use(body_parser.json);
 
-// MongoDB Connection
-var db_name = 'crowdstudy';
+// View Engine - React
+app.set('view engine', 'jsx');
+app.engine('jsx', jsx_engine);
+
+// Database - MongoDb
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
-    MongoClient.connect('mongodb://127.0.0.1:27017/' + db_name, function (err, db) {
+    MongoClient.connect(config.db, function (err, db) {
         if (err) return next(err);
         req.db = db;
         next();
@@ -47,10 +67,13 @@ experiments.forEach(function (path, n) {
     log.info('\t Experiment %s - %s', n+1, name);
 });
 
+// Debugging
+debug(app);
+
 // Start Server
-var server = app.listen(3000, function() {
+var server = app.listen(config.port, function() {
     var host = server.address().address;
     var port = server.address().port;
 
-    log.info('Server listening at http://%s:%s', host, port);
+    log.info('Server Listening at http://%s:%s', host, port);
 });

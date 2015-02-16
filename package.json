@@ -5,11 +5,17 @@
     "express": "4.10.*",
     "express-debug": "*",
     "body-parser": "*",
+
     "async": "0.9.0",
+    "glob": "4.3.5",
     "lodash": "3.2.0",
+
     "bunyan": "1.3.3",
+
     "mongodb": "1.4.31",
-    "glob": "4.3.5"
+
+    "react": "*",
+    "express-react-views": "*"
   }
 
 }
