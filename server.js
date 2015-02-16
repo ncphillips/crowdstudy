@@ -4,7 +4,8 @@ var body_parser = require('body-parser');
 var debug = require('express-debug');
 var glob = require('glob');
 var jsx_engine = require('express-react-views').createEngine({ jsx: { harmony: true } }); // Harmony allows for ES6.
-var log = require('bunyan').createLogger({name: 'CrowdStudy'});
+
+global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
 
 // Configuration
 /**
@@ -28,7 +29,6 @@ var config = {
 // Locals
 app.locals.title = config.title;
 app.locals.email = config.email;
-app.locals.log = log;
 
 // Body Parsers
 app.use(body_parser.urlencoded());
@@ -41,7 +41,6 @@ app.engine('jsx', jsx_engine);
 // Database - MongoDb
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
-    log.info('What');
     MongoClient.connect(config.db, function (err, db) {
         if (err) {
             log.error(err);

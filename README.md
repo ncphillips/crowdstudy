@@ -14,10 +14,25 @@ The React library to help create the GUIs needed.
 
 
 ## Experiments
-Each experiment is represent by an Express application located in the `experiments` directory.
+Each experiment is represented by an Express app located in the 
+`experiments` directory. These experiments are mounted on a URL
+which corresponds to the experiment name. 
+
+### App Structure
+Experiment sub-applications have the following structure:
+
+    example_experiment/
+        views/
+            index.jsx
+        app.js
+        controllers.js
+        routes.js
+
+
 
 ## Using CrowdStudy
 To run the CrowdStudy server:
 
-    $ grunt
+    grunt | bunyan -o short
+
 
