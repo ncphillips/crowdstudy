@@ -26,7 +26,7 @@ Experiment sub-applications have the following structure:
 
     example_experiment/
         views/
-            index.jsx
+            default.jsx
         app.js
         controllers.js
         routes.js

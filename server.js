@@ -1,5 +1,6 @@
 'use strict';
-var app = require('express')();
+var express = require('express')
+var app = express();
 var body_parser = require('body-parser');
 var debug = require('express-debug');
 var glob = require('glob');
@@ -39,6 +40,9 @@ app.locals.email = config.email;
 app.use(body_parser.urlencoded());
 app.use(body_parser.json());
 
+// Static Files
+app.use(express.static('public'));
+
 // React.js is used as the view engine.
 app.set('view engine', 'jsx');
 app.engine('jsx', jsx_engine);
@@ -61,19 +65,20 @@ app.use(function (req, res, next) {
 });
 
 // Main Routes
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
+app.set('views', __dirname+'/app/views');
+require('./app/routes')(app);
 
 // Register Experiments
 log.info('Lookign for Experiments');
 var experiments = glob.sync('experiments/**/app.js');
 
+global.experiments = [];
 experiments.forEach(function (path, n) {
     var path_a= path.split('/');
     var name = path_a[path_a.length-2];
     var experiment = require('./' + path);
 
+    global.experiments.push(name);
     app.use('/' + name, experiment);
 
     log.info('\t Experiment %s - %s', n+1, name);

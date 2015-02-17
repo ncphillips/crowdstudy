@@ -10,7 +10,7 @@ module.exports = function (grunt) {
                 options: {
                     nodeArgs: ['--debug'],
                     ext: 'js,html',
-                    watch: ['server.js', 'experiments/**/*.js', 'experiments/**/*']
+                    watch: ['server.js', 'experiments/**/*.js', 'experiments/**/views/*.jsx']
                 }
 
             }
