@@ -5,16 +5,21 @@ var debug = require('express-debug');
 var glob = require('glob');
 var jsx_engine = require('express-react-views').createEngine({ jsx: { harmony: true } }); // Harmony allows for ES6.
 
+// A global `log` object using a `bunyan` logger.
 global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
 
-// Configuration
 /**
  * @todo Put config in a separate file.
  */
+// Configuration
 var config = {
+    // Application Title
     title: 'CrowdStudy',
+    // Admin Email
     email: 'ncphillips@upei.ca',
+    // Default Port
     port: 3000,
+    // MongoDB Connection Info
     _db: {
         full: 'mongodb://127.0.0.1:27017/crowdstudy',
         url: '127.0.0.1',
@@ -26,19 +31,22 @@ var config = {
     }
 };
 
-// Locals
+// Application variables
 app.locals.title = config.title;
 app.locals.email = config.email;
 
-// Body Parsers
+// These middleware functions parse the HTTP request body for json or urlencoded information.
 app.use(body_parser.urlencoded());
 app.use(body_parser.json());
 
-// View Engine - React
+// React.js is used as the view engine.
 app.set('view engine', 'jsx');
 app.engine('jsx', jsx_engine);
 
-// Database - MongoDb
+// MongoDb is used as the database.
+// A connection to Mongo is created every time there is a new request.
+// An object representing that connection is assigned to `req.db` for
+// the controllers to use.
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
     MongoClient.connect(config.db, function (err, db) {
@@ -46,6 +54,7 @@ app.use(function (req, res, next) {
             log.error(err);
             return next(err);
         }
+
         req.db = db;
         next();
     });
@@ -73,7 +82,7 @@ experiments.forEach(function (path, n) {
 // Debugging
 debug(app);
 
-// Start Server
+// Start the Server.
 var server = app.listen(config.port, function() {
     var host = server.address().address;
     var port = server.address().port;
