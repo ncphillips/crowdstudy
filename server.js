@@ -14,13 +14,9 @@ global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
  */
 // Configuration
 var config = {
-    // Application Title
     title: 'CrowdStudy',
-    // Admin Email
     email: 'ncphillips@upei.ca',
-    // Default Port
     port: 3000,
-    // MongoDB Connection Info
     _db: {
         full: 'mongodb://127.0.0.1:27017/crowdstudy',
         url: '127.0.0.1',
@@ -40,10 +36,10 @@ app.locals.email = config.email;
 app.use(body_parser.urlencoded());
 app.use(body_parser.json());
 
-// Static Files
+// This tells express where static files can be served from.
 app.use(express.static('public'));
 
-// React.js is used as the view engine.
+// Here, we set React.js as the view engine.
 app.set('view engine', 'jsx');
 app.engine('jsx', jsx_engine);
 
@@ -72,6 +68,8 @@ require('./app/routes')(app);
 log.info('Lookign for Experiments');
 var experiments = glob.sync('experiments/**/app.js');
 
+// We make a globally available list of experiments. I don't like this, but I
+// haven't found out how to get the list from elsewhere.
 global.experiments = [];
 experiments.forEach(function (path, n) {
     var path_a= path.split('/');
@@ -84,7 +82,7 @@ experiments.forEach(function (path, n) {
     log.info('\t Experiment %s - %s', n+1, name);
 });
 
-// Debugging
+// Debugging tab when in development environment
 debug(app);
 
 // Start the Server.
