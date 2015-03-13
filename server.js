@@ -13,20 +13,7 @@ global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
  * @todo Put config in a separate file.
  */
 // Configuration
-var config = {
-    title: 'CrowdStudy',
-    email: 'ncphillips@upei.ca',
-    port: 3000,
-    _db: {
-        full: 'mongodb://127.0.0.1:27017/crowdstudy',
-        url: '127.0.0.1',
-        port: '27017',
-        name: 'crowdstudy'
-    },
-    get db () {
-        return 'mongodb://' + config._db.url + ':' + config._db.port + '/' + config._db.name;
-    }
-};
+var config = require('./config');
 
 // Application variables
 app.locals.title = config.title;
@@ -37,7 +24,7 @@ app.use(body_parser.urlencoded());
 app.use(body_parser.json());
 
 // This tells express where static files can be served from.
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // Here, we set React.js as the view engine.
 app.set('view engine', 'jsx');
@@ -60,8 +47,10 @@ app.use(function (req, res, next) {
     });
 });
 
-// Main Routes
+// Application View Files
 app.set('views', __dirname+'/app/views');
+
+// Main Routes
 require('./app/routes')(app);
 
 // Register Experiments
@@ -70,13 +59,18 @@ var experiments = glob.sync('experiments/**/app.js');
 
 // We make a globally available list of experiments. I don't like this, but I
 // haven't found out how to get the list from elsewhere.
+// Proposal A: Global Variable
+// Proposal B: Database
 global.experiments = [];
 experiments.forEach(function (path, n) {
     var path_a= path.split('/');
     var name = path_a[path_a.length-2];
     var experiment = require('./' + path);
 
+    // Add to experiment list
     global.experiments.push(name);
+
+    // Use the experiment on i
     app.use('/' + name, experiment);
 
     log.info('\t Experiment %s - %s', n+1, name);

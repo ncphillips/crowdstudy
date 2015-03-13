@@ -3,6 +3,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         // Define the `package.json` file
         pgk: grunt.file.readJSON('package.json'),
+
         // Runs the application, and watches the `server.js` file and all experiment files.
         nodemon: {
             dev: {
@@ -10,7 +11,7 @@ module.exports = function (grunt) {
                 options: {
                     nodeArgs: ['--debug'],
                     ext: 'js,html',
-                    watch: ['server.js', 'experiments/**/*.js', 'experiments/**/views/*.jsx']
+                    watch: ['server.js', 'experiments/*/*.js', 'experiments/*/views/**/*.jsx']
                 }
 
             }
