@@ -15,7 +15,7 @@
     "mongodb": "1.4.34",
 
     "react": "0.12",
-    "express-react-views": "0.71"
+    "express-react-views": "0.7.1"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
