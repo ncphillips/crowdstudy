@@ -2,7 +2,7 @@
 var React = require('react');
 
 // Components
-var Navbar = require('../components/Navbar');
+var Navbar = require('../components/Navbar.jsx');
 
 var DefaultLayout = React.createClass({
     render: function () {
