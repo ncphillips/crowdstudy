@@ -35,7 +35,7 @@ app.engine('jsx', jsx_engine);
 // When running the application in the development environment, this middleware will
 // send a full stack trace to the client when errors occur.
 if (app.get('env') == 'development') {
-    app.use(express.errorHandler());
+    app.use(require('errorhandler')());
 }
 
 // MongoDb is used as the database.
@@ -90,7 +90,7 @@ debug(app);
 
 // Start the server. HTTPS is used because Crowdflower will only allow
 // ajax calls to be made to HTTPS servers.
-var server = https.createServer(config.https, app);
+var server = https.createServer(config.https_options, app);
 server.listen(config.port, function () {
     var host = server.address().address;
     var port = server.address().port;

@@ -13,10 +13,6 @@ var config = {
 
     key_path: 'server.key',
     cert_path: 'combined.crt',
-    https: {
-        key: fs.readFileSync(config._https_key_path),
-        cert: fs.readFileSync(config._https_cert_path)
-    },
 
     _db: {
         full: 'mongodb://127.0.0.1:27017/crowdstudy',
@@ -32,6 +28,11 @@ var config = {
     get db () {
         return 'mongodb://' + config._db.url + ':' + config._db.port + '/' + config._db.name;
     }
+};
+
+config.https_options = {
+    key: fs.readFileSync(config.key_path),
+    cert: fs.readFileSync(config.cert_path)
 };
 
 module.exports = config;
