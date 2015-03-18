@@ -14,7 +14,6 @@
 
     "mongodb": "1.4.31",
 
-    "react": "*",
     "express-react-views": "*"
   },
   "devDependencies": {
