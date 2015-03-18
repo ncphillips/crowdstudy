@@ -9,7 +9,7 @@ var config = {
     title: 'CrowdStudy',
     email: 'ncphillips@upei.ca',
 
-    port: 8888,
+    port: 8998,
 
     key_path: 'server.key',
     cert_path: 'combined.crt',
