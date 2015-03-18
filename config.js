@@ -15,7 +15,6 @@ var config = {
     cert_path: 'combined.crt',
 
     _db: {
-        full: 'mongodb://127.0.0.1:27017/crowdstudy',
         url: '127.0.0.1',
         port: '27017',
         name: 'crowdstudy'
