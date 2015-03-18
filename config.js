@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 /**
  * @module Config
  * @description
@@ -6,7 +8,16 @@
 var config = {
     title: 'CrowdStudy',
     email: 'ncphillips@upei.ca',
-    port: 3000,
+
+    port: 8888,
+
+    key_path: 'server.key',
+    cert_path: 'combined.crt',
+    https: {
+        key: fs.readFileSync(config._https_key_path),
+        cert: fs.readFileSync(config._https_cert_path)
+    },
+
     _db: {
         full: 'mongodb://127.0.0.1:27017/crowdstudy',
         url: '127.0.0.1',

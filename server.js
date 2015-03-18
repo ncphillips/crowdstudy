@@ -1,5 +1,7 @@
 'use strict';
-var express = require('express')
+
+var https = require('https');
+var express = require('express');
 var app = express();
 var body_parser = require('body-parser');
 var debug = require('express-debug');
@@ -30,6 +32,12 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jsx');
 app.engine('jsx', jsx_engine);
 
+// When running the application in the development environment, this middleware will
+// send a full stack trace to the client when errors occur.
+if (app.get('env') == 'development') {
+    app.use(express.errorHandler());
+}
+
 // MongoDb is used as the database.
 // A connection to Mongo is created every time there is a new request.
 // An object representing that connection is assigned to `req.db` for
@@ -59,7 +67,6 @@ var experiments = glob.sync('experiments/**/app.js');
 
 // We make a globally available list of experiments. I don't like this, but I
 // haven't found out how to get the list from elsewhere.
-// Proposal A: Global Variable
 // Proposal B: Database
 global.experiments = [];
 experiments.forEach(function (path, n) {
@@ -76,13 +83,18 @@ experiments.forEach(function (path, n) {
     log.info('\t Experiment %s - %s', n+1, name);
 });
 
-// Debugging tab when in development environment
+// When in the development environment, this provides a tab with some
+// application info in it.
 debug(app);
 
-// Start the Server.
-var server = app.listen(config.port, function() {
+
+// Start the server. HTTPS is used because Crowdflower will only allow
+// ajax calls to be made to HTTPS servers.
+var server = https.createServer(config.https, app);
+server.listen(config.port, function () {
     var host = server.address().address;
     var port = server.address().port;
 
     log.info('Server Listening at http://%s:%s', host, port);
 });
+
