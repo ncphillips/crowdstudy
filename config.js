@@ -11,6 +11,8 @@ var config = {
 
     port: 8998,
 
+    use_https: false,
+
     key_path: 'new_server.key',
     cert_path: 'combined.crt',
 
@@ -29,9 +31,12 @@ var config = {
     }
 };
 
-config.https_options = {
-    key: fs.readFileSync(config.key_path),
-    cert: fs.readFileSync(config.cert_path)
-};
+if (config.use_https){
+    config.https_options = {
+        key: fs.readFileSync(config.key_path),
+        cert: fs.readFileSync(config.cert_path)
+    };
+}
+
 
 module.exports = config;

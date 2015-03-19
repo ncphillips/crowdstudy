@@ -1,5 +1,6 @@
 'use strict';
 
+var http = require('http');
 var https = require('https');
 var express = require('express');
 var app = express();
@@ -87,13 +88,22 @@ experiments.forEach(function (path, n) {
 // application info in it.
 debug(app);
 
-// Start the server. HTTPS is used because Crowdflower will only allow
-// ajax calls to be made to HTTPS servers.
-var server = https.createServer(config.https_options, app);
+// HTTP or HTTPS
+var server = null;
+if (config.use_https) {
+    console.log('HTTPS');
+    server = https.createServer(config.https_options, app);
+}
+else {
+    console.log('HTTP');
+    server = http.createServer(app);
+}
+
 server.listen(config.port, function () {
+    var protocol = config.use_https ? 'https' : 'http';
     var host = server.address().address;
     var port = server.address().port;
 
-    log.info('Server Listening at https://%s:%s', host, port);
+    log.info('Server Listening at http%s://%s:%s', protocol, host, port);
 });
 
