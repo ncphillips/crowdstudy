@@ -16,8 +16,8 @@ app.set('views', __dirname+'/views');
 
 // Static files are in ./public and are available at this route.
 // Example:
-//      <script type="text/jsx" src="/examples/scripts/ExampleButton.js"></script>
-//      <script type="text/jsx" src="scripts/ExampleInput.js"></script>
+//      <script type="text/jsx" src="/examples/scripts/ExampleButton.jsx"></script>
+//      <script type="text/jsx" src="scripts/ExampleInput.jsx"></script>
 app.use(express.static(__dirname + '/public'));
 
 // Loads this application's routes.

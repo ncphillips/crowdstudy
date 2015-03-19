@@ -17,10 +17,23 @@ module.exports = function (grunt) {
             }
 
         },
+
+        react: {
+            dynamic_mappings: {
+                files: [{
+                    expand: true,
+                    src: ['experiments/**/public/scripts/*.jsx'],
+                    dest: '.',
+                    ext: '.js'
+
+                }]
+            }
+
+        },
         // Runes nodemon and watch concurrently, and makes sure to display all logs.
         concurrent: {
-            default: ['nodemon', 'watch'],
-            debug: ['nodemon', 'watch'],
+            default: ['nodemon', 'watch', 'react'],
+            debug: ['nodemon', 'watch', 'react'],
             options: {
                 logConcurrentOutput: true
             }
@@ -28,6 +41,7 @@ module.exports = function (grunt) {
     });
 
     require('load-grunt-tasks')(grunt);
+    grunt.loadNpmTasks('grunt-react');
 
     grunt.option('force', true);
 

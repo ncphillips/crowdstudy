@@ -1,6 +1,6 @@
 'use strict';
 
-var ExampleButton = React.createClass({displayName: "ExampleButton",
+var ExampleButton = React.createClass({
     getInitialState: function () {
         return {count: 0}
     },
@@ -12,12 +12,12 @@ var ExampleButton = React.createClass({displayName: "ExampleButton",
 
     render: function () {
         return (
-            React.createElement("input", {type: "button", value: this.state.count, onClick: this.handleClick})
+            <input type="button" value={this.state.count} onClick={this.handleClick} />
         )
     }
 });
 
 React.render(
-    React.createElement(ExampleButton, null),
+    <ExampleButton />,
     document.getElementById('example-button')
 );

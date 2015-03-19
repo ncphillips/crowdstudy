@@ -35,8 +35,8 @@ Experiment sub-applications have the following structure:
     example/
         public/
             scripts/
-                ExampleButton.js
-                ExampleInput.js
+                ExampleButton.jsx
+                ExampleInput.jsx
         views/
             components/
                 ExampleList.jsx

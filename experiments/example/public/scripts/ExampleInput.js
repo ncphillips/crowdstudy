@@ -1,14 +1,14 @@
 'use strict';
 
-var ExampleInput = React.createClass({
+var ExampleInput = React.createClass({displayName: "ExampleInput",
     render: function () {
         return (
-            <input type="text" />
+            React.createElement("input", {type: "text"})
         )
     }
 });
 
 React.render(
-    <ExampleInput />,
+    React.createElement(ExampleInput, null),
     document.getElementById('example-input')
 );
