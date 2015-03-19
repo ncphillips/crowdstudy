@@ -36,9 +36,9 @@ app.locals.email = config.email;
 
 // CORS
 app.use(function (req, res, next) {
-    console.log("INCOMING REQUEST");
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next()
 });
 
 // Middleware
@@ -112,11 +112,9 @@ debug(app);
 // HTTP or HTTPS
 var server = null;
 if (config.use_https) {
-    console.log('HTTPS');
     server = https.createServer(config.https_options, app);
 }
 else {
-    console.log('HTTP');
     server = http.createServer(app);
 }
 
