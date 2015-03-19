@@ -42,7 +42,7 @@ app.use(function (req, res, next) {
 });
 
 // Middleware
-app.use(session());
+// app.use(session());
 app.use(response_time());
 app.use(body_parser.urlencoded());
 app.use(body_parser.json());
