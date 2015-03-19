@@ -22,6 +22,12 @@ var config = require('./config');
 app.locals.title = config.title;
 app.locals.email = config.email;
 
+// CORS
+app.all('/', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+});
+
 // These middleware functions parse the HTTP request body for json or urlencoded information.
 app.use(body_parser.urlencoded());
 app.use(body_parser.json());
