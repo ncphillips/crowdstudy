@@ -1,15 +1,24 @@
 'use strict';
 
+// Server Modules
 var http = require('http');
 var https = require('https');
+
+// Express JS
 var express = require('express');
+
+// Middleware Modules
 var body_parser = require('body-parser');
 var response_time = require('response-time');
+var session = require('express-session');
 
+// Used for finding files with regex.
 var glob = require('glob');
 
+// React JSX View Engine
 var jsx_engine = require('express-react-views').createEngine({ jsx: { harmony: true } }); // Harmony allows for ES6.
 
+// Debugging
 var debug = require('express-debug');
 
 // Create the App
@@ -18,9 +27,6 @@ var app = express();
 // A global `log` object using a `bunyan` logger.
 global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
 
-/**
- * @todo Put config in a separate file.
- */
 // Configuration
 var config = require('./config');
 
@@ -35,9 +41,9 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 });
 
+// Middleware
+app.use(session());
 app.use(response_time());
-
-// These middleware functions parse the HTTP request body for json or urlencoded information.
 app.use(body_parser.urlencoded());
 app.use(body_parser.json());
 
