@@ -1,7 +1,7 @@
 'use strict';
 var React = require('react');
 
-//var Navbar = require('../components/Navbar');
+var Navbar = require('../components/Navbar');
 
 var DefaultLayout = React.createClass({
     render: function () {
@@ -14,6 +14,7 @@ var DefaultLayout = React.createClass({
                     <link rel="stylesheet" href="crowd-study.css"></link>
                 </head>
                 <body>
+                    <Navbar></Navbar>
 
                     <div id="content" className="center-block center-block-no-float">
                         {this.props.children}

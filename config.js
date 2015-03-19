@@ -11,7 +11,7 @@ var config = {
 
     port: 8998,
 
-    key_path: 'server.key',
+    key_path: 'new_server.key',
     cert_path: 'combined.crt',
 
     _db: {
