@@ -3,11 +3,17 @@
 var http = require('http');
 var https = require('https');
 var express = require('express');
-var app = express();
 var body_parser = require('body-parser');
-var debug = require('express-debug');
+var response_time = require('response-time');
+
 var glob = require('glob');
+
 var jsx_engine = require('express-react-views').createEngine({ jsx: { harmony: true } }); // Harmony allows for ES6.
+
+var debug = require('express-debug');
+
+// Create the App
+var app = express();
 
 // A global `log` object using a `bunyan` logger.
 global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
@@ -23,10 +29,13 @@ app.locals.title = config.title;
 app.locals.email = config.email;
 
 // CORS
-app.all('/', function (req, res, next) {
+app.use(function (req, res, next) {
+    console.log("INCOMING REQUEST");
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 });
+
+app.use(response_time());
 
 // These middleware functions parse the HTTP request body for json or urlencoded information.
 app.use(body_parser.urlencoded());
