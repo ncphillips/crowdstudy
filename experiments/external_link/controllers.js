@@ -3,9 +3,9 @@
 /**
  * @description
  * <p>
- *     An example controller function. It renders the view located at 'views/index.jsx'.
+ *     Returns a Survey form for Crowdflower users to fill out.
  * </p>
- *
+ * <code>
  * {
  *      id: 12345,
  *      platform: 'Crowdflower',
@@ -18,6 +18,7 @@
  *          }
  *      }
  * }
+ * </code>
  * @param req
  * @param res
  */
@@ -31,10 +32,18 @@ exports.get_form = function (req, res) {
     );
 };
 
+/**
+ * Validates form data and then stores the results in the Workers record.
+ *
+ * @param req
+ * @param res
+ */
 exports.post_form = function (req, res) {
-    // So we're going to connect to the workers collection, and then see
-    // if this worker has ever been a part of our experiment.
     var workers_collection = req.db.collection('workers');
+
+    /**
+     * @todo validate form data.
+     */
 
     /**
      * Callback used to respond to the POST.
@@ -91,11 +100,13 @@ exports.post_form = function (req, res) {
 
         }
     });
-
-
-
 };
 
+/**
+ * Generates an alpha-numeric code for validating Workers judgments.
+ *
+ * @returns {string}
+ */
 function generateCode() {
     var mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     var result = '';
@@ -106,6 +117,12 @@ function generateCode() {
     return result;
 }
 
+/**
+ * Receives Crowdflower webhook notices and validates Workers judgments.
+ *
+ * @param req
+ * @param res
+ */
 exports.webhook = function (req,res) {
     if (req.body.signal === 'unit_complete') {
         var workers_collection = req.db.collection('workers');
