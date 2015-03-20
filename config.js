@@ -9,7 +9,7 @@ var config = {
     title: 'CrowdStudy',
     email: 'ncphillips@upei.ca',
 
-    port: 8998,
+    port: 3000,
 
     use_https: false,
 
