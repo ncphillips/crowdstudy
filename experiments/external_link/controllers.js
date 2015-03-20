@@ -3,19 +3,20 @@
 /**
  * @description
  * <p>
- *     An example controller function. It renders the view located at "views/index.jsx".
+ *     An example controller function. It renders the view located at 'views/index.jsx'.
  * </p>
  *
  * {
- *      worker_id: 12345,
- *      platform: "Crowdflower",
+ *      id: 12345,
+ *      platform: 'Crowdflower',
  *      experiments: {
  *          external_link: {
-  *             // Custom Format
-  *         }
+ *              yob: 1992,
+ *              name: "Nolan Phillips",
+ *              code: "1234567890abcdef",
+ *              headers: { ... }
+ *          }
  *      }
- *
- *
  * }
  * @param req
  * @param res
@@ -35,6 +36,23 @@ exports.post_form = function (req, res) {
     // if this worker has ever been a part of our experiment.
     var workers_collection = req.db.collection('workers');
 
+    /**
+     * Callback used to respond to the POST.
+     *
+     * @param err
+     * @param result
+     */
+    function respond(err, result) {
+        if (err) {
+            console.log(err);
+            res.render('error_page');
+        }
+        else {
+            console.log('Worker info saved.');
+            res.render('code_page', {code: code});
+        }
+    }
+
     workers_collection.find({id: req.body.worker_id}).toArray(function (err, workers) {
         var worker = null;
         var code = generateCode();
@@ -46,9 +64,9 @@ exports.post_form = function (req, res) {
         }
         // If there is no record of that worker, a new record is created with all the information we need.
         else if (workers.length === 0) {
-            console.log("Creating new Worker record.");
+            console.log('Creating new Worker...');
             worker = {
-                platform: "crowdflower",
+                platform: 'crowdflower',
                 id: req.body.worker_id,
                 experiments: {
                     external_link: {
@@ -59,29 +77,23 @@ exports.post_form = function (req, res) {
                     }
                 }
             };
-            workers_collection.insert(worker);
+            workers_collection.insert(worker, respond);
         }
         else {
+            console.log('Existing Worker found...');
             worker = workers[0];
-            worker.experiments.external_link = {
+            workers_collection.update({_id: worker._id}, {$set: {external_link: {
                 name: req.body.name,
                 yob: req.body.yob,
                 headers: req.headers,
                 code: code
-            }
+            }}}, respond);
+
         }
     });
 
 
-    workers_collection.insert(worker, function (err, result) {
-        if (err) {
-            console.log(err);
-            res.render('error_page');
-        }
-        else {
-            res.render('code_page', {code: worker.code});
-        }
-    });
+
 };
 
 function generateCode() {
@@ -97,13 +109,12 @@ function generateCode() {
 exports.webhook = function (req,res) {
     if (req.body.signal === 'unit_complete') {
         var workers_collection = req.db.collection('workers');
-
-        console.log(req.body);
         var payload = JSON.parse(req.body.payload);
 
         payload.results.judgments.forEach(function(judgment) {
-
             var worker_id = judgment.worker_id;
+            console.log('Validating work done by: ' + worker_id);
+
             var code = judgment.data.code;
 
             workers_collection.find({id: worker_id}).toArray(function (err, docs) {
