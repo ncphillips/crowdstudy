@@ -10,8 +10,7 @@ var ExampleLayout = React.createClass({
     render: function () {
         return (
             <div>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.11.1/JSXTransformer.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.11.1/react.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"></link>
                 <link rel="stylesheet" href="/crowd-study.css"></link>
                 <div id="content" className="center-block center-block-no-float">

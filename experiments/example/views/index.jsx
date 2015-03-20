@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var ExampleLayout = require('./layouts/ExampleLayout.jsx');
+var ExampleLayout = require('./layouts/ExampleLayout');
 
 var HelloMessage = React.createClass({
     render: function () {
@@ -11,8 +11,8 @@ var HelloMessage = React.createClass({
                     <p>This is an example page for an experiment.</p>
                     <div id="example-input"></div>
                     <div id="example-button"></div>
-                <script type="text/jsx" src="scripts/ExampleButton.js"></script>
-                <script type="text/jsx" src="scripts/ExampleInput.js"></script>
+                <script type="text/javascript" src="scripts/ExampleButton.js"></script>
+                <script type="text/javascript" src="scripts/ExampleInput.js"></script>
             </ExampleLayout>
         );
     }
