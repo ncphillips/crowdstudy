@@ -54,8 +54,7 @@ exports.webhook = function (req,res) {
         var payload = JSON.parse(req.body.payload);
 
 
-        if (payload.judgments.length > 0) {
-            payload.judgments.forEach(function(judgment) {
+            payload.results.judgments.forEach(function(judgment) {
 
                 var worker_id = judgment.worker_id;
                 var code = judgment.data.code;
@@ -77,7 +76,6 @@ exports.webhook = function (req,res) {
                 });
 
             });
-        }
     }
     res.status(200).send();
 };
