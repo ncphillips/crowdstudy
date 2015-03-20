@@ -23,6 +23,30 @@ Run the following commands to install io.js on your machine.
 Data is stored in a Mongo database, which is made accessible through `req.db`. By default, there are no models 
 or any other kind of type checking, but feel free to add them as needed.
 
+### The Worker Collection
+Information about workers from Crowdflower and Mechanical Turk will be stored in a 
+MongoDB `workers` collection. These documents will have the following structure:
+
+    {
+        id: 1341235,                // The Crowdflower or mTurk ID.
+        platform: 'crowdflower',    // A string containing either "crowdflower" or "mturk"
+        experiments: {              // Each sub-object here will have whatever format suits the experiment.
+            ajax_interaction: {
+                headers: { ... },
+                img: ['a.jpg', 'c.jpg'],
+            },
+            example: {
+                name: 'Billy Joel'
+            },
+            external_link: {
+                dob: {
+                    year: 1992,
+                    month: 2,
+                    day: 21
+                }
+            }
+        }
+    }
 
 ## View rendering
 The React library is used both server and client side.
@@ -94,7 +118,7 @@ the client, which means functions like `handleClick` won't work on them. See the
 TODO
 ### External Link Example
 TODO 
-        
+      
 ## Using CrowdStudy
 To run the CrowdStudy server:
 
