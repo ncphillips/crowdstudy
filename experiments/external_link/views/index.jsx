@@ -11,6 +11,7 @@ var HelloMessage = React.createClass({
                 <div className="col-md-6">
                     <h1>External UPEI Survey</h1>
                     <form id="external-upei-form" action="#" method="POST">
+                        <img src="contributor_id.png"/>
                         <div className="form-group">
                             <label htmlFor="worker-id-input">Crowdflower Worker ID</label>
                             <input name="worker_id" id="worker-id-input" className="form-control" type="text" placeholder="Crowdflower Worker ID"/>
