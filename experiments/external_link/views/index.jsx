@@ -10,8 +10,20 @@ var HelloMessage = React.createClass({
                 <div className="col-md-3"></div>
                 <div className="col-md-6">
                     <h1>External UPEI Survey</h1>
-                    <form id="external-upei-form" action="#" method="POST">
+                    <div id="instrucitons">
+                        <p>
+                            Thank you for taking the time to do this survery.
+                        </p>
+                        <p>
+                            In order to make sure you get the bonus at the end of this survey,
+                            please paste your Crowdflower Contributor ID and paste it below. You
+                            can find this ID in the Help dropdown back on Crowdflower site. See
+                            the picture below:
+                        </p>
                         <img src="contributor_id.png"/>
+                    </div>
+                    <form id="external-upei-form" action="#" method="POST">
+
                         <div className="form-group">
                             <label htmlFor="worker-id-input">Crowdflower Worker ID</label>
                             <input name="worker_id" id="worker-id-input" className="form-control" type="text" placeholder="Crowdflower Worker ID"/>
