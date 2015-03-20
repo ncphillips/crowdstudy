@@ -50,9 +50,13 @@ exports.webhook = function (req,res) {
     if (req.body.signal === 'unit_complete') {
         var workers_collection = req.db.collection('workers');
 
-        var payload = JSON.parseFromString(req.body.payload);
+console.log(req.body);
+        var payload = JSON.parse(req.body.payload);
 
-        var judgment = payload.judgments[0];
+
+        if (payload.judgments.length > 0) {
+            payload.judgments.forEach(function(judgment) {
+
         var worker_id = judgment.worker_id;
         var code = judgment.data.code;
 
@@ -61,6 +65,7 @@ exports.webhook = function (req,res) {
                 res.status(200).send();
             }
             else if (docs.length === 1) {
+                console.log(docs);
                 var worker = docs[0];
                 if (worker.code === code) {
                     console.log('Code matched – Give worker a bonus!');
@@ -70,6 +75,9 @@ exports.webhook = function (req,res) {
                 }
             }
         });
+
+            });
+       };
     }
     res.status(200).send();
 };
