@@ -53,29 +53,28 @@ exports.webhook = function (req,res) {
         console.log(req.body);
         var payload = JSON.parse(req.body.payload);
 
+        payload.results.judgments.forEach(function(judgment) {
 
-            payload.results.judgments.forEach(function(judgment) {
+            var worker_id = judgment.worker_id;
+            var code = judgment.data.code;
 
-                var worker_id = judgment.worker_id;
-                var code = judgment.data.code;
-
-                workers_collection.find({id: worker_id}).toArray(function (err, docs) {
-                    if (err) {
-                        res.status(200).send();
+            workers_collection.find({id: worker_id}).toArray(function (err, docs) {
+                if (err) {
+                    res.status(200).send();
+                }
+                else if (docs.length === 1) {
+                    console.log(docs);
+                    var worker = docs[0];
+                    if (worker.code === code) {
+                        console.log('Code matched – Give worker a bonus!');
                     }
-                    else if (docs.length === 1) {
-                        console.log(docs);
-                        var worker = docs[0];
-                        if (worker.code === code) {
-                            console.log('Code matched – Give worker a bonus!');
-                        }
-                        else {
-                            console.log('Code mismatch – No bonus for that worker!')
-                        }
+                    else {
+                        console.log('Code mismatch – No bonus for that worker!')
                     }
-                });
-
+                }
             });
+
+        });
     }
     res.status(200).send();
 };
