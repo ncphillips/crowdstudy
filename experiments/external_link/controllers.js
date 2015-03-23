@@ -23,13 +23,13 @@
  * @param res
  */
 exports.get_form = function (req, res) {
-    // Render a JSX view and sent it as a response.
-    res.render(
-        // Specifies the view, which is located at ./views/index.jsx
-        'index',
-        // Context object.
-        { title: 'External Survey Example'}
-    );
+    var errors = {
+        worker_id: [],
+        name: [],
+        yob: []
+    };
+
+    res.render('survey', {errors: errors});
 };
 
 /**
@@ -39,12 +39,6 @@ exports.get_form = function (req, res) {
  * @param res
  */
 exports.post_form = function (req, res) {
-    var workers_collection = req.db.collection('workers');
-
-    /**
-     * @todo validate form data.
-     */
-
     /**
      * Callback used to respond to the POST.
      *
@@ -57,49 +51,69 @@ exports.post_form = function (req, res) {
             res.render('error_page');
         }
         else {
-            console.log('Worker info saved.');
             res.render('code_page', {code: code});
         }
     }
 
-    workers_collection.find({id: req.body.worker_id}).toArray(function (err, workers) {
-        var worker = null;
-        var code = generateCode();
+    // Here we're checking to see if there are any validation errors that we should be sending back to the user.
+    var errors = {
+        worker_id: [],
+        name: [],
+        yob: []
+    };
 
-        // If anything goes wrong, the error page is rendered.
-        if (err) {
-            console.log(err);
-            res.render('error_page');
-        }
-        // If there is no record of that worker, a new record is created with all the information we need.
-        else if (workers.length === 0) {
-            console.log('Creating new Worker...');
-            worker = {
-                platform: 'crowdflower',
-                id: req.body.worker_id,
-                experiments: {
-                    external_link: {
-                        name: req.body.name,
-                        yob: req.body.yob,
-                        headers: req.headers,
-                        code: code
+    if (!req.body.worker_id) errors.worker_id.push('Please provide your Crowdflower ID');
+    if (!req.body.name) errors.name.push('Please provide your name.');
+    if (!req.body.yob) errors.yob.push('Please provide your Year of Birth.');
+
+    if (errors.worker_id || errors.name || errors.yob) {
+        res.render('survey', {errors: errors})
+    }
+    // If there aren't, then we'll start se
+    else {
+        var workers_collection = req.db.collection('workers');
+
+
+
+        workers_collection.find({id: req.body.worker_id}).toArray(function (err, workers) {
+            var worker = null;
+            var code = generateCode();
+
+            // If anything goes wrong, the error page is rendered.
+            if (err) {
+                console.log(err);
+                res.render('error_page');
+            }
+            // If there is no record of that worker, a new record is created with all the information we need.
+            else if (workers.length === 0) {
+                console.log('Creating new Worker...');
+                worker = {
+                    platform: 'crowdflower',
+                    id: req.body.worker_id,
+                    experiments: {
+                        external_link: {
+                            name: req.body.name,
+                            yob: req.body.yob,
+                            headers: req.headers,
+                            code: code
+                        }
                     }
-                }
-            };
-            workers_collection.insert(worker, respond);
-        }
-        else {
-            console.log('Existing Worker found...');
-            worker = workers[0];
-            workers_collection.update({_id: worker._id}, {$set: {external_link: {
-                name: req.body.name,
-                yob: req.body.yob,
-                headers: req.headers,
-                code: code
-            }}}, respond);
+                };
+                workers_collection.insert(worker, respond);
+            }
+            else {
+                console.log('Existing Worker found...');
+                worker = workers[0];
+                workers_collection.update({_id: worker._id}, {$set: {external_link: {
+                    name: req.body.name,
+                    yob: req.body.yob,
+                    headers: req.headers,
+                    code: code
+                }}}, respond);
 
-        }
-    });
+            }
+        });
+    }
 };
 
 /**
@@ -108,9 +122,13 @@ exports.post_form = function (req, res) {
  * @returns {string}
  */
 function generateCode() {
+    // The mask contains all of the valid characters for the code. A regex for
+    // this code would be `^[a-zA-Z0-9]*$`. It would be a good idea to get a
+    // better regex so a bit more validation could happen on the Crowdflower end.
     var mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    var result = '';
 
+    // The result variable will hold the code. One character will be used at a time.
+    var result = '';
     for (var length = 16; length > 0; --length)
         result += mask[Math.round(Math.random() * (mask.length - 1))];
 
