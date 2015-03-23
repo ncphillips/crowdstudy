@@ -42,15 +42,22 @@ The following instructions come from `/path/to/crowdstudy/mturk-clt/GetStarted.h
 
 The server is written in Javascript using the Expressjs framework. It is
 being run by io.js, a fork of Node.js which uses Chrome v8 engine and
-supports ES6. 
+supports ES6, the latest Javascript standard.
 
 Run the following commands to install io.js on your machine.
 
     #! /bin/bash
     curl https://raw.githubusercontent.com/creationix/nvm/v0.24.0/install.sh | bash
-    source ~/.nvm/nvm.sh 
+    source ~/.nvm/nvm.sh
+    
+    # Install io.js
     nvm install iojs
-
+    
+    # Load nvm and iojs from profile
+    echo source ~/.nvm/nvm.sh >> ~/.profile
+    echo nvm use iojs >> ~/.profile
+    source ~/.profile
+    
 ## Database
 Data is stored in a Mongo database, which is made accessible through `req.db`. By default, there are no models 
 or any other kind of type checking, but feel free to add them as needed.
