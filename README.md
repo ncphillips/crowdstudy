@@ -117,8 +117,22 @@ the client, which means functions like `handleClick` won't work on them. See the
 ### AJAX Interaction Example
 TODO
 ### External Link Example
-TODO 
-      
+Some experiments will be carried out using an link on the job page. This link takes him to a page hosted by this platform
+where he is asked to supply his Crowdflower or mTurk worker id, and complete a survey. After completing the survey, the 
+worker is given code which he must paste into a textfield back on Crowdflower/mTurk. The worker is then given a bonus
+if he has submitted the correct code.
+
+This experiment is pretty simple: 3 views, 3 routes, 3 controllers, and a couple helper functions.
+
+`GET /` renders `survey.jsx` to show the worker the initial survey page.
+
+`POST /` validates the form. If it is not valid, then `survey.jsx` is re-rendered with the appropriate errors. If the form
+is valid, then the worker's information is saved to Mongo and a code is generated and displayed by rendering `code_page.jsx`.
+
+If an unexpected error occurs, `error_page.jsx` is rendered.
+
+`POST /webhook` is accessed by Crowdflower for when send back the judgments gathered.
+
 ## Using CrowdStudy
 To run the CrowdStudy server:
 
