@@ -15,8 +15,8 @@ Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their 
 * [Sign up](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html) for an Amazon Web Services account.
 * [Sign up](https://requester.mturk.com) to be an Amazon Mechanical Turk requester
 * Configure the Command Line Tools to use your AWS identifier:
-    * Follow [these instructions](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html) 
-    to find your AWS identifier.
+    * View the [Security Credentials](https://console.aws.amazon.com/iam/home?#security_credential) page to find or
+    generate your access and security keys. These must be for your root account, not for one of the IAM User accounts.
     * `cp /path/to/crowdstudy/mturk-clit/bin/mturk.properties_copy /path/to/crowdstudy/mturk-clit/bin/mturk.properties`
     * Open `mturk-clit/bin/mturk.properties`
     * On lines 11 and 12, insert your access and secret keys, respectively.
@@ -31,7 +31,6 @@ Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their 
     * `sh getBalance.sh`
     * This should print something like `Your account balance: $0.00`
     * Note: This must be run from within `mturk-clt/bin` directory.
-    * Note: You cannot use the Amazaon IAM User account access/secret keys, you must use those from your root account.
 
 ## Server & Framework
 
