@@ -10,8 +10,8 @@ var config = {
     email: 'ncphillips@upei.ca',
 
     server: {
-        port: 3000,
-        use_https: false,
+        port: 8998,
+        use_https: true,
 
         key_path: 'new_server.key',
         cert_path: 'combined.crt',
@@ -27,7 +27,7 @@ var config = {
          * @returns {string}
          */
         get db () {
-            return 'mongodb://' + config._db.url + ':' + config._db.port + '/' + config._db.name;
+            return 'mongodb://' + config.server._db.url + ':' + config.server._db.port + '/' + config.server._db.name;
         }
     },
 
