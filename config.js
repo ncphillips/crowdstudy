@@ -9,32 +9,41 @@ var config = {
     title: 'CrowdStudy',
     email: 'ncphillips@upei.ca',
 
-    port: 3000,
+    server: {
+        port: 3000,
+        use_https: false,
 
-    use_https: false,
+        key_path: 'new_server.key',
+        cert_path: 'combined.crt',
 
-    key_path: 'new_server.key',
-    cert_path: 'combined.crt',
-
-    _db: {
-        url: '127.0.0.1',
-        port: '27017',
-        name: 'crowdstudy'
+        _db: {
+            url: '127.0.0.1',
+            port: '27017',
+            name: 'crowdstudy'
+        },
+        /**
+         * Returns the URL for the MongoDB instance.
+         *
+         * @returns {string}
+         */
+        get db () {
+            return 'mongodb://' + config._db.url + ':' + config._db.port + '/' + config._db.name;
+        }
     },
-    /**
-     * Returns the URL for the MongoDB instance.
-     *
-     * @returns {string}
-     */
-    get db () {
-        return 'mongodb://' + config._db.url + ':' + config._db.port + '/' + config._db.name;
+
+    mturk: {
+
+    },
+
+    crowdflower: {
+        api_key: require('./cf_api_key')
     }
 };
 
-if (config.use_https){
-    config.https_options = {
-        key: fs.readFileSync(config.key_path),
-        cert: fs.readFileSync(config.cert_path)
+if (config.server.use_https) {
+    config.server.https_options = {
+        key: fs.readFileSync(config.server.key_path),
+        cert: fs.readFileSync(config.server.cert_path)
     };
 }
 
