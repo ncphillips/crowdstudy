@@ -27,17 +27,17 @@ var HelloMessage = React.createClass({
                         <div className="form-group">
                             <label htmlFor="worker-id-input">Crowdflower Worker ID</label>
                             <input name="worker_id" id="worker-id-input" className="form-control" type="text" placeholder="Crowdflower Worker ID"/>
-                            <span class="errors">{this.props.errors.worker_id}</div>
+                            <span className="error">{this.props.errors.worker_id}</span>
                         </div>
                         <div className="form-group">
                             <label htmlFor="name">Name</label>
                             <input className="form-control" name="name" id="name"/>
-                            <span class="errors">{this.props.errors.name}</div>
+                            <span className="error">{this.props.errors.name}</span>
                         </div>
                         <div className="form-group">
                             <label htmlFor="yob">Year of Birth</label>
                             <input className="form-control" type="number" min="0" name="yob" id="yob"/>
-                            <span class="errors">{this.props.errors.yob}</div>
+                            <span className="error">{this.props.errors.yob}</span>
                         </div>
                         <div className="form-group">
                             <input type="submit" className="form-control btn btn-primary" value="Submit"/>
