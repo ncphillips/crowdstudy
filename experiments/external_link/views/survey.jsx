@@ -42,6 +42,7 @@ var HelloMessage = React.createClass({
                             <label htmlFor="yob">Year of Birth</label>
                             <input className={yob_class} type="number" min="0" name="yob" id="yob"/>
                             <span class="errors">{this.props.errors.yob}</div>
+
                         </div>
                         <div className="form-group">
                             <input type="submit" className="form-control btn btn-primary" value="Submit"/>
