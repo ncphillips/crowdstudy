@@ -5,6 +5,10 @@ var ExampleLayout = require('./layouts/ExampleLayout.jsx');
 
 var HelloMessage = React.createClass({
     render: function () {
+        var worker_id_class = this.errors.worker_id ? 'form-control has-errors': 'form-control';
+        var name_class = this.errors.name ? 'form-control has-errors': 'form-control';
+        var yob_class = this.errors.yob ? 'form-control has-errors': 'form-control';
+
         return (
             <ExampleLayout title="Example External Survey">
                 <div className="col-md-3"></div>
@@ -26,17 +30,17 @@ var HelloMessage = React.createClass({
 
                         <div className="form-group">
                             <label htmlFor="worker-id-input">Crowdflower Worker ID</label>
-                            <input name="worker_id" id="worker-id-input" className="form-control" type="text" placeholder="Crowdflower Worker ID"/>
+                            <input name="worker_id" id="worker-id-input" className={worker_id_class} type="text" placeholder="Crowdflower Worker ID"/>
                             <span class="errors">{this.props.errors.worker_id}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="name">Name</label>
-                            <input className="form-control" name="name" id="name"/>
+                            <input className={name_class} name="name" id="name"/>
                             <span class="errors">{this.props.errors.name}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="yob">Year of Birth</label>
-                            <input className="form-control" type="number" min="0" name="yob" id="yob"/>
+                            <input className={yob_class} type="number" min="0" name="yob" id="yob"/>
                             <span class="errors">{this.props.errors.yob}</div>
                         </div>
                         <div className="form-group">
