@@ -21,7 +21,7 @@ Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their 
     * Open `mturk-clit/bin/mturk.properties`
     * On lines 11 and 12, insert your access and secret keys, respectively.
 * Set the `MTURK_CMD_HOME` environment variable to `./mturk-clt`
-    * `echo MTURK_CMD_HOME="/path/to/crowdstudy/mturk-clt" >> ~/.profile`
+    * `echo export MTURK_CMD_HOME="/path/to/crowdstudy/mturk-clt" >> ~/.profile`
 * Make sure you have the Java JRE installed:
     * The default JRE can be installed with `sudo apt-get install default-jre`, but any other version will do.
 * Set the `JAVA_HOME` environment variable to your Java Standard Edition Runtime Environment (JRE) installation location.
@@ -30,7 +30,7 @@ Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their 
     * `cd /path/to/crowdstudy/mturk-clt/bin/`
     * `sh getBalance.sh`
     * This should print something like `Your account balance: $0.00`
-    * Note: This must be run from within `mturk-clt/bin` directory.
+    * **Note:** This MUST be run from within `mturk-clt/bin` directory.
 
 ## Server & Framework
 
