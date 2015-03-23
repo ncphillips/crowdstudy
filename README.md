@@ -124,14 +124,14 @@ if he has submitted the correct code.
 
 This experiment is pretty simple: 3 views, 3 routes, 3 controllers, and a couple helper functions.
 
-`GET /` renders `survey.jsx` to show the worker the initial survey page.
+`GET /` calls the `get_survey` controller, which renders `survey.jsx` to show the worker the initial survey page.
 
-`POST /` validates the form. If it is not valid, then `survey.jsx` is re-rendered with the appropriate errors. If the form
+`POST /` calls `post_survey` which validates the form. If it is not valid, then `survey.jsx` is re-rendered with the appropriate errors. If the form
 is valid, then the worker's information is saved to Mongo and a code is generated and displayed by rendering `code_page.jsx`.
 
 If an unexpected error occurs, `error_page.jsx` is rendered.
 
-`POST /webhook` is accessed by Crowdflower for when send back the judgments gathered.
+`POST /webhook` is accessed by Crowdflower for when send back the judgments gathered. The `webhook` controller handles this route.
 
 ## Using CrowdStudy
 To run the CrowdStudy server:
