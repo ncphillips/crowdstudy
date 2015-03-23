@@ -5,9 +5,9 @@ var ExampleLayout = require('./layouts/ExampleLayout.jsx');
 
 var HelloMessage = React.createClass({
     render: function () {
-        var worker_id_class = this.errors.worker_id ? 'form-control has-errors': 'form-control';
-        var name_class = this.errors.name ? 'form-control has-errors': 'form-control';
-        var yob_class = this.errors.yob ? 'form-control has-errors': 'form-control';
+        var worker_id_class = this.props.errors.worker_id ? 'form-group has-error': 'form-group';
+        var name_class = this.props.errors.name ? 'form-group has-error': 'form-group';
+        var yob_class = this.props.errors.yob ? 'form-group has-error': 'form-group';
 
         return (
             <ExampleLayout title="Example External Survey">
@@ -28,20 +28,20 @@ var HelloMessage = React.createClass({
                     </div>
                     <form id="external-upei-form" action="#" method="POST">
 
-                        <div className="form-group">
+                        <div className={worker_id_class}>
                             <label htmlFor="worker-id-input">Crowdflower Worker ID</label>
-                            <input name="worker_id" id="worker-id-input" className={worker_id_class} type="text" placeholder="Crowdflower Worker ID"/>
-                            <span class="errors">{this.props.errors.worker_id}</div>
+                            <input name="worker_id" id="worker-id-input" className="form-control" type="text" placeholder="Crowdflower Worker ID"/>
+                            <span className="errors">{this.props.errors.worker_id}</span>
                         </div>
-                        <div className="form-group">
+                        <div className={name_class}>
                             <label htmlFor="name">Name</label>
-                            <input className={name_class} name="name" id="name"/>
-                            <span class="errors">{this.props.errors.name}</div>
+                            <input className="form-control" name="name" id="name"/>
+                            <span className="errors">{this.props.errors.name}</span>
                         </div>
-                        <div className="form-group">
+                        <div className={yob_class}>
                             <label htmlFor="yob">Year of Birth</label>
-                            <input className={yob_class} type="number" min="0" name="yob" id="yob"/>
-                            <span class="errors">{this.props.errors.yob}</div>
+                            <input className="form-control" type="number" min="0" name="yob" id="yob"/>
+                            <span className="errors">{this.props.errors.yob}</span>
 
                         </div>
                         <div className="form-group">

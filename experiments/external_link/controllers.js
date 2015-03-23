@@ -39,6 +39,8 @@ exports.get_form = function (req, res) {
  * @param res
  */
 exports.post_form = function (req, res) {
+    var code = generateCode();
+
     /**
      * Callback used to respond to the POST.
      *
@@ -77,7 +79,6 @@ exports.post_form = function (req, res) {
 
         workers_collection.find({id: req.body.worker_id}).toArray(function (err, workers) {
             var worker = null;
-            var code = generateCode();
 
             // If anything goes wrong, the error page is rendered.
             if (err) {
