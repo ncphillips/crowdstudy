@@ -123,6 +123,6 @@ server.listen(config.port, function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    log.info('Server Listening at http%s://%s:%s', protocol, host, port);
+    log.info('Server Listening at %s://%s:%s', protocol, host, port);
 });
 
