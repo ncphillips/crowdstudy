@@ -143,6 +143,7 @@ function generateCode() {
  * @param worker_id
  */
 function crowdflowerBonus(worker_id) {
+    // Currently in Stub mode.
 
 }
 
