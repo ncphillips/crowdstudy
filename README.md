@@ -1,8 +1,20 @@
-# CrowdStudy
+# Crowd Study
 Starting in March 2015, the UPEI HCI Lab will be conducting a number of 
 experiments related to crowd work. In order to track data gathered from 
 these experiments, we have created CrowdStudy. This application for serving
 files, and collecting results for each experiment.
+
+## Getting Started
+Before you can get started using the Crowd Study platform, you must make sure to sign up for
+both Crowdflower and Amazon's Mechanical Turk.
+
+### Crowdflower
+Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their account.
+
+### Amazon Mechanical Turk
+[Sign up](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html) for an Amazon Web Services account.
+
+[Sign up](https://requester.mturk.com) to be an Amazon Mechanical Turk requester
 
 ## Server & Framework
 
