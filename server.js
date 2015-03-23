@@ -66,7 +66,7 @@ if (app.get('env') == 'development') {
 // the controllers to use.
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
-    MongoClient.connect(config.db, function (err, db) {
+    MongoClient.connect(config.server.db, function (err, db) {
         if (err) {
             log.error(err);
             return next(err);
@@ -111,15 +111,15 @@ debug(app);
 
 // HTTP or HTTPS
 var server = null;
-if (config.use_https) {
-    server = https.createServer(config.https_options, app);
+if (config.server.use_https) {
+    server = https.createServer(config.server.https_options, app);
 }
 else {
     server = http.createServer(app);
 }
 
-server.listen(config.port, function () {
-    var protocol = config.use_https ? 'https' : 'http';
+server.listen(config.server.port, function () {
+    var protocol = config.server.use_https ? 'https' : 'http';
     var host = server.address().address;
     var port = server.address().port;
 
