@@ -3,6 +3,7 @@ docs/
 *.log
 .idea
 
+mturk-clt/bin/mturk.properties
 
 *.key
 *.crt

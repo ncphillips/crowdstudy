@@ -17,6 +17,7 @@ Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their 
 * Configure the Command Line Tools to use your AWS identifier:
     * Follow [these instructions](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html) 
     to find your AWS identifier.
+    * `cp /path/to/crowdstudy/mturk-clit/bin/mturk.properties_copy /path/to/crowdstudy/mturk-clit/bin/mturk.properties`
     * Open `mturk-clit/bin/mturk.properties`
     * On lines 11 and 12, insert your access and secret keys, respectively.
 * Set the `MTURK_CMD_HOME` environment variable to `./mturk-clt`
@@ -24,11 +25,13 @@ Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their 
 * Make sure you have the Java JRE installed:
     * The default JRE can be installed with `sudo apt-get install default-jre`, but any other version will do.
 * Set the `JAVA_HOME` environment variable to your Java Standard Edition Runtime Environment (JRE) installation location.
-
-This command will setup your JAVA_HOME variable:
-
-    echo JAVA_HOME="`which java`" >> ~/.profile
-
+    * With default-jre, run `echo export JAVA_HOME="/usr/" >> ~/.profile`
+* Test things out by getting your AWS account balance.
+    * `cd /path/to/crowdstudy/mturk-clt/bin/`
+    * `sh getBalance.sh`
+    * This should print something like `Your account balance: $0.00`
+    * Note: This must be run from within `mturk-clt/bin` directory.
+    * Note: You cannot use the Amazaon IAM User account access/secret keys, you must use those from your root account.
 
 ## Server & Framework
 
