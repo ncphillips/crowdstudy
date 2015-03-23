@@ -12,9 +12,22 @@ both Crowdflower and Amazon's Mechanical Turk.
 Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their account.
 
 ### Amazon Mechanical Turk
-[Sign up](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html) for an Amazon Web Services account.
+* [Sign up](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html) for an Amazon Web Services account.
+* [Sign up](https://requester.mturk.com) to be an Amazon Mechanical Turk requester
+* Configure the Command Line Tools to use your AWS identifier:
+    * Follow [these instructions](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html) 
+    to find your AWS identifier.
+    * Open `mturk-clit/bin/mturk.properties`
+    * On lines 11 and 12, insert your access and secret keys, respectively.
+* Set the `MTURK_CMD_HOME` environment variable to `./mturk-clt`
+    * `echo MTURK_CMD_HOME="/path/to/crowdstudy/mturk-clt" >> ~/.profile`
+* Make sure you have the Java JRE installed:
+    * The default JRE can be installed with `sudo apt-get install default-jre`, but any other version will do.
+* Set the `JAVA_HOME` environment variable to your Java Standard Edition Runtime Environment (JRE) installation location.
 
-[Sign up](https://requester.mturk.com) to be an Amazon Mechanical Turk requester
+
+    echo JAVA_HOME="`which java`" >> ~/.profile
+
 
 ## Server & Framework
 
