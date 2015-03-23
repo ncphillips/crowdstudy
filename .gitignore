@@ -5,5 +5,7 @@ docs/
 
 mturk-clt/bin/mturk.properties
 
+cf_api_key.js
+
 *.key
 *.crt

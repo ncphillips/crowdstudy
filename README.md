@@ -9,9 +9,15 @@ Before you can get started using the Crowd Study platform, you must make sure to
 both Crowdflower and Amazon's Mechanical Turk.
 
 ### Crowdflower
-Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their account.
+* [Signup](http://make.crowdflower.com) to be a Crowdflower requester.
+* Go to the [user page](https://make.crowdflower.com/account/user) and copy your API Key.
+* `cp /path/to/crowdstudy/cf_api_key_dummy.js /path/to/crowdstudy/cf_api_key.js`
+* Open `/path/to/crowdstudy/cf_api_key.js` and paste your API Key in the quotes.
+
 
 ### Amazon Mechanical Turk
+The following instructions come from `/path/to/crowdstudy/mturk-clt/GetStarted.html`:
+
 * [Sign up](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html) for an Amazon Web Services account.
 * [Sign up](https://requester.mturk.com) to be an Amazon Mechanical Turk requester
 * Configure the Command Line Tools to use your AWS identifier:
@@ -44,8 +50,6 @@ Run the following commands to install io.js on your machine.
     curl https://raw.githubusercontent.com/creationix/nvm/v0.24.0/install.sh | bash
     source ~/.nvm/nvm.sh 
     nvm install iojs
-    
- 
 
 ## Database
 Data is stored in a Mongo database, which is made accessible through `req.db`. By default, there are no models 
