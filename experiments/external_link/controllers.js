@@ -24,9 +24,9 @@
  */
 exports.get_form = function (req, res) {
     var errors = {
-        worker_id: [],
-        name: [],
-        yob: []
+        worker_id: '',
+        name: '',
+        yob: ''
     };
 
     res.render('survey', {errors: errors});
@@ -57,14 +57,14 @@ exports.post_form = function (req, res) {
 
     // Here we're checking to see if there are any validation errors that we should be sending back to the user.
     var errors = {
-        worker_id: [],
-        name: [],
-        yob: []
+        worker_id: '',
+        name: '',
+        yob: ''
     };
 
-    if (!req.body.worker_id) errors.worker_id.push('Please provide your Crowdflower ID');
-    if (!req.body.name) errors.name.push('Please provide your name.');
-    if (!req.body.yob) errors.yob.push('Please provide your Year of Birth.');
+    if (!req.body.worker_id) errors.worker_id = 'Please provide your Crowdflower ID';
+    if (!req.body.name) errors.name = 'Please provide your name.';
+    if (!req.body.yob) errors.yob = 'Please provide your Year of Birth.';
 
     if (errors.worker_id || errors.name || errors.yob) {
         res.render('survey', {errors: errors})
