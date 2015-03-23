@@ -1,6 +1,10 @@
 {
   "name": "CrowdStudy",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "http://bitbucket.org/ncphillips/crowdstudy.git"
+  },
   "dependencies": {
     "express": "4.10.*",
     "express-debug": "1.1.1",
