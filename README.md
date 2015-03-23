@@ -25,6 +25,7 @@ Go to [Crowdflower's website](http://make.crowdflower.com) to sign up for their 
     * The default JRE can be installed with `sudo apt-get install default-jre`, but any other version will do.
 * Set the `JAVA_HOME` environment variable to your Java Standard Edition Runtime Environment (JRE) installation location.
 
+This command will setup your JAVA_HOME variable:
 
     echo JAVA_HOME="`which java`" >> ~/.profile
 
