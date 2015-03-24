@@ -20,6 +20,11 @@ The following instructions come from `/path/to/crowdstudy/mturk-clt/GetStarted.h
 
 * [Sign up](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html) for an Amazon Web Services account.
 * [Sign up](https://requester.mturk.com) to be an Amazon Mechanical Turk requester
+
+#### Setting up the Command Line Tools (NOT IMPLEMENTED)
+This sections describes how to set up the Mechanical Turk Command Line Tools. Currently, Crowd Study does not use
+the mTurk Command Line Tools, but just in case it does in the future, here are some instructions.
+
 * Configure the Command Line Tools to use your AWS identifier:
     * View the [Security Credentials](https://console.aws.amazon.com/iam/home?#security_credential) page to find or
     generate your access and security keys. These must be for your root account, not for one of the IAM User accounts.
@@ -37,7 +42,7 @@ The following instructions come from `/path/to/crowdstudy/mturk-clt/GetStarted.h
     * `sh getBalance.sh`
     * This should print something like `Your account balance: $0.00`
     * **Note:** This MUST be run from within `mturk-clt/bin` directory.
-
+    
 ## Server & Framework
 
 The server is written in Javascript using the Expressjs framework. It is
@@ -60,11 +65,14 @@ Run the following commands to install io.js on your machine.
     
 ## Database
 Data is stored in a Mongo database, which is made accessible through `req.db`. By default, there are no models 
-or any other kind of type checking, but feel free to add them as needed.
+or any other kind of type checking, but feel free to add them as needed. 
+
+
 
 ### The Worker Collection
 Information about workers from Crowdflower and Mechanical Turk will be stored in a 
-MongoDB `workers` collection. These documents will have the following structure:
+MongoDB `workers` collection. Although there is currently no helper functions or 
+validation for these documents, they should have the following structure:
 
     {
         id: 1341235,                // The Crowdflower or mTurk ID.
@@ -171,6 +179,41 @@ is valid, then the worker's information is saved to Mongo and a code is generate
 If an unexpected error occurs, `error_page.jsx` is rendered.
 
 `POST /webhook` is accessed by Crowdflower for when send back the judgments gathered. The `webhook` controller handles this route.
+
+#### Crowdflower Job Setup
+
+Navigate to Crowdflower's [new job page](http://make.crowdflower.com/jobs/new).
+
+Under **Survey Job** click **Get Started**.
+
+Go to the CML Editor.
+
+Set the Title and Instructions to what you want.
+
+Use the following CML, but make sure to replace the link url:
+
+    <h3>
+      <a href="https://hcilab.csit.upei.ca:8998/external_link" 
+         class="clicked validates-clicked" target="_blank">
+           Follow this link to complete our survey!
+      </a>
+    </h3>
+    <cml:text label="Survey Code" name="code" validates="required" 
+              data-validates-regex-message="Please copy and paste the code here that can be found at the end of the Survey" 
+              default="Enter code here..." instructions="Enter Survey code in this field after completing" />
+              
+              
+#### Mechanical Turk Job Setup
+
+Navigate to the mTurk [New Project](https://requester.mturk.com/create/projects/new) page.
+
+Select the **Survey Link** template and press **Create Project**.
+ 
+Enter the properties as you see fit.
+
+Change the Survey Link URL on the **Design Layout** page to your URL.
+ 
+Save the project and Publish a batch.
 
 ## Using CrowdStudy
 To run the CrowdStudy server:
