@@ -1,9 +1,24 @@
 'use strict';
 
+/**
+ * Renders the Survey JSX to static HTML.
+ *
+ * @param req
+ * @param res
+ */
 exports.getForm = function (req, res) {
     res.render('survey', req.context);
 };
 
+
+/**
+ * Sets the context for the Survey from the URL/Form data.
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
 exports.setContext = function(req, res, next) {
     var context = {
         errors: {}
@@ -29,6 +44,15 @@ exports.setContext = function(req, res, next) {
 };
 
 
+/**
+ * Validates the submitted Survey form. If invalid, the form is re-rendered with
+ * any errors that were generated.
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
 exports.validateForm = function (req, res, next){
     if (!req.body.name) req.context.errors.name = 'Please supply your name.';
     if (!req.body.yob) req.context.errors.yob = 'Please supply your year of birth.';
@@ -45,6 +69,13 @@ exports.validateForm = function (req, res, next){
 };
 
 
+/**
+ * Get or Creates a Worker document and saves submitted experiment information.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.saveWork = function (req, res, next) {
     var workers = req.db.collection('workers');
 
@@ -92,6 +123,8 @@ exports.saveWork = function (req, res, next) {
 /**
  * Generates an alpha-numeric code for validating Workers judgments.
  *
+ * Uses a simple regex: ^[a-zA-Z0-9]*$
+ *
  * @returns {string}
  */
 function generateCode() {
@@ -109,6 +142,12 @@ function generateCode() {
 }
 
 
+/**
+ * Renders teh page which displays the code generated for the worker who completed the Survey.
+ *
+ * @param req
+ * @param res
+ */
 exports.showCode = function (req, res){
     res.render('code_page', req.context);
 };
@@ -117,10 +156,21 @@ exports.showCode = function (req, res){
 
 /**
  * Gives a Crowdflower worker a bonus.
+ *
  * @param worker_id
  */
 function crowdflowerBonus(worker_id) {
     // Currently in Stub mode.
+
+}
+
+
+/**
+ * Approves a MechanicalTurk HIT.
+ *
+ * @param hitId
+ */
+function mturkApproveHIT(hitId) {
 
 }
 

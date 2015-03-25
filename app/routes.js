@@ -5,4 +5,6 @@ module.exports = function (app) {
 
     // Worker Routes
     app.get('/workers', controllers.worker_list);
+
+    app.get('/getBalance', controllers.getBalance);
 };
