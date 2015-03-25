@@ -6,7 +6,16 @@ var controllers = require('./controllers');
  * @param app
  */
 module.exports = function (app) {
-    app.get('/', controllers.get_form);
-    app.post('/', controllers.post_form);
+    app.get('/',
+        controllers.setContext,
+        controllers.getForm);
+    app.post('/',
+        controllers.setContext,
+        controllers.validateForm,
+        controllers.saveWork,
+        controllers.showCode);
+
     app.post('/webhook', controllers.webhook);
 };
+
+

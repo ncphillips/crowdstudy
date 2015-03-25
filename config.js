@@ -10,8 +10,8 @@ var config = {
     email: 'ncphillips@upei.ca',
 
     server: {
-        port: 8998,
-        use_https: true,
+        port: 3000,
+        use_https: false,
 
         key_path: 'new_server.key',
         cert_path: 'combined.crt',

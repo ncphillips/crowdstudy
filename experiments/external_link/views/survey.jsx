@@ -3,9 +3,66 @@
 var React = require('react');
 var ExampleLayout = require('./layouts/ExampleLayout.jsx');
 
-var HelloMessage = React.createClass({
+var Crowdflower = {
+    instructions: React.createClass({
+        render: function () {
+            console.log("Rendering Crowdflower");
+            return (
+                <div id="instructions">
+                    <p>
+                        Before we get started, we need your contributor id. You can find it in
+                        the <b>help</b> dropdown of the Crowdflower interface.
+                    </p>
+                    <img src="crowdflower_worker_id.png"></img>
+                </div>
+                    );
+        }
+    }),
+    form_fields: React.createClass({
+        render: function () {
+            return (<div></div>);
+        }
+    })
+};
+
+var MechanicalTurk = {
+    instructions: React.createClass({
+        render: function () {
+            return (
+                <div id="instructions">
+                    <p>
+                        Before we get started, we need your worker id. You can find it in
+                        the Mechanical Turk <a href="https://www.mturk.com/mturk/dashboard">Worker Dashboard</a>.
+                    </p>
+                    <img src="mturk_worker_id.png"></img>
+                </div>
+            );
+        }
+    }),
+
+    form_fields: React.createClass({
+        render: function () {
+            return ( <div> <input name="hit_id" value={this.props.hitId} type="hidden"/>  </div> );
+        }
+    })
+};
+
+var Survey = React.createClass({
     render: function () {
-        var worker_id_class = this.props.errors.worker_id ? 'form-group has-error': 'form-group';
+        var Platform = null;
+        // Load Platform Specific Instructions
+        if (this.props.platform === 'crowdflower'){
+            Platform = Crowdflower
+        }
+        else {
+            Platform = MechanicalTurk
+        }
+
+        var Instructions = Platform.instructions;
+        var ExtraFields = Platform.form_fields;
+
+        // Alter input classes if there's an error for that field.
+        var worker_id_class = this.props.errors.worker_id? 'form-group has-error': 'form-group';
         var name_class = this.props.errors.name ? 'form-group has-error': 'form-group';
         var yob_class = this.props.errors.yob ? 'form-group has-error': 'form-group';
 
@@ -14,25 +71,18 @@ var HelloMessage = React.createClass({
                 <div className="col-md-3"></div>
                 <div className="col-md-6">
                     <h1>External UPEI Survey</h1>
-                    <div id="instrucitons">
-                        <p>
-                            Thank you for taking the time to do this survery.
-                        </p>
-                        <p>
-                            In order to make sure you get the bonus at the end of this survey,
-                            please paste your Crowdflower Contributor ID and paste it below. You
-                            can find this ID in the Help dropdown back on Crowdflower site. See
-                            the picture below:
-                        </p>
-                        <img src="contributor_id.png"/>
-                    </div>
+                    <Instructions></Instructions>
                     <form id="external-upei-form" action="#" method="POST">
+                        <input type="hidden" name="platform" value={this.props.platform}/>
+
+                        <ExtraFields {...this.props}></ExtraFields>
 
                         <div className={worker_id_class}>
-                            <label htmlFor="worker-id-input">Crowdflower Worker ID</label>
-                            <input name="worker_id" id="worker-id-input" className="form-control" type="text" placeholder="Crowdflower Worker ID"/>
+                            <label htmlFor="id">Worker ID</label>
+                            <input className="form-control" name="worker_id" id="worker_id"/>
                             <span className="errors">{this.props.errors.worker_id}</span>
                         </div>
+
                         <div className={name_class}>
                             <label htmlFor="name">Name</label>
                             <input className="form-control" name="name" id="name"/>
@@ -52,7 +102,8 @@ var HelloMessage = React.createClass({
                 <div className="col-md-2"></div>
             </ExampleLayout>
         );
+
     }
 });
 
-module.exports = HelloMessage;
+module.exports = Survey;

@@ -1,120 +1,91 @@
 'use strict';
 
-/**
- * @description
- * <p>
- *     Returns a Survey form for Crowdflower users to fill out.
- * </p>
- * <code>
- * {
- *      id: 12345,
- *      platform: 'Crowdflower',
- *      experiments: {
- *          external_link: {
- *              yob: 1992,
- *              name: "Nolan Phillips",
- *              code: "1234567890abcdef",
- *              headers: { ... }
- *          }
- *      }
- * }
- * </code>
- * @param req
- * @param res
- */
-exports.get_form = function (req, res) {
-    var errors = {
-        worker_id: '',
-        name: '',
-        yob: ''
-    };
-
-    res.render('survey', {errors: errors});
+exports.getForm = function (req, res) {
+    res.render('survey', req.context);
 };
 
-/**
- * Validates form data and then stores the results in the Workers record.
- *
- * @param req
- * @param res
- */
-exports.post_form = function (req, res) {
-    var code = generateCode();
-
-    /**
-     * Callback used to respond to the POST.
-     *
-     * @param err
-     * @param result
-     */
-    function respond(err, result) {
-        if (err) {
-            console.log(err);
-            res.render('error_page');
-        }
-        else {
-            res.render('code_page', {code: code});
-        }
-    }
-
-    // Here we're checking to see if there are any validation errors that we should be sending back to the user.
-    var errors = {
-        worker_id: '',
-        name: '',
-        yob: ''
+exports.setContext = function(req, res, next) {
+    var context = {
+        errors: {}
     };
 
-    if (!req.body.worker_id) errors.worker_id = 'Please provide your Crowdflower ID';
-    if (!req.body.name) errors.name = 'Please provide your name.';
-    if (!req.body.yob) errors.yob = 'Please provide your Year of Birth.';
-
-    if (errors.worker_id || errors.name || errors.yob) {
-        res.render('survey', {errors: errors})
+    if (req.query.platform === 'crowdflower') {
+        context.platform = 'crowdflower';
     }
-    // If there aren't, then we'll start se
+    else if (req.query.platform === 'mturk' && (req.query.hitId || req.body.hitId)) {
+        context.platform = 'mturk';
+
+        // This is camelcase because mTurk does camel case.
+        // The hitId is originally passed in by the URL, but it's added to the form as
+        // an extra hidden field. This is just to try and catch it if the URL query
+        // gets removed.
+        context.hitId = req.query.hitId || req.body.hitId;
+    }
     else {
-        var workers_collection = req.db.collection('workers');
-
-
-
-        workers_collection.find({id: req.body.worker_id}).toArray(function (err, workers) {
-            var worker = null;
-
-            // If anything goes wrong, the error page is rendered.
-            if (err) {
-                console.log(err);
-                res.render('error_page');
-            }
-            // If there is no record of that worker, a new record is created with all the information we need.
-            else if (workers.length === 0) {
-                console.log('Creating new Worker...');
-                worker = {
-                    platform: 'crowdflower',
-                    id: req.body.worker_id,
-                    experiments: {
-                        external_link: {
-                            name: req.body.name,
-                            yob: req.body.yob,
-                            headers: req.headers,
-                            code: code
-                        }
-                    }
-                };
-                workers_collection.insert(worker, respond);
-            }
-            else {
-                console.log('Existing Worker found...');
-                worker = workers[0];
-                workers_collection.update({_id: worker._id}, {$set: {external_link: {
-                    name: req.body.name,
-                    yob: req.body.yob,
-                    headers: req.headers,
-                    code: code
-                }}}, respond);
-
-            }
-        });
+        return res.render('error_page');
     }
+    req.context = context;
+    return next();
+};
+
+
+exports.validateForm = function (req, res, next){
+    if (!req.body.name) req.context.errors.name = 'Please supply your name.';
+    if (!req.body.yob) req.context.errors.yob = 'Please supply your year of birth.';
+    if (!req.body.worker_id) req.context.errors.worker_id = 'Please supply your worker id.';
+
+    // If any errors get generated, then we're going to render the survey again so the
+    // errors can be displayed to the worker.
+    var num_errors = Object.getOwnPropertyNames(req.context.errors).length;
+    if (num_errors > 0) {
+        return res.render('survey', req.context);
+    }
+
+    next();
+};
+
+
+exports.saveWork = function (req, res, next) {
+    var workers = req.db.collection('workers');
+
+    workers.find({id: req.body.worker_id}).toArray(function (err, docs) {
+        if (err) { return res.render('error_page'); }
+
+        var experiment = { };
+        experiment.name = req.body.name;
+        experiment.yob = req.body.yob;
+        experiment.code = req.context.code = generateCode();
+
+        // Mechanical Turk
+        // We need to store this immediately, because mTurk requires us to manually
+        // retrieve the HITs which must be approved.
+        experiment.hitId = req.body.hitId;
+
+        // Crowdflower
+        // This value will get set later on once we receive the Judgment from Crowdflower.
+        experiment.judgmentId = '';
+
+        var worker = {};
+
+        // This first case occurs if the worker has already taken part
+        // in one of our experiments. We simple add the results to his list
+        // of experiments and we're good to go.
+        if (docs.length > 0) {
+            worker = docs[0];
+            worker.experiments.external_link = experiment;
+            workers.update({_id: worker._id}, worker, next);
+        }
+
+        // In this second case, we must create the worker doc,
+        // as well as store the experiment information.
+        else {
+            worker.id = query.id;
+            worker.platform = req.body.platform;
+            worker.experiments = {};
+            worker.experiments.external_link = experiment;
+            workers.insert(worker, next);
+        }
+    });
 };
 
 
@@ -136,6 +107,12 @@ function generateCode() {
 
     return result;
 }
+
+
+exports.showCode = function (req, res){
+    res.render('code_page', req.context);
+};
+
 
 
 /**
@@ -195,3 +172,7 @@ exports.webhook = function (req,res) {
     }
     res.status(200).send();
 };
+
+
+
+
