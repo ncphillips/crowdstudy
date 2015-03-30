@@ -24,7 +24,6 @@ exports.getForm = function (req, res) {
  */
 exports.setContext = function(req, res, next) {
     var context = {
-        worker_id: 12345,
         errors: {}
     };
 

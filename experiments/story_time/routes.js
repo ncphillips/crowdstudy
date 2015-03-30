@@ -11,9 +11,6 @@ module.exports = function (app) {
 
     app.post('/', controllers.setContext, controllers.validateForm, controllers.saveWork, controllers.showCode);
 
-    app.post('/webhook', controllers.webhook);
-
-
     app.post('/submitStory', function (req, res) {
         var A = require('../../alchemyapi');
         var alchemy = new A();
@@ -40,6 +37,8 @@ module.exports = function (app) {
             })
         }
     });
+
+    app.post('/webhook', controllers.webhook);
 };
 
 
