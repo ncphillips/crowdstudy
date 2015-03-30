@@ -28,8 +28,8 @@
     </div>
 </section>
 <!-- close container section -->
-<style type="text/css">td { font-size:1.0em; padding:5px 5px; }</style>
-
+<style type="text/css">td { font-size:1.0em; padding:5px 5px; }
+</style>
 <script type="text/javascript">
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -38,7 +38,7 @@
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
-    var link_string = "https://hcilab.csit.upei.ca:8998/external_link?platform=mturk&hitid=" + getParameterByName("hitId");
+    var link_string = "https://hcilab.csit.upei.ca:8998/external_link?platform=mturk&hitId=" + getParameterByName("hitId");
     document.getElementById("external-link").href = link_string;
 
 </script>

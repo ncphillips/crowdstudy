@@ -1,5 +1,8 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
+
 /**
  * Renders the Survey JSX to static HTML.
  *
@@ -90,7 +93,7 @@ exports.saveWork = function (req, res, next) {
         // Mechanical Turk
         // We need to store this immediately, because mTurk requires us to manually
         // retrieve the HITs which must be approved.
-        experiment.hitId = req.body.hitId;
+        experiment.hitId = req.context.hitId;
 
         // Crowdflower
         // This value will get set later on once we receive the Judgment from Crowdflower.
@@ -98,23 +101,37 @@ exports.saveWork = function (req, res, next) {
 
         var worker = {};
 
+        var saveHitId = function (err) {
+            if (err) return next(err);
+            if (experiment.hitId) {
+                // Append Hit ID
+                console.log(experiment.hitId);
+                fs.appendFile('experiments/external_link/external_link.success', '\n' + experiment.hitId, function (err) {
+                    console.log(err);
+                    if (err) next(err);
+                    else next();
+                });
+            }
+            else next();
+        };
+
         // This first case occurs if the worker has already taken part
         // in one of our experiments. We simple add the results to his list
         // of experiments and we're good to go.
         if (docs.length > 0) {
             worker = docs[0];
             worker.experiments.external_link = experiment;
-            workers.update({_id: worker._id}, worker, next);
+            workers.update({_id: worker._id}, worker, saveHitId);
         }
 
         // In this second case, we must create the worker doc,
         // as well as store the experiment information.
         else {
-            worker.id = query.id;
+            worker.id = req.body.worker_id;
             worker.platform = req.body.platform;
             worker.experiments = {};
             worker.experiments.external_link = experiment;
-            workers.insert(worker, next);
+            workers.insert(worker, saveHitId);
         }
     });
 };
@@ -161,16 +178,6 @@ exports.showCode = function (req, res){
  */
 function crowdflowerBonus(worker_id) {
     // Currently in Stub mode.
-
-}
-
-
-/**
- * Approves a MechanicalTurk HIT.
- *
- * @param hitId
- */
-function mturkApproveHIT(hitId) {
 
 }
 

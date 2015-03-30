@@ -9,6 +9,11 @@ var config = {
     title: 'CrowdStudy',
     email: 'ncphillips@upei.ca',
 
+    // This is an array of active experiment names. Only the experiments named in this array will be loaded.
+    experiments: [
+        'external'
+    ],
+
     server: {
         port: 3000,
         use_https: false,

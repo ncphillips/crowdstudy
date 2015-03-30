@@ -50,9 +50,13 @@ app.use(body_parser.json());
 // This tells express where static files can be served from.
 app.use(express.static(__dirname + '/public'));
 
+// EJS view engine
+app.set('view engine', 'ejs');
+
 // Here, we set React.js as the view engine.
-app.set('view engine', 'jsx');
-app.engine('jsx', jsx_engine);
+//app.set('view engine', 'jsx');
+//app.engine('jsx', jsx_engine);
+
 
 // When running the application in the development environment, this middleware will
 // send a full stack trace to the client when errors occur.
