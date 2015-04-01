@@ -1,27 +1,26 @@
-var start_time;
-var end_time;
-
 /**
  * Worker Performance Metrics.
  */
 var StoryMetrics = React.createClass({
+    character_count: {
+        create: function (e) {
+            
+        }
+    },
     render: function () {
         var metrics = this.props.metrics;
+        if (metrics.character_count) {
+            var data = [
+                { value: metrics.character_count.average, name: 'Average'},
+                { value: metrics.character_count.worker, name: 'You'}];
 
-        var language = metrics.alchemy.language || '';
-
-        return (
-            <div id="metrics" className="panel panel-default">
-                <div className="panel-body">
-                    <table>
-                        <tr>
-                            <td><b>Language</b></td>
-                            <td></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        );
+            return (
+                <BarChart data={data}></BarChart>
+            );
+        }
+        else {
+            return (<div></div>)
+        }
     }
 });
 
@@ -39,90 +38,95 @@ var StoryImage = React.createClass({
     }
 });
 
-
 /**
  * Submit Button
  */
 var StoryFormButton = React.createClass({
-    handleClick: function () {
-        this.props.onStorySubmit();
-    },
     render: function () {
         var btn_text = this.props.submitting ? 'Submitting...' : 'Submit';
         return (
-            <input type="button" className="btn btn-primary" onClick={this.handleClick} disabled={this.props.submitting} value={btn_text}/>
+            <input type="button" className="btn btn-primary" onClick={this.props.clickCallback} disabled={this.props.submitting} value={btn_text}/>
         );
     }
 });
+
+/**
+ * Submit Button
+ */
+var Button = React.createClass({
+    handleClick: function () {
+        this.props.clickCallback();
+    },
+    render: function () {
+        var className = this.props.className || '';
+        var value = this.props.value || 'Submit';
+        var disabled = this.props.disabled || false;
+        return (
+            <input type="button" className={className} disabled={disabled} value={value} onClick={this.handleClick}/>
+        );
+    }
+});
+
+
 
 /**
  * Story Writing Form
  */
 var StoryForm = React.createClass({
     render: function () {
+        var btn_text = this.props.submitting ? 'Submitting...' : 'Submit';
+
         return (
             <form>
                 <div className="form-group">
                     <textarea id="story-text" disabled={this.props.submitting} name="story-text" rows="4" className="form-control"></textarea>
                 </div>
                 <div className="form-group">
-                    <StoryFormButton {...this.props}></StoryFormButton>
+                    <StoryFormButton
+                        value={btn_text}
+                        disabled={this.props.submitting}
+                        className="btn btn-primary"
+                        clickCallback={this.props.storySubmitCallback}></StoryFormButton>
                 </div>
             </form>
         );
     }
 });
 
-
-var CaptureWorkerId = React.createClass({
-    handleClick: function () {
-        this.props.captureWorkerId();
-    },
-
+var StoryTime = React.createClass({
     render: function () {
         return (
-            <div>
-                <div className="form-group">
-                    <label htmlFor="worker_id">Worker ID:</label>
-                    <input id="worker-id" type="text" name="worker_id" className="form-control"/>
-                </div>
-                <div className="form-group">
-                    <input id="worker-id-button" type="button" className="btn btn-primary form-control" value="Submit" onClick={this.handleClick}/>
-                </div>
-            </div>
+        <div>
+            <h2>Story: {this.props.story_num}</h2>
+            <p>
+                You will be shown a series of pictures. For each picture, write a short story about that
+                picture. The story you write only needs to be a couple sentences long.
+            </p>
+            <StoryMetrics metrics={this.props.metrics}></StoryMetrics>
+            <StoryImage img_url={this.props.img_url}></StoryImage>
+            <StoryForm storySubmitCallback={this.props.callback} submitting={this.props.submitting}></StoryForm>
+        </div>
         );
     }
 });
 
-/**
- * Ethical Statement
- */
-var EthicalStatement = React.createClass({
+var EthicsAndWorkerID = React.createClass({
     render: function () {
         return (
             <div>
-                <p>This experiment is being conducted by the University of Prince Edward Island's Human-Computer Interaction Lab.</p>
-                <p>We are studying the performance of workers on crowd sourcing services.</p>
-                <p>Before submitting your Worker ID, please read the following:</p>
-
-                <ol>
-                    <li> By submitting your Worker ID you are giving consent for the UPEI HCI Lab to collect information on
-                        your performance in the following tasks.</li>
-                    <li> All information gathered is, and always will be, anonymous.</li>
-                    <li> The information gathered will only be used for research purposes.</li>
-                    <li> By submitting this form you consent to let the UPEI HCI Lab use this information for research purposes.</li>
-                    <li> If at any time you wish to revoke your consent, please email ncphillips@upei.ca and all your data will be removed.</li>
-                </ol>
-
-            </div>
+            <EthicalStatement></EthicalStatement>
+            <WorkerIDForm callback={this.props.callback}></WorkerIDForm>
+        </div>
         );
     }
 });
+
+
 
 /**
  * The main app container.
  */
-var StoryTime = React.createClass({
+var StoryTimeApp = React.createClass({
     getInitialState: function () {
         return {
             worker_id: null,
@@ -150,6 +154,7 @@ var StoryTime = React.createClass({
 
             success: function(state) {
                 state.submitting = false;
+                state.start_time = new Date();
                 this.setState(state);
             }.bind(this),
 
@@ -166,19 +171,23 @@ var StoryTime = React.createClass({
      *
      * @param event
      */
-    handleStorySubmit: function (event) {
+    storySubmitCallback: function (event) {
         var story_text = document.getElementById('story-text').value;
 
         this.setState({submitting: true});
 
         this.postData({
             worker_id: this.state.worker_id,
+            time: {
+                start: this.state.start_time,
+                end: new Date()
+            },
             story_num: this.state.story_num,
             story_text: story_text
         });
     },
 
-    captureWorkerId: function () {
+    captureWorkerIdCallback: function () {
         var worker_id = document.getElementById('worker-id').value;
         this.setState({worker_id: worker_id});
         this.postData({
@@ -196,34 +205,15 @@ var StoryTime = React.createClass({
      * @returns {XML}
      */
     render: function () {
-        if (this.state.worker_id) {
-            return (
-                <div>
-                    <h2>Story: {this.state.story_num}</h2>
-                    <p>
-                        You will be shown a series of pictures. For each picture, write a short story about that
-                        picture. The story you write only needs to be a couple sentences long.
-                    </p>
-                    <StoryMetrics metrics={this.state.metrics}></StoryMetrics>
-                    <StoryImage img_url={this.state.img_url}></StoryImage>
-                    <StoryForm onStorySubmit={this.handleStorySubmit} submitting={this.state.submitting}></StoryForm>
-                </div>
-            );
-        }
-        else {
-            return  (
-                <div>
-                    <EthicalStatement></EthicalStatement>
-                    <CaptureWorkerId captureWorkerId={this.captureWorkerId}></CaptureWorkerId>
-                </div>
-            )
-
-        }
+        if (this.state.code) return <CodeDisplay code={this.state.code}></CodeDisplay>;
+        else if (this.state.worker_id) { return <StoryTime {...this.state} callback={this.storySubmitCallback}></StoryTime>; }
+        else return <EthicsAndWorkerID callback={this.captureWorkerIdCallback}></EthicsAndWorkerID>
 
     }
 });
 
 
-React.render(<StoryTime/>, document.getElementById('story-time'));
+
+React.render(<StoryTimeApp/>, document.getElementById('story-time'));
 
 

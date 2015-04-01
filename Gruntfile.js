@@ -22,8 +22,8 @@ module.exports = function (grunt) {
             dynamic_mappings: {
                 files: [{
                     expand: true,
-                    src: ['experiments/**/public/scripts/*.jsx'],
-                    dest: '.',
+                    src: ['experiments/**/public/scripts/*.jsx', 'public/scripts/*.jsx'],
+                    dest: '.', // I can't get this to work with a ../build pattern.
                     ext: '.js'
 
                 }]

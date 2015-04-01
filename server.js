@@ -111,7 +111,7 @@ experiments.forEach(function (path, n) {
 
 // When in the development environment, this provides a tab with some
 // application info in it.
-debug(app);
+//debug(app);
 
 // HTTP or HTTPS
 var server = null;
