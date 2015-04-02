@@ -1,5 +1,6 @@
 'use strict';
-var controllers = require('./controllers');
+var workers = require('../../lib/controllers/workers'); // Crowd Study Controllers
+var ec = require('./controllers'); // Experiment Controllers
 
 /**
  * Adds new routes to the application passed in.
