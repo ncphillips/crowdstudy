@@ -15,7 +15,7 @@ var StoryMetrics = React.createClass({
                 { value: metrics.character_count.worker, name: 'You'}];
 
             return (
-                <BarChart data={data}></BarChart>
+                <BarChart_OX_LY id="time-chart" data={data}></BarChart_OX_LY>
             );
         }
         else {
@@ -110,18 +110,6 @@ var StoryTime = React.createClass({
     }
 });
 
-var EthicsAndWorkerID = React.createClass({
-    render: function () {
-        return (
-            <div>
-            <EthicalStatement></EthicalStatement>
-            <WorkerIDForm callback={this.props.callback}></WorkerIDForm>
-        </div>
-        );
-    }
-});
-
-
 
 /**
  * The main app container.
@@ -187,12 +175,8 @@ var StoryTimeApp = React.createClass({
         });
     },
 
-    captureWorkerIdCallback: function () {
-        var worker_id = document.getElementById('worker-id').value;
-        this.setState({worker_id: worker_id});
-        this.postData({
-            worker_id: this.state.worker_id
-        });
+    workerIdFormCallback: function (data) {
+        this.setState(data);
     },
 
     /**
@@ -205,15 +189,24 @@ var StoryTimeApp = React.createClass({
      * @returns {XML}
      */
     render: function () {
-        if (this.state.code) return <CodeDisplay code={this.state.code}></CodeDisplay>;
-        else if (this.state.worker_id) { return <StoryTime {...this.state} callback={this.storySubmitCallback}></StoryTime>; }
-        else return <EthicsAndWorkerID callback={this.captureWorkerIdCallback}></EthicsAndWorkerID>
-
+        if (this.state.code) {
+            return <CodeDisplay code={this.state.code}></CodeDisplay>;
+        }
+        else if (this.state.worker_id) {
+            return <StoryTime {...this.state} callback={this.storySubmitCallback}></StoryTime>;
+        }
+        else {
+            return (
+                <WorkerIDForm callback={this.workerIdFormCallback} url="/worker">
+                    <EthicalStatement></EthicalStatement>
+                </WorkerIDForm>
+            );
+        }
     }
 });
 
 
 
-React.render(<StoryTimeApp/>, document.getElementById('story-time'));
+React.render(<StoryTimeApp/>, document.getElementById('app'));
 
 

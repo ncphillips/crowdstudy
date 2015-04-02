@@ -7,11 +7,12 @@ var controllers = require('./controllers');
  */
 module.exports = function (app) {
 
-    app.get('/', controllers.setContext, controllers.getForm);
+    app.get('/', controllers.setContext, controllers.renderApp);
 
-    app.post('/', controllers.setContext, controllers.validateForm, controllers.saveWork, controllers.showCode);
+    app.get('/worker', controllers.setContext, controllers.registerWorker);
 
-    app.post('/submitStory', function (req, res) {
+
+    app.post('/story', function (req, res) {
         var A = require('../../alchemyapi');
         var alchemy = new A();
 
@@ -19,12 +20,11 @@ module.exports = function (app) {
             alchemy.sentiment("text", req.body.story_text, {}, function (results) {
                 res.json({
                     story_num: 0,
-                    img_url: 'crowdflower_worker_id.png',
+                    img_url: 'images/crowdflower_worker_id.png',
                     metrics: {
-                        character_count: {
-                            average: 100,
-                            worker: req.body.story_text.length
-                        },
+                        time: {},
+                        characters: {},
+                        words: {},
                         alchemy: results
                     }
                 })

@@ -4,18 +4,18 @@ var fs = require('fs');
 var path = require('path');
 
 /**
- * Renders the Survey JSX to static HTML.
+ * Renders the StoryTime app.
  *
  * @param req
  * @param res
  */
-exports.getForm = function (req, res) {
-    res.render('story', req.context);
+exports.renderApp = function (req, res) {
+    res.render('short_stories', req.context);
 };
 
 
 /**
- * Sets the context for the Survey from the URL/Form data.
+ * Sets the context for the Short Stories app from the URL/Form data.
  *
  * @param req
  * @param res
@@ -46,32 +46,6 @@ exports.setContext = function(req, res, next) {
     return next();
 };
 
-
-/**
- * Validates the submitted Survey form. If invalid, the form is re-rendered with
- * any errors that were generated.
- *
- * @param req
- * @param res
- * @param next
- * @returns {*}
- */
-exports.validateForm = function (req, res, next){
-    if (!req.body.name) req.context.errors.name = 'Please supply your name.';
-    if (!req.body.yob) req.context.errors.yob = 'Please supply your year of birth.';
-    if (!req.body.worker_id) req.context.errors.worker_id = 'Please supply your worker id.';
-
-    // If any errors get generated, then we're going to render the survey again so the
-    // errors can be displayed to the worker.
-    var num_errors = Object.getOwnPropertyNames(req.context.errors).length;
-    if (num_errors > 0) {
-        return res.render('story', req.context);
-    }
-
-    next();
-};
-
-
 /**
  * Get or Creates a Worker document and saves submitted experiment information.
  *
@@ -79,7 +53,7 @@ exports.validateForm = function (req, res, next){
  * @param res
  * @param next
  */
-exports.saveWork = function (req, res, next) {
+exports.registerWorker = function (req, res, next) {
     var workers = req.db.collection('workers');
 
     workers.find({id: req.body.worker_id}).toArray(function (err, docs) {

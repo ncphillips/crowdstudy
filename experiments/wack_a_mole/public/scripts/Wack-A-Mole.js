@@ -93,7 +93,10 @@ var Performance = React.createClass({displayName: "Performance",
 
 var WackPerformance = React.createClass({displayName: "WackPerformance",
     render: function () {
-        return React.createElement(BarChart, {data: [1, 1, 2, 3, 5, 8, 13]})
+        var data = this.props.performance.map(function (p) {
+           return p.time.start - p.time.end;
+        });
+        return React.createElement(BarChart, {data: data})
     }
 });
 
