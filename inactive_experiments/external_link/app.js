@@ -24,4 +24,4 @@ app.use(express.static(__dirname + '/public'));
 // Loads this application's routes.
 require('./routes.js')(app);
 
-module.exports = app;
+module.exports.app = app;

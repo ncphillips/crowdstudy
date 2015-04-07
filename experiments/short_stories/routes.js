@@ -1,6 +1,6 @@
 'use strict';
 var workers = require('../../lib/controllers/workers'); // Crowd Study Controllers
-var ec = require('./controllers'); // Experiment Controllers
+var controllers = require('./controllers'); // Experiment Controllers
 
 /**
  * Adds new routes to the application passed in.
@@ -8,9 +8,9 @@ var ec = require('./controllers'); // Experiment Controllers
  */
 module.exports = function (app) {
 
-    app.get('/', controllers.setContext, controllers.renderApp);
+    app.get('/', controllers.renderApp);
 
-    app.get('/worker', controllers.setContext, controllers.registerWorker);
+    app.get('/worker', workers.get_or_create);
 
 
     app.post('/story', function (req, res) {
@@ -38,8 +38,6 @@ module.exports = function (app) {
             })
         }
     });
-
-    app.post('/webhook', controllers.webhook);
 };
 
 

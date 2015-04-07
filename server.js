@@ -11,6 +11,7 @@ var express = require('express');
 var body_parser = require('body-parser');
 var response_time = require('response-time');
 var session = require('express-session');
+var crowd_platforms = require('./lib/controllers/crowd_platform');
 
 // Used for finding files with regex.
 var glob = require('glob');
@@ -29,6 +30,15 @@ global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
 
 // Configuration
 var config = require('./config');
+
+// HTTP or HTTPS
+var server = null;
+if (config.server.use_https) {
+    server = https.createServer(config.server.https_options, app);
+}
+else {
+    server = http.createServer(app);
+}
 
 // Application variables
 app.locals.title = config.title;
@@ -49,6 +59,8 @@ app.use(body_parser.json());
 
 // This tells express where static files can be served from.
 app.use(express.static(__dirname + '/public'));
+
+app.use(crowd_platforms.parsePlatform);
 
 // EJS view engine
 app.set('view engine', 'ejs');
@@ -104,7 +116,9 @@ experiments.forEach(function (path, n) {
     global.experiments.push(name);
 
     // Use the experiment on i
-    app.use('/' + name, experiment);
+    app.use('/' + name, experiment.app);
+
+    if (experiment.init) experiment.init(config, server);
 
     log.info('\t Experiment %s - %s', n+1, name);
 });
@@ -112,15 +126,6 @@ experiments.forEach(function (path, n) {
 // When in the development environment, this provides a tab with some
 // application info in it.
 //debug(app);
-
-// HTTP or HTTPS
-var server = null;
-if (config.server.use_https) {
-    server = https.createServer(config.server.https_options, app);
-}
-else {
-    server = http.createServer(app);
-}
 
 server.listen(config.server.port, function () {
     var protocol = config.server.use_https ? 'https' : 'http';
