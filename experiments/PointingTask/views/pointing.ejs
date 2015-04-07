@@ -15,6 +15,8 @@
     <button onClick="launchFullscreen(document.documentElement)" style="top: 0; left: 0; position: absolute; width:100%;">Full Screen(Press Esc to Exit Full Screen)</button>
     <script>
 
+    var worker_id = <%= worker_id %>;
+    var platform = "<%= platform %>";
 
 
 
@@ -88,7 +90,7 @@
             ctx.font = "24px Georgia";
             ctx.fillText(this.id, this.x, this.y);
         }
-    }
+    };
 
     /* Trial Class
      * cen(px) - Diameter from center of screen to center of target
@@ -139,14 +141,30 @@
             // Draw a mouse trail
             ctx.fillStyle = "black";
             ctx.beginPath();
-            ctx.arc(mouse.x, mouse.y, canvas.width*.0005, 0, 2*Math.PI);;
+            ctx.arc(mouse.x, mouse.y, canvas.width*.0005, 0, 2*Math.PI);
             ctx.fill();
             ctx.stroke();
         }
         if(!stopLog){
             // Log mouse movement
-            socket.emit('moveLog', PID + "; " + trial_tar + "; " + trial_cen + "; " + Trials[currentTrial].tar  + "; " + Trials[currentTrial].cen  + "; "  + number_of_targets + "; " + dest + "; " + mouse.x +
-                         "; " + mouse.y + "; " + Date.now() + "; "  +  browserName + "; "  + OSName + "; " + (invisibleMode ? 0 : 1) + "; "  + (currentBlock + 1)  + "\n");
+            socket.emit(
+                    'moveLog', PID + "; " +
+                    trial_tar + "; " +
+                    trial_cen + "; " +
+                    Trials[currentTrial].tar  + "; " +
+                    Trials[currentTrial].cen  + "; "  +
+                    number_of_targets + "; " +
+                    dest + "; " +
+                    mouse.x + "; " +
+                    mouse.y + "; " +
+                    Date.now() + "; "  +
+                    browserName + "; "  +
+                    OSName + "; " +
+                    (invisibleMode ? 0 : 1) + "; "  +
+                    (currentBlock + 1)  +
+                    worker_id + "; " +
+                    platform +
+                    "\n");
         }
     }, false);
 
@@ -173,8 +191,23 @@
                         endTime = Date.now();
                         if(!skipFirst){
                             // Log mouse click data
-                            socket.emit('clickLog', PID + "; " + trial_tar + "; " + trial_cen + "; " + Trials[currentTrial].tar  + "; " + Trials[currentTrial].cen  + "; "  +  number_of_targets + "; " + dest + "; " + startTime + "; " +
-                                        endTime + "; " + mousedownTime  + "; "  + errors + "; "  + browserName  + "; " + OSName + "; " + (invisibleMode ? 0 : 1) + "; "  + (currentBlock + 1)  + "\n");
+                            socket.emit('clickLog', PID + "; " +
+                            trial_tar + "; " +
+                            trial_cen + "; " +
+                            Trials[currentTrial].tar  + "; " +
+                            Trials[currentTrial].cen  + "; "  +
+                            number_of_targets + "; " +
+                            dest + "; " +
+                            startTime + "; " +
+                            endTime + "; " +
+                            mousedownTime  + "; "  +
+                            errors + "; "  +
+                            browserName  + "; " +
+                            OSName + "; " +
+                            (invisibleMode ? 0 : 1) + "; "  +
+                            (currentBlock + 1)  + ";" +
+                            worker_id + ";" +
+                            platform + "\n");
                         }
                         else{
                             skipFirst = false;
@@ -234,7 +267,7 @@
     function onWindowLoad() {
 
         detectBrowserOS();
-    
+
         // Get PID number from external source
         var query = window.location.search.substring(1);
         var vars = query.split("&");
@@ -247,8 +280,8 @@
         // PID = Date.now() % 1000;
 
         // Tell server PID number
-        socket.emit("init", PID);   
-        
+        socket.emit("init", PID);
+
         // Hide the information passed in the URL
         window.history.replaceState("Hello", "World", "PointingTask");
 
@@ -279,7 +312,7 @@
         trial_cen = canvas.height*(Trials[currentTrial].cen/200);   // Radius from screen center to target center for the trial
         trial_tar = canvas.height*(Trials[currentTrial].tar/200);   // Radius of target in trial
         dest = Math.ceil(number_of_targets/2);
-        
+
         // Initialize Targets for trial
         for (var i = 0; i < number_of_targets; i++) {
             var temp = new Target(canvas.width/2 + Math.cos(i*angleIncr)*trial_cen, canvas.height/2 + Math.sin(i*angleIncr)*trial_cen, trial_tar, i);
@@ -309,7 +342,7 @@
                 var temp = new Target(canvas.width/2 + Math.cos(i*angleIncr)*trial_cen, canvas.height/2 + Math.sin(i*angleIncr)*trial_cen, trial_tar, i);
                 Targets.push(temp);
             }
-            
+
             canvasDraw();
         }
     }
@@ -337,7 +370,7 @@
         }
     }
 
-    // Shuffles Trials within each block by repeatedly picking random 2 trial positions to swap 
+    // Shuffles Trials within each block by repeatedly picking random 2 trial positions to swap
     function shuffleTrial(){
         var shuffle_one = Math.floor(Math.random() * Trials.length);
         var shuffle_two = Math.floor(Math.random() * Trials.length);
@@ -356,10 +389,10 @@
     function launchFullscreen(element) {
         if(element.requestFullscreen) {
             element.requestFullscreen();
-        } 
+        }
         else if(element.mozRequestFullScreen) {
             element.mozRequestFullScreen();
-        } 
+        }
         else if(element.webkitRequestFullscreen) {
             element.webkitRequestFullscreen();
         }
@@ -372,7 +405,7 @@
     function detectBrowserOS(){
         var nVer = navigator.appVersion;
         var nAgt = navigator.userAgent;
-        var fullVersion  = ''+parseFloat(navigator.appVersion); 
+        var fullVersion  = ''+parseFloat(navigator.appVersion);
         var majorVersion = parseInt(navigator.appVersion,10);
         var nameOffset,verOffset,ix;
 
@@ -381,7 +414,7 @@
             fullVersion = nAgt.substring(verOffset+6);
             if ((verOffset=nAgt.indexOf("Version"))!=-1){
                 fullVersion = nAgt.substring(verOffset+8);
-            } 
+            }
         }
         else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
             browserName = "Microsoft Internet Explorer";
@@ -396,7 +429,7 @@
             fullVersion = nAgt.substring(verOffset+7);
             if ((verOffset=nAgt.indexOf("Version"))!=-1){
                 fullVersion = nAgt.substring(verOffset+8);
-            } 
+            }
         }
         else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
             browserName = "Firefox";
@@ -417,7 +450,7 @@
         }
         majorVersion = parseInt(''+fullVersion,10);
         if (isNaN(majorVersion)) {
-            fullVersion  = ''+parseFloat(navigator.appVersion); 
+            fullVersion  = ''+parseFloat(navigator.appVersion);
             majorVersion = parseInt(navigator.appVersion,10);
         }
 

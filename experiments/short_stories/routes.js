@@ -1,5 +1,5 @@
 'use strict';
-var workers = require('../../lib/controllers/workers'); // Crowd Study Controllers
+var workers = require('../../lib/controllers/worker'); // Crowd Study Controllers
 var controllers = require('./controllers'); // Experiment Controllers
 
 /**
