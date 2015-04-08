@@ -17,7 +17,7 @@
 
     var worker_id = <%= worker_id %>;
     var platform = "<%= platform %>";
-
+    var hitId = "<%= hitId %>";
 
 
 
@@ -163,7 +163,8 @@
                     (invisibleMode ? 0 : 1) + "; "  +
                     (currentBlock + 1)  +
                     worker_id + "; " +
-                    platform +
+                    platform + "; " +
+                    hitId + "; " +
                     "\n");
         }
     }, false);
@@ -191,7 +192,7 @@
                         endTime = Date.now();
                         if(!skipFirst){
                             // Log mouse click data
-                            socket.emit('clickLog', PID + "; " +
+                            socket.emit( 'clickLog', PID + "; " +
                             trial_tar + "; " +
                             trial_cen + "; " +
                             Trials[currentTrial].tar  + "; " +
@@ -207,7 +208,9 @@
                             (invisibleMode ? 0 : 1) + "; "  +
                             (currentBlock + 1)  + ";" +
                             worker_id + ";" +
-                            platform + "\n");
+                            platform + "; " +
+                            hitId + "; " +
+                            "\n");
                         }
                         else{
                             skipFirst = false;

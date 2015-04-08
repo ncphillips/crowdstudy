@@ -22,7 +22,9 @@ var WorkerIDForm = React.createClass({
      */
     getDefaultProps: function () {
         return {
+            platform: 'crowdflower',
             url: '/workers',
+            dataType: 'json',
             callback: function (data) {
                 console.log('The WorkerIDForm was not supplied`callback` property.');
             }
@@ -34,13 +36,14 @@ var WorkerIDForm = React.createClass({
      */
     submitForm: function () {
         var worker_id = document.getElementById('worker-id').value;
+        console.log("Hello");
 
         $.ajax({
             url: this.props.url,
             type: 'POST',
-            dataType: 'json',
-            data: {worker_id: worker_id},
-            success: this.callback,
+            dataType: this.props.dataType,
+            data: {worker_id: worker_id, platform: this.props.platform},
+            success: this.props.callback,
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
@@ -61,8 +64,8 @@ var WorkerIDForm = React.createClass({
                     <label htmlFor="worker_id">Worker ID:</label>
                     <input
                         type="text"
-                        id="worker_id"
-                        name="worker_id"
+                        id="worker-id"
+                        name="worker-id"
                         className="form-control"/>
                 </div>
                 <div className="form-group">

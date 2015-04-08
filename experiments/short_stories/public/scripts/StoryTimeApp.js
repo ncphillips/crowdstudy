@@ -9,10 +9,10 @@ var StoryMetrics = React.createClass({displayName: "StoryMetrics",
     },
     render: function () {
         var metrics = this.props.metrics;
-        if (metrics.character_count) {
+        if (metrics.characters) {
             var data = [
-                { value: metrics.character_count.average, name: 'Average'},
-                { value: metrics.character_count.worker, name: 'You'}];
+                { value: metrics.characters.average, name: 'Average'},
+                { value: metrics.characters.worker, name: 'You'}];
 
             return (
                 React.createElement(BarChart_OX_LY, {id: "time-chart", data: data})
@@ -28,11 +28,11 @@ var StoryMetrics = React.createClass({displayName: "StoryMetrics",
 /**
  * Image
  */
-var StoryImage = React.createClass({displayName: "StoryImage",
+var Image = React.createClass({displayName: "Image",
     render: function () {
         return (
-            React.createElement("div", {id: "story-image"}, 
-                React.createElement("img", {src: this.props.img_url})
+            React.createElement("div", {class: "image"}, 
+                React.createElement("img", {src: this.props.url})
             )
         );
     }
@@ -95,15 +95,16 @@ var StoryForm = React.createClass({displayName: "StoryForm",
 
 var StoryTime = React.createClass({displayName: "StoryTime",
     render: function () {
+        var img_url = 'images/'+ this.props.img + '.png';
         return (
         React.createElement("div", null, 
-            React.createElement("h2", null, "Story: ", this.props.story_num), 
+            React.createElement("h2", null, "Story: ", this.props.img), 
             React.createElement("p", null, 
                 "You will be shown a series of pictures. For each picture, write a short story about that" + ' ' +
                 "picture. The story you write only needs to be a couple sentences long."
             ), 
             React.createElement(StoryMetrics, {metrics: this.props.metrics}), 
-            React.createElement(StoryImage, {img_url: this.props.img_url}), 
+            React.createElement(Image, {url: img_url}), 
             React.createElement(StoryForm, {storySubmitCallback: this.props.callback, submitting: this.props.submitting})
         )
         );
@@ -119,8 +120,7 @@ var StoryTimeApp = React.createClass({displayName: "StoryTimeApp",
         return {
             worker_id: null,
             submitting: true,
-            story_num: null,
-            img_url: '',
+            img: 1,
             code: '',
             metrics: {}
         };
@@ -134,7 +134,7 @@ var StoryTimeApp = React.createClass({displayName: "StoryTimeApp",
      */
     postData: function (data) {
         $.ajax({
-            url: 'http://localhost:3000/story_time/submitStory',
+            url: 'http://localhost:3000/short_stories/story',
             dataType: 'json',
             type: 'POST',
 
@@ -170,13 +170,17 @@ var StoryTimeApp = React.createClass({displayName: "StoryTimeApp",
                 start: this.state.start_time,
                 end: new Date()
             },
-            story_num: this.state.story_num,
+            img: this.state.img,
             story_text: story_text
         });
     },
 
     workerIdFormCallback: function (data) {
-        this.setState(data);
+        var new_state = {
+            worker_id: data.worker.id,
+            submitting: false
+        };
+        this.setState(new_state);
     },
 
     /**
@@ -197,7 +201,7 @@ var StoryTimeApp = React.createClass({displayName: "StoryTimeApp",
         }
         else {
             return (
-                React.createElement(WorkerIDForm, {callback: this.workerIdFormCallback, url: "/worker"}, 
+                React.createElement(WorkerIDForm, {callback: this.workerIdFormCallback}, 
                     React.createElement(EthicalStatement, null)
                 )
             );

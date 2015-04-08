@@ -1,6 +1,10 @@
 'use strict';
-var workers = require('../../lib/controllers/worker'); // Crowd Study Controllers
-var controllers = require('./controllers'); // Experiment Controllers
+var workers = require('../../lib/controllers/worker');
+var auth = require('../../lib/controllers/authentication');
+var controllers = require('./controllers');
+
+
+var NUM_IMAGES = 2;
 
 /**
  * Adds new routes to the application passed in.
@@ -10,31 +14,43 @@ module.exports = function (app) {
 
     app.get('/', controllers.renderApp);
 
-    app.get('/worker', workers.get_or_create);
-
+    app.post('/workers', workers.get_or_create, function () {
+        res.json({worker_id: req.context.worker.id})
+    });
 
     app.post('/story', function (req, res) {
         var A = require('../../alchemyapi');
         var alchemy = new A();
 
-        if (req.body.story_num >= 0 ){
-            alchemy.sentiment("text", req.body.story_text, {}, function (results) {
-                res.json({
-                    story_num: 0,
-                    img_url: 'images/crowdflower_worker_id.png',
-                    metrics: {
-                        time: {},
-                        characters: {},
-                        words: {},
-                        alchemy: results
-                    }
-                })
-            });
-        } else {
-            res.json({
-                story_num: 0,
-                img_url: 'crowdflower_worker_id.png',
-                metrics: {}
+        var img = parseInt(req.body.img);
+
+        // @todo Generate Metrics
+        var response = {
+            metrics: {
+                //alchemy: results,
+                time: { },
+                characters: {
+                    worker: req.body.story_text.length,
+                    average: 100
+                },
+                words: {}
+            }
+        };
+
+        // @todo Save results
+
+        // Send response.
+        if (img < NUM_IMAGES) {
+            // Next Image
+            response.img = img + 1;
+            res.json(response);
+
+        }
+        else {
+            // Generate code.
+            auth.generate_confirmation_code(req, res, function () {
+                response.code = req.confirmation_code;
+                res.json(response);
             })
         }
     });

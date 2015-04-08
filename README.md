@@ -67,6 +67,8 @@ Run the following commands to install io.js on your machine.
 Data is stored in a Mongo database, which is made accessible through `req.db`. By default, there are no models 
 or any other kind of type checking, but feel free to add them as needed. 
 
+Note: req.db is not accessible form socket functions.
+
 
 ### The Worker Collection
 Information about workers from Crowdflower and Mechanical Turk will be stored in a 
@@ -111,19 +113,17 @@ Run `docco *` at the command line to generate docco docs.
 JSDocs is not yet supported.
 
 ## Experiments
-Each experiment is represented by an Express app located in the 
-`experiments` directory. These experiments are mounted on a URL
-which corresponds to the experiment name. 
-
-Three example experiments are provided. The first is a simple example that just shows how to make 
-an experiment app, the second is an app which is meant to be interacted with using client-side javascript
-built into the Crowdflower and mTurk jobs, and the third is meant to be accessed via an external link.
+Each experiment is represented by an Express app located in the `experiments` directory. These 
+experiments are mounted on a URL which corresponds to the experiment name. 
 
 ### Basic App Structure
 Experiment sub-applications have the following structure:
 
     example/
         public/
+            images/
+                img_0.png
+                img_1.png
             scripts/
                 ExampleButton.jsx
                 ExampleButton.js
@@ -134,11 +134,13 @@ Experiment sub-applications have the following structure:
         app.js
         controllers.js
         routes.js
+        sockets.js
         
 
 * app.js – This file exports the experiment as an application. It sets up the experiment specific views, static files, and routes.
 * controller.js – Contains middleware and controller functions for handling requests.
 * routes.js - Is a function which sets up the routes needed for the experiment.
+* sockets.js - (Optional) Exports a function accepting the `config` and `server` objects. This can be used to set up sockets.
 * views/ – Contains EJS views. 
 * public/ – Contains public files specific to this experiment.
     * scripts/ – `.jsx` files here are compiled to `.js` files in the same directory when the server starts. 

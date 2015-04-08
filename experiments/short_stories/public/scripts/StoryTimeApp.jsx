@@ -9,10 +9,10 @@ var StoryMetrics = React.createClass({
     },
     render: function () {
         var metrics = this.props.metrics;
-        if (metrics.character_count) {
+        if (metrics.characters) {
             var data = [
-                { value: metrics.character_count.average, name: 'Average'},
-                { value: metrics.character_count.worker, name: 'You'}];
+                { value: metrics.characters.average, name: 'Average'},
+                { value: metrics.characters.worker, name: 'You'}];
 
             return (
                 <BarChart_OX_LY id="time-chart" data={data}></BarChart_OX_LY>
@@ -28,11 +28,11 @@ var StoryMetrics = React.createClass({
 /**
  * Image
  */
-var StoryImage = React.createClass({
+var Image = React.createClass({
     render: function () {
         return (
-            <div id="story-image">
-                <img src={this.props.img_url}></img>
+            <div class="image">
+                <img src={this.props.url}></img>
             </div>
         );
     }
@@ -95,15 +95,16 @@ var StoryForm = React.createClass({
 
 var StoryTime = React.createClass({
     render: function () {
+        var img_url = 'images/'+ this.props.img + '.png';
         return (
         <div>
-            <h2>Story: {this.props.story_num}</h2>
+            <h2>Story: {this.props.img}</h2>
             <p>
                 You will be shown a series of pictures. For each picture, write a short story about that
                 picture. The story you write only needs to be a couple sentences long.
             </p>
             <StoryMetrics metrics={this.props.metrics}></StoryMetrics>
-            <StoryImage img_url={this.props.img_url}></StoryImage>
+            <Image url={img_url}></Image>
             <StoryForm storySubmitCallback={this.props.callback} submitting={this.props.submitting}></StoryForm>
         </div>
         );
@@ -119,8 +120,7 @@ var StoryTimeApp = React.createClass({
         return {
             worker_id: null,
             submitting: true,
-            story_num: null,
-            img_url: '',
+            img: 1,
             code: '',
             metrics: {}
         };
@@ -134,7 +134,7 @@ var StoryTimeApp = React.createClass({
      */
     postData: function (data) {
         $.ajax({
-            url: 'http://localhost:3000/story_time/submitStory',
+            url: 'http://localhost:3000/short_stories/story',
             dataType: 'json',
             type: 'POST',
 
@@ -170,13 +170,17 @@ var StoryTimeApp = React.createClass({
                 start: this.state.start_time,
                 end: new Date()
             },
-            story_num: this.state.story_num,
+            img: this.state.img,
             story_text: story_text
         });
     },
 
     workerIdFormCallback: function (data) {
-        this.setState(data);
+        var new_state = {
+            worker_id: data.worker.id,
+            submitting: false
+        };
+        this.setState(new_state);
     },
 
     /**
@@ -197,7 +201,7 @@ var StoryTimeApp = React.createClass({
         }
         else {
             return (
-                <WorkerIDForm callback={this.workerIdFormCallback} url="/worker">
+                <WorkerIDForm callback={this.workerIdFormCallback}>
                     <EthicalStatement></EthicalStatement>
                 </WorkerIDForm>
             );

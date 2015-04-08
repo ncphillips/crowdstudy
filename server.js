@@ -118,7 +118,7 @@ experiments.forEach(function (path, n) {
     // Use the experiment on i
     app.use('/' + name, experiment.app);
 
-    if (experiment.init) experiment.init(config, server);
+    if (experiment.sockets) experiment.sockets(config, server);
 
     log.info('\t Experiment %s - %s', n+1, name);
 });
