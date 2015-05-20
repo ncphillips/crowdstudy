@@ -32,7 +32,7 @@ var Image = React.createClass({
     render: function () {
         return (
             <div class="image">
-                <img src={this.props.url}></img>
+                <img src={this.props.url} style={{"max-width": "500px", "max-height": "500"}}></img>
             </div>
         );
     }
@@ -79,6 +79,7 @@ var StoryForm = React.createClass({
         return (
             <form>
                 <div className="form-group">
+                    <label for="story-text">Write a short story:</label>
                     <textarea id="story-text" disabled={this.props.submitting} name="story-text" rows="4" className="form-control"></textarea>
                 </div>
                 <div className="form-group">
@@ -95,7 +96,7 @@ var StoryForm = React.createClass({
 
 var StoryTime = React.createClass({
     render: function () {
-        var img_url = 'images/'+ this.props.img + '.png';
+        var img_url = 'images/'+ this.props.img + '.jpg';
         return (
         <div>
             <h2>Story: {this.props.img}</h2>
@@ -105,6 +106,7 @@ var StoryTime = React.createClass({
             </p>
             <StoryMetrics metrics={this.props.metrics}></StoryMetrics>
             <Image url={img_url}></Image>
+            <br/>
             <StoryForm storySubmitCallback={this.props.callback} submitting={this.props.submitting}></StoryForm>
         </div>
         );

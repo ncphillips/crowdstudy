@@ -96,7 +96,7 @@ var WackPerformance = React.createClass({displayName: "WackPerformance",
         var data = this.props.performance.map(function (p) {
            return p.time.start - p.time.end;
         });
-        return React.createElement(BarChart, {data: data})
+        return React.createElement(BarChart_OX_LY, {data: data})
     }
 });
 
