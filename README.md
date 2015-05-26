@@ -99,11 +99,9 @@ validation for these documents, they should have the following structure:
 ## View rendering
 Pages are rendered server side using the EJS view engine.
 
-Any client side JSX files located in an experiments `public/scripts` directory are compiled to 
-Javascript when the server starts.
-
-## Logging
-A global `log` variable provides access to a bunyan logger. 
+Any client side JSX files located in an experiments `experiments/**/public/scripts/` directory are compiled to 
+Javascript when the server starts. The JS files are then compressed and put in `public/scripts/build/experiments/'
+by Browserified, along with the `CrowdExperiments` react component, in which you should wrap your experiment app.
 
 ## Documentation
 Two forms of documentation applications will used in this project: docco and JSDocs.
