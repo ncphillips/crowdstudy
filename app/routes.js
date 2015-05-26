@@ -6,13 +6,13 @@ module.exports = function (app) {
     app.get('/', controllers.index);
 
     // Worker Routes
-    app.get('/workers', worker.list, function (req, res) {
+    app.get('/worker', worker.list, function (req, res) {
         console.log('GET');
         res.send(req.context.workers);
     });
 
-    app.post('/workers', worker.get_or_create, function (req, res) {
-        res.json(req.context);
+    app.post('/worker', worker.get_or_create, worker.register_for_experiment, function (req, res) {
+        res.json(req.context.worker);
 
     });
 

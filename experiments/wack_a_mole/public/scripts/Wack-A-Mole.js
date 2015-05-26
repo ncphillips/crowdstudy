@@ -210,4 +210,10 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-React.render(React.createElement(WackAMoleApp, null), document.getElementById('wack-a-mole'));
+var WackExperiment = React.createClass({displayName: "WackExperiment",
+  render: function () {
+    return ( React.createElement(CrowdExperiment, null, " ", React.createElement(WackAMoleApp, null, " ")) );
+  }
+});
+
+React.render(React.createElement(WackExperiment, null), document.getElementById('wack-a-mole'));

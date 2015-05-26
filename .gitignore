@@ -5,6 +5,11 @@ docs/
 
 mturk-clt/bin/mturk.properties
 
+public/scripts/*.js
+public/scripts/**/*.js
+experiments/**/public/scripts/*.js
+experiments/**/public/scripts/**/*.js
+
 cf_api_key.js
 
 *.key

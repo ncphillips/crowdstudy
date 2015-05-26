@@ -19,3 +19,5 @@ var EthicalStatement = React.createClass({
         );
     }
 });
+
+module.exports = EthicalStatement;

@@ -11,3 +11,5 @@ var CodeDisplay = React.createClass({
         );
     }
 });
+
+module.exports = CodeDisplay;

@@ -32,7 +32,7 @@ var Image = React.createClass({displayName: "Image",
     render: function () {
         return (
             React.createElement("div", {class: "image"}, 
-                React.createElement("img", {src: this.props.url})
+                React.createElement("img", {src: this.props.url, style: {"max-width": "500px", "max-height": "500"}})
             )
         );
     }
@@ -79,6 +79,7 @@ var StoryForm = React.createClass({displayName: "StoryForm",
         return (
             React.createElement("form", null, 
                 React.createElement("div", {className: "form-group"}, 
+                    React.createElement("label", {for: "story-text"}, "Write a short story:"), 
                     React.createElement("textarea", {id: "story-text", disabled: this.props.submitting, name: "story-text", rows: "4", className: "form-control"})
                 ), 
                 React.createElement("div", {className: "form-group"}, 
@@ -95,7 +96,7 @@ var StoryForm = React.createClass({displayName: "StoryForm",
 
 var StoryTime = React.createClass({displayName: "StoryTime",
     render: function () {
-        var img_url = 'images/'+ this.props.img + '.png';
+        var img_url = 'images/'+ this.props.img + '.jpg';
         return (
         React.createElement("div", null, 
             React.createElement("h2", null, "Story: ", this.props.img), 
@@ -105,6 +106,7 @@ var StoryTime = React.createClass({displayName: "StoryTime",
             ), 
             React.createElement(StoryMetrics, {metrics: this.props.metrics}), 
             React.createElement(Image, {url: img_url}), 
+            React.createElement("br", null), 
             React.createElement(StoryForm, {storySubmitCallback: this.props.callback, submitting: this.props.submitting})
         )
         );

@@ -22,7 +22,12 @@ module.exports = function (grunt) {
             dynamic_mappings: {
                 files: [{
                     expand: true,
-                    src: ['experiments/**/public/scripts/*.jsx', 'public/scripts/*.jsx'],
+                    src: [
+                      'experiments/**/public/scripts/*.jsx',
+                      'experiments/**/public/scripts/**/*.jsx',
+                      'public/scripts/*.jsx',
+                      'public/scripts/**/*.jsx'
+                    ],
                     dest: '.', // I can't get this to work with a ../build pattern.
                     ext: '.js'
 
@@ -30,10 +35,19 @@ module.exports = function (grunt) {
             }
 
         },
+        browserify: {
+          dist: {
+            files: {
+              'public/scripts/build/CrowdStudy.js': [
+                'public/scripts/*.js',
+                'public/scripts/**/*.js'
+              ]
+            }
+          }
+        },
         // Runes nodemon and watch concurrently, and makes sure to display all logs.
         concurrent: {
-            default: ['nodemon', 'watch', 'react'],
-            debug: ['nodemon', 'watch', 'react'],
+            default: ['nodemon', 'watch', 'react', 'browserify'],
             options: {
                 logConcurrentOutput: true
             }
