@@ -1,4 +1,5 @@
 'use strict';
+var CrowdExperiment = require('CrowdExperiment');
 
 var Mole = React.createClass({
     render: function () {
@@ -91,15 +92,6 @@ var Performance = React.createClass({
 
 });
 
-var WackPerformance = React.createClass({
-    render: function () {
-        var data = this.props.performance.map(function (p) {
-           return p.time.start - p.time.end;
-        });
-        return <BarChart_OX_LY data={data}></BarChart_OX_LY>
-    }
-});
-
 var WackAMoleApp = React.createClass({
     getInitialState: function () {
         return {
@@ -153,6 +145,7 @@ var WackAMoleApp = React.createClass({
 
         if (this.state.timeout_id)
             clearTimeout(this.state.timeout_id);
+        console.log("Waiting");
         var t_id = setTimeout(this.moveMole, waittime );
 
         this.setState({
@@ -192,7 +185,6 @@ var WackAMoleApp = React.createClass({
             <div>
                 <div>
                     <h1>Wack a Mole!</h1>
-                    <WackPerformance {...this.state}></WackPerformance>
                     <table className="table">
                         <tr> <td>Whack Count: {this.state.hit_count}</td> <td>Miss Count: {this.state.miss_count}</td> </tr>
                         <tr> <td>Screen Height: {this.state.screen.height}</td> <td>Screen Width: {this.state.screen.width}</td> </tr>
@@ -206,14 +198,20 @@ var WackAMoleApp = React.createClass({
     }
 });
 
-function getRandomInt(min, max) {
+var getRandomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 var WackExperiment = React.createClass({
   render: function () {
-    return ( <CrowdExperiment> <WackAMoleApp> </WackAMoleApp></CrowdExperiment> );
+    console.log("Wacking moles.");
+    return (
+      <CrowdExperiment experiment_name="wack_a_mole"o>
+        <WackAMoleApp/>
+      </CrowdExperiment>
+    );
   }
 });
 
 React.render(<WackExperiment/>, document.getElementById('wack-a-mole'));
+

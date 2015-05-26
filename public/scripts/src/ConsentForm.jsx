@@ -1,5 +1,5 @@
 'use strict';
-var EthicalStatement = require('./Ethics');
+var EthicalStatement = require('Ethics');
 
 var ConsentForm = React.createClass({
   render: function () {
@@ -10,11 +10,11 @@ var ConsentForm = React.createClass({
           <div className="form-group row">
             <div className="col-sm-2"></div>
             <div className="col-sm-3">
-              <input type="btn" className="btn btn-success" onClick={this.props.consent} value="Yes"/>
+              <input type="btn" className="btn btn-success" onClick={this.props.consent} defaultValue="Yes"/>
             </div>
             <div className="col-sm-1"></div>
             <div className="col-sm-3">
-              <input type="btn" className="btn btn-danger"  onClick={this.props.noConsent} value="No"/>
+              <input type="btn" className="btn btn-danger"  onClick={this.props.noConsent} defaultValue="No"/>
             </div>
             <div className="col-sm-2"></div>
           </div>

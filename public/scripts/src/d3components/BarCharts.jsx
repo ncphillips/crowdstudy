@@ -23,7 +23,7 @@ var D3Component = React.createClass({
 var BarChart_OX_LY = React.createClass({
     getDefaultProps: function () {
         return {
-            id: '',
+            id: 'barchart',
             width: 200,
             height: 200,
             data: []
@@ -179,3 +179,6 @@ function type(d) {
     d.value = +d.value; // coerce to number
     return d;
 }
+
+
+module.exports.OX_LY = BarChart_OX_LY;

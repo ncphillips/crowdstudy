@@ -1,8 +1,8 @@
 'use strict';
 
-var WorkerInfo = require('./Worker');
-var ConsentForm = require('./ConsentForm');
-var CodeDisplay = require('./CodeDisplay');
+var WorkerInfo = require('Worker');
+var ConsentForm = require('ConsentForm');
+var CodeDisplay = require('CodeDisplay');
 
 var GIVE_CONSENT_URL = '';
 var REVOKE_CONSENT_URL = '';
@@ -16,7 +16,7 @@ var REVOKE_CONSENT_URL = '';
 var CrowdExperiment = React.createClass({
   render: function () {
     var component_to_render = null;
-    console.log(this.props.children);
+    console.log("Children:", this.props.children);
 
     // Collect Worker Info
     if (!this.state.worker.id || !this.state.worker.platform){
@@ -113,10 +113,5 @@ var CrowdExperiment = React.createClass({
   }
 
 });
-
-var test_element = document.getElementById('crowd-experiment-test');
-if (test_element) {
-  React.render(<CrowdExperiment/>, test_element);
-};
 
 module.exports = CrowdExperiment;
