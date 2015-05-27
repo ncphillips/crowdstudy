@@ -23,6 +23,9 @@
     "mongodb": "1.4.34",
 
     "react": "0.12",
+    "flux": "*",
+    "es6-promises": "*",
+    "object-assign": "*",
     "express-react-views": "0.7.1",
 
     "socket.io": "^1.0.6"

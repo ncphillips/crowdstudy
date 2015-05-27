@@ -206,7 +206,7 @@ var WackExperiment = React.createClass({
   render: function () {
     console.log("Wacking moles.");
     return (
-      <CrowdExperiment experiment_name="wack_a_mole"o>
+      <CrowdExperiment experiment_name="wack_a_mole">
         <WackAMoleApp/>
       </CrowdExperiment>
     );

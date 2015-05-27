@@ -1,6 +1,6 @@
 'use strict';
 
-var WorkerInfo = require('Worker');
+var WorkerRegistrationForm = require('WorkerRegistrationForm');
 var ConsentForm = require('ConsentForm');
 var CodeDisplay = require('CodeDisplay');
 
@@ -10,31 +10,31 @@ var REVOKE_CONSENT_URL = '';
 /**
  * CrowdExperiment
  *
- * This is a React application for running an crowd work experiment.
- *
+ * This is a controller-view.
  */
 var CrowdExperiment = React.createClass({
   render: function () {
     var component_to_render = null;
-    console.log("Children:", this.props.children);
 
     // Collect Worker Info
     if (!this.state.worker.id || !this.state.worker.platform){
-      console.log("Getting worker info.");
-      component_to_render = this.workerInfoComponent()
+      component_to_render = this.workerRegistrationForm()
     }
+    // Display Exeriment-Completion Code
+    else if (this.state.experiment.completed) {
+      component_to_render = <CodeDisplay code={this.state.experiment.code}/>
+    }
+    // Display Exit Page
     else if (this.state.experiment.consent === false) {
       component_to_render = (<p>Thank you for your time.</p>);
     }
     // Ask for Consent
     else if (this.state.experiment.consent == null) {
-      console.log("Getting consent");
       component_to_render = this.consentComponent();
     }
-    // Show experiment.
+    // Run Experiment.
     else if (this.state.experiment.consent) {
-      console.log("Starting experiment.");
-      component_to_render = this.props.children;
+      component_to_render = <this.props.experiment_app worker={this.state.worker} data={this.state.experiment} exit={this.exit}/>
     }
 
     return (
@@ -51,11 +51,12 @@ var CrowdExperiment = React.createClass({
       // Worker Information
       worker: {
         id: '',
-        platform: '',
+        platform: ''
       },
 
       // State Data to be used by the Experiment.
       experiment: {
+        code: '',
         consent: null,
         completed: false
       }
@@ -68,17 +69,18 @@ var CrowdExperiment = React.createClass({
   },
 
   // Worker Information
-  workerRetrieved: function (worker) {
+  workerRegistered: function (worker) {
     var w = {
+      _id: worker._id,
       id: worker.id,
       platform: worker.platform
     };
 
     var e = worker.experiments[this.props.experiment_name];
+    console.log(worker);
 
     this.setState({worker: w, experiment: e});
   },
-
 
   // Consent
   consent: function () {
@@ -90,28 +92,39 @@ var CrowdExperiment = React.createClass({
     var experiment = this.state.experiment;
     experiment.consent = false;
     this.setState({experiment: experiment});
+    // Update Database
   },
   revokeConsent: function () {
     console.log("Consent revoked.");
+    this.setState({experiment: {consent: false}});
+    // Update Database
   },
 
   // Sub components.
-  workerInfoComponent: function () {
+  workerRegistrationForm: function () {
     return (
-      <WorkerInfo experiment_name={this.props.experiment_name} callback={this.workerRetrieved}>
+      <WorkerRegistrationForm experiment_name={this.props.experiment_name} callback={this.workerRegistered}>
         <p>
           We are studying crowd work.
         </p>
         <p>
           Before starting, please tell us what platform you are coming from, and what you're worker ID is.
         </p>
-      </WorkerInfo>
+      </WorkerRegistrationForm>
     );
   },
   consentComponent: function () {
     return <ConsentForm consent={this.consent} noConsent={this.noConsent}/>
-  }
+  },
 
+  // Experiment Completed.
+  exit: function (experiment, completed) {
+    if (completed) {
+      var code = "A76CJLWOI96HS8S";
+      this.setState({experiment: {code: code, completed: true}});
+    }
+    // Update database.
+  }
 });
 
 module.exports = CrowdExperiment;

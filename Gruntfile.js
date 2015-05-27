@@ -38,9 +38,7 @@ module.exports = function (grunt) {
     browserify: {
       dist: {
         files: {
-          'public/scripts/build/CrowdStudy.js': [
-            './public/scripts/src/*.js',
-          ]
+          // Generated Below.
         }
       },
       options: {
@@ -48,7 +46,7 @@ module.exports = function (grunt) {
           'CrowdExperiment': './public/scripts/src/CrowdExperiment.js',
           'ConsentForm': './public/scripts/src/ConsentForm.js',
           'CodeDisplay': './public/scripts/src/CodeDisplay.js',
-          'Worker': './public/scripts/src/Worker.js',
+          'WorkerRegistrationForm': './public/scripts/src/WorkerRegistrationForm.js',
           'Ethics': './public/scripts/src/Ethics.js',
           'BarCharts': './public/scripts/src/d3components/BarCharts.js'
         }
@@ -71,7 +69,7 @@ module.exports = function (grunt) {
     var scripts = ['.', 'experiments', name,'public/scripts/*.js'].join('/');
     var subscripts = ['.','experiments', name,'public/scripts/**/*.js'].join('/');
 
-    grunt_config.browserify.dist.files['public/scripts/build/experiments/'+name+'.js'] = [scripts, subscripts];
+    grunt_config.browserify.dist.files['public/scripts/build/' + name + '.js'] = [scripts, subscripts];
   });
 
   grunt.initConfig(grunt_config);

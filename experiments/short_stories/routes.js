@@ -1,9 +1,5 @@
 'use strict';
-var workers = require('../../lib/controllers/worker');
-var auth = require('../../lib/controllers/authentication');
 var controllers = require('./controllers');
-
-
 var NUM_IMAGES = 2;
 
 /**
@@ -13,10 +9,6 @@ var NUM_IMAGES = 2;
 module.exports = function (app) {
 
     app.get('/', controllers.renderApp);
-
-    app.post('/workers', workers.get_or_create, function () {
-        res.json({worker_id: req.context.worker.id})
-    });
 
     app.post('/story', function (req, res) {
         var A = require('../../alchemyapi');

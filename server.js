@@ -11,7 +11,7 @@ var express = require('express');
 var body_parser = require('body-parser');
 var response_time = require('response-time');
 var session = require('express-session');
-var crowd_platforms = require('./lib/controllers/crowd_platform');
+var crowd_platforms = require('./lib/middleware/crowd_platform');
 
 // Used for finding files with regex.
 var glob = require('glob');

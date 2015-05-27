@@ -1,3 +1,5 @@
+'use strict';
+var WORKER_REGISTRATION_URL = '/worker/register';
 /**
  * This React component renders a page for capturing a crowd worker's id and platform.
  *
@@ -10,14 +12,14 @@
  *   },
  *   render: function () {
  *      return (
- *        <WorkerIDForm url="/registerWorker" callback={this.workerRegistered}>
+ *        <WorkerRegistrationForm callback={this.workerRegistered}>
  *            Here is some additional information pertaining to this experiment.
- *        </WorkerIDForm>
+ *        </WorkerRegistrationForm>
  *      );
  *   }
  * }
  */
-var WorkerInfo = React.createClass({
+var WorkerRegistrationForm = React.createClass({
   render: function () {
     return (
       <div id="worker-id-form">
@@ -34,7 +36,9 @@ var WorkerInfo = React.createClass({
           <input type="text" id="worker-id" name="worker-id" className="form-control"/>
         </div>
         <div className="form-group">
-          <input type="button" id="worker-id-button" className="btn btn-primary form-control" value="Submit" onClick={this.submitForm}/>
+          <input type="button" id="worker-id-button"
+            className="btn btn-primary form-control"
+            value="Submit" onClick={this.submitForm}/>
         </div>
       </div>
     );
@@ -45,12 +49,9 @@ var WorkerInfo = React.createClass({
    */
   getDefaultProps: function () {
     return {
-      platform: '',
       experiment: 'placeholder',
-      url: '/worker',
-      dataType: 'json',
-      callback: function (data) {
-        console.log('The WorkerInfo component was not supplied `callback` property.');
+      callback: function () {
+        console.log("WorkerRegistrationForm callback no provided.");
       }
     };
   },
@@ -60,13 +61,20 @@ var WorkerInfo = React.createClass({
    *
    * Data Posted: {
    *   worker_id: 12345,
-   *   platform: 'crowdflower'
+   *   platform: 'crowdflower',
+   *   experiment_name: "example_experiment"
    * }
    *
    * Data Returned: {
    *    worker: {
    *        id: 12345,
    *        platform: 'crowdflower',
+   *        experiments: {
+   *          example_experiment: {
+   *            completed: false,
+   *            consent: null
+   *          }
+   *        }
    *        consent: null,
    *        registered: True
    * }
@@ -75,12 +83,10 @@ var WorkerInfo = React.createClass({
     var worker_id = document.getElementById('worker-id').value;
     var platform = document.getElementById('worker-platform').value;
 
-    console.log(worker_id, platform);
-
     $.ajax({
-      url: this.props.url,
+      url: WORKER_REGISTRATION_URL,
       type: 'POST',
-      dataType: this.props.dataType,
+      dataType: 'json',
       data: {
         worker_id: worker_id,
         platform: platform,
@@ -94,4 +100,4 @@ var WorkerInfo = React.createClass({
   }
 });
 
-module.exports = WorkerInfo;
+module.exports = WorkerRegistrationForm;
