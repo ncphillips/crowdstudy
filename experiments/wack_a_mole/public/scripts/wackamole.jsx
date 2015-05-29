@@ -2,6 +2,9 @@
 var CrowdExperiment = require('CrowdExperiment');
 var Field = require('./components/Field');
 var DIMENSIONS = [3, 3];
+var HIT = 2;
+var MISS = -1;
+var DOWN = -2
 var WAIT_TIMES = [];
 
 for (var i = 1; i <= 10; i++) {
@@ -14,15 +17,23 @@ var getRandomInt = function (min, max) {
 
 var WackAMoleApp = React.createClass({
   render: function () {
+    var field = null;
+    if (this.state.round.number >= 0) {
+      field = (<Field dimensions={this.props.settings.dimensions} row={this.state.round.mole_row} patch={this.state.round.mole_col} hit={this.moleHit} miss={this.moleMiss}/>);
+    };
+
     return (
       <div>
         <h2>Wack-A-Mole</h2>
         <p>You have {this.props.settings.wait_times.length} chances to wack that mole!</p>
-        <p><b>SCORE: </b>{this.state.round.score}</p>
+        <ul>
+          <li>{HIT} points for every mole wacked!</li>
+          <li>{MISS} points for each wack that misses!</li>
+          <li>{DOWN} points for each mole that hides before you wack them!</li>
+        </ul>
+        <p><b>Score: </b>{this.state.round.score}</p>
         <input type="btn" className="btn btn-primary" value="Start!" onClick={this.startRound} disabled={this.state.round.number >= 0}/>
-        <Field dimensions={this.props.settings.dimensions}
-          row={this.state.round.mole_row} patch={this.state.round.mole_col}
-          hit={this.moleHit} miss={this.moleMiss}/>
+      {field}
       </div>
     );
   },
@@ -130,7 +141,7 @@ var WackAMoleApp = React.createClass({
     misses.push({x: e.clientX, y: e.clientY, time: e.timeStamp});
 
     var state = this.state;
-    state.round.score = state.round.score - 1;
+    state.round.score = state.round.score + MISS;
     state.round.mouse_misses = misses;
     this.setState(state);
   },
@@ -146,7 +157,7 @@ var WackAMoleApp = React.createClass({
     }
 
     var state = this.state;
-    state.round.score = this.state.round.score + 1;
+    state.round.score = this.state.round.score + HIT;
     state.round.hit = true;
     state.round.time_end = e.timeStamp;
     state.round.mouse_end = [e.clientX, e.clientY];
@@ -162,7 +173,7 @@ var WackAMoleApp = React.createClass({
       clearTimeout(this.state.round.timeout_id);
     }
     var state = this.state;
-    state.round.score = state.round.score - 1;
+    state.round.score = state.round.score + DOWN;
     state.round.hit = false;
     state.round.time_end = state.round.time_start + state.round.time_interval;
     state.round.mouse_end = null;
