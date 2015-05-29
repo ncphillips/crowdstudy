@@ -30,7 +30,7 @@ var Row = React.createClass({
   render: function () {
     var patches= [];
     for (let i=1; i <= this.props.dimensions[1]; i++){
-      let has_mole = this.props.mole_patch === i;
+      var has_mole = this.props.mole_patch === i;
       patches.push(
         <Patch key={i} has_mole={has_mole} hit={this.props.hit} miss={this.props.miss}></Patch>
       );
@@ -45,7 +45,7 @@ var Row = React.createClass({
  *
  * Props:
  *    1. dimensions = [Number, Number]
- *    2. row = Number
+ *    2. row = Numbe
  *    3. patch = Number
  *    4. hit = func
  *    5. miss = func
@@ -54,8 +54,8 @@ var Field = React.createClass({
   render: function () {
     var rows = [];
 
-    for (let i=1; i <= this.props.dimensions[0]; i++){
-      let mole_patch = 0;
+    for (var i=1; i <= this.props.dimensions[0]; i++){
+      var mole_patch = 0;
       if (this.props.row === i) mole_patch = this.props.patch;
       rows.push(
         <Row dimensions={this.props.dimensions}

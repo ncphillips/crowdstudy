@@ -4,7 +4,7 @@ var Field = require('./components/Field');
 var DIMENSIONS = [3, 3];
 var WAIT_TIMES = [];
 
-for (let i = 1; i <= 10; i++) {
+for (var i = 1; i <= 10; i++) {
   WAIT_TIMES.push({low: 4 - ((i/3) - 1), high: 4 - ((i/3) - 1) + (i % 3)});
 }
 
