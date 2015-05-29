@@ -29,7 +29,7 @@ var Patch = React.createClass({
 var Row = React.createClass({
   render: function () {
     var patches= [];
-    for (let i=1; i <= this.props.dimensions[1]; i++){
+    for (var i=1; i <= this.props.dimensions[1]; i++){
       var has_mole = this.props.mole_patch === i;
       patches.push(
         <Patch key={i} has_mole={has_mole} hit={this.props.hit} miss={this.props.miss}></Patch>
