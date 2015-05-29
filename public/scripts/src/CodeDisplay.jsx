@@ -2,7 +2,7 @@ var CodeDisplay = React.createClass({
     render: function () {
         return (
             <div>
-                <h1>Thank you for taking part in this UPEI HCI Lab experiment!</h1>
+                <h2>Thank you for taking part in this UPEI HCI Lab experiment!</h2>
                 <p>
                     Please copy the following code and paste it into the textbox in the job you came from.
                 </p>

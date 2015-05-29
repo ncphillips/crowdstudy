@@ -88,8 +88,10 @@ var WorkerRegistrationForm = React.createClass({
       type: 'POST',
       dataType: 'json',
       data: {
-        worker_id: worker_id,
-        platform: platform,
+        worker: {
+          id: worker_id,
+          platform: platform
+        },
         experiment_name: this.props.experiment_name
       },
       success: this.props.callback,

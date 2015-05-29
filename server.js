@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
 // Middleware
 // app.use(session());
 app.use(response_time());
-app.use(body_parser.urlencoded({extended: false}));
+app.use(body_parser.urlencoded({extended: true}));
 app.use(body_parser.json());
 
 // This tells express where static files can be served from.

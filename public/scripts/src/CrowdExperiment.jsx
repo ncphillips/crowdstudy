@@ -69,7 +69,8 @@ var CrowdExperiment = React.createClass({
   },
 
   // Worker Information
-  workerRegistered: function (worker) {
+  workerDidUpdate: function (worker) {
+    console.log(worker);
     var w = {
       _id: worker._id,
       id: worker.id,
@@ -77,8 +78,6 @@ var CrowdExperiment = React.createClass({
     };
 
     var e = worker.experiments[this.props.experiment_name];
-    console.log(worker);
-
     this.setState({worker: w, experiment: e});
   },
 
@@ -95,7 +94,6 @@ var CrowdExperiment = React.createClass({
     // Update Database
   },
   revokeConsent: function () {
-    console.log("Consent revoked.");
     this.setState({experiment: {consent: false}});
     // Update Database
   },
@@ -103,7 +101,7 @@ var CrowdExperiment = React.createClass({
   // Sub components.
   workerRegistrationForm: function () {
     return (
-      <WorkerRegistrationForm experiment_name={this.props.experiment_name} callback={this.workerRegistered}>
+      <WorkerRegistrationForm experiment_name={this.props.experiment_name} callback={this.workerDidUpdate}>
         <p>
           We are studying crowd work.
         </p>
@@ -118,12 +116,26 @@ var CrowdExperiment = React.createClass({
   },
 
   // Experiment Completed.
-  exit: function (experiment, completed) {
-    if (completed) {
-      var code = "A76CJLWOI96HS8S";
-      this.setState({experiment: {code: code, completed: true}});
-    }
+  exit: function (data) {
     // Update database.
+    var experiment = this.state.experiment;
+    experiment.data = data;
+    experiment.completed = true;
+
+    $.ajax({
+      url: '/worker/submit',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        worker: this.state.worker,
+        experiment: experiment,
+        experiment_name: this.props.experiment_name
+      },
+      success: this.workerDidUpdate,
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   }
 });
 
