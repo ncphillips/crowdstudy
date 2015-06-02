@@ -1,5 +1,6 @@
 'use strict';
 
+var DemographicSurvey = require('DemographicSurvey');
 var WorkerRegistrationForm = require('WorkerRegistrationForm');
 var ConsentForm = require('ConsentForm');
 var CodeDisplay = require('CodeDisplay');
@@ -19,6 +20,9 @@ var CrowdExperiment = React.createClass({
     // Collect Worker Info
     if (!this.state.worker.id || !this.state.worker.platform){
       component_to_render = this.workerRegistrationForm()
+    }
+    else if (!this.state.worker.survey_completed) {
+      component_to_render = <DemographicSurvey worker={this.state.worker}/>
     }
     // Display Exeriment-Completion Code
     else if (this.state.experiment.completed) {

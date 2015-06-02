@@ -48,6 +48,7 @@ module.exports = function (grunt) {
           'CodeDisplay': './public/scripts/src/CodeDisplay.js',
           'WorkerRegistrationForm': './public/scripts/src/WorkerRegistrationForm.js',
           'Ethics': './public/scripts/src/Ethics.js',
+          'DemographicSurvey': './public/scripts/src/DemographicSurvey.js',
           'BarCharts': './public/scripts/src/d3components/BarCharts.js'
         }
       }
