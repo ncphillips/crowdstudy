@@ -1,0 +1,48 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+
+</script>
+<script>
+setInterval(function(){ 
+
+  var text = ($("#id_description_iframe").contents().find("body").html()); 
+  if (text.indexOf("It works!") > -1){
+    alert("Woo");
+  }
+
+}, 1000);
+</script>
+<form action="https://docs.google.com/a/upei.ca/forms/d/1EeQglwKi3B_R2NFrm69S8R-IpZye08SssOh22WSHsx4/formResponse" method="POST" id="ss-form" target="_self" onsubmit=""><ol role="list" class="ss-question-list" style="padding-left: 0">
+
+<div class="ss-form-question errorbox-good" role="listitem">
+<div dir="ltr" class="ss-item  ss-radio"><div class="ss-form-entry">
+<label class="ss-q-item-label" for="entry_1708025436"><div class="ss-q-title">Blah
+</div>
+<div class="ss-q-help ss-secondary-text" dir="ltr">answer</div></label>
+
+<ul class="ss-choices" role="radiogroup" aria-label="Blah answer "><li class="ss-choice-item"><label><span class="ss-choice-item-control goog-inline-block"><input type="radio" name="entry.303739040" value="Option 1" id="group_303739040_1" role="radio" class="ss-q-radio" aria-label="Option 1"></span>
+<span class="ss-choice-label">Option 1</span>
+</label></li> <li class="ss-choice-item"><label><span class="ss-choice-item-control goog-inline-block"><input type="radio" name="entry.303739040" value="Option 2" id="group_303739040_2" role="radio" class="ss-q-radio" aria-label="Option 2"></span>
+<span class="ss-choice-label">Option 2</span>
+</label></li></ul>
+<div class="error-message" id="1708025436_errorMessage"></div>
+<div class="required-message">This is a required question</div></div></div></div>
+<input type="hidden" name="draftResponse" value="[,,&quot;-2783094307287308039&quot;]
+">
+<input type="hidden" name="pageHistory" value="0">
+
+
+<input type="hidden" name="fbzx" value="-2783094307287308039">
+
+<div class="ss-item ss-navigate"><table id="navigation-table"><tbody><tr><td class="ss-form-entry goog-inline-block" id="navigation-buttons" dir="ltr">
+<input type="submit" name="submit" value="Submit" id="ss-submit" class="jfk-button jfk-button-action ">
+</td>
+</tr></tbody></table></div></ol></form>
+<iframe id="id_description_iframe" src="http://localhost:3000/cake.html" class="rte-zone" height="200" frameborder="0" title="description">
+  <html>
+    <head></head>
+    <body class="frameBody">
+      test<br/>
+    </body>
+  </html>
+</iframe>
+

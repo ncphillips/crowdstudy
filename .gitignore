@@ -3,7 +3,7 @@ docs/
 *.log
 .idea
 
-mturk-clt/bin/mturk.properties
+experiments/wack_a_mole/public/mturk-clt/bin/mturk.properties
 
 public/scripts/*.js
 public/scripts/**/*.js

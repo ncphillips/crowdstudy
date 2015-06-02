@@ -2,7 +2,44 @@
 
 var Mole = React.createClass({
   render: function () {
-    return <img src="mole_1.jpg" width="100" height="100"></img>;
+    var img_src = "mole_" + this.state.img + ".png";
+
+    return <img src={img_src} width="100" height="100"></img>;
+  },
+  getInitialState: function () {
+    return {
+      img: 0
+    };
+  },
+  componentDidMount: function () {
+    this.openEyes();
+  },
+  openEyes: function () {
+    this.setState({img: 0}, function () {
+      if (this.state.hit) {
+        this.wince();
+      }
+      else {
+        setTimeout(this.blink, 1000);
+      }
+    });
+  },
+  blink: function () {
+    var _this = this;
+
+    one();
+
+    function one(){
+      _this.setState({img: 1}, setTimeout.bind(null, two, 50));
+    }
+
+    function two() {
+      _this.setState({img: 2}, setTimeout.bind(null, _this.openEyes, 100));
+    }
+  },
+  wince: function () {
+    console.log("WINCING IN PAIN@");
+
   }
 });
 
@@ -17,12 +54,20 @@ var Patch = React.createClass({
     var child = <Empty/>;
     var callback = this.props.miss;
     var className = 'empty-patch';
+
     if (this.props.has_mole) {
-      child = <Mole/>;
-      callback = this.props.hit;
+      child = <Mole was_hit={this.state.hit} callback={this.props.callback} />;
+      callback = this.hit;
       className = 'mole-patch';
     }
+
     return <td className={className} onClick={callback}>{child}</td>;
+  },
+  getInitialState: function () {
+    return { hit: false };
+  },
+  hit: function () {
+    this.setState({hit:true});
   }
 });
 
