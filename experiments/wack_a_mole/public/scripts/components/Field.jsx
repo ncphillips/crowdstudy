@@ -4,7 +4,12 @@ var Mole = React.createClass({
   render: function () {
     var img_src = "mole_" + this.state.img + ".png";
 
-    return <img src={img_src} width="100" height="100"></img>;
+    return <img src={img_src} style={{position: "absolute", top: 15, left: 40, width: "120px", height: "120px", "z-index": 2}}/>
+  },
+  getDefaultProps: function () {
+    return {
+      was_hit: false
+    };
   },
   getInitialState: function () {
     return {
@@ -16,11 +21,11 @@ var Mole = React.createClass({
   },
   openEyes: function () {
     this.setState({img: 0}, function () {
-      if (this.state.hit) {
+      if (this.props.was_hit) {
         this.wince();
       }
       else {
-        setTimeout(this.blink, 1000);
+        setTimeout(this.blink, 800);
       }
     });
   },
@@ -38,36 +43,57 @@ var Mole = React.createClass({
     }
   },
   wince: function () {
-    console.log("WINCING IN PAIN@");
+    var _this = this;
 
-  }
-});
+    three();
 
-var Empty = React.createClass({
-  render: function () {
-    return <img src="hill.jpg" width="100" height="100"></img>;
+    function three() {
+      _this.setState({img: 3}, setTimeout.bind(null, four, 50));
+    }
+
+    function four() {
+      _this.setState({img: 4}, setTimeout.bind(null, five, 50));
+    }
+    function five() {
+      _this.setState({img: 5}, setTimeout.bind(null, six, 50));
+    }
+    function six() {
+      _this.setState({img: 6}, setTimeout.bind(null, _this.props.callback, 100));
+    }
   }
 });
 
 var Patch = React.createClass({
   render: function () {
-    var child = <Empty/>;
+    var child = null;
     var callback = this.props.miss;
     var className = 'empty-patch';
 
     if (this.props.has_mole) {
-      child = <Mole was_hit={this.state.hit} callback={this.props.callback} />;
-      callback = this.hit;
+      child = <Mole was_hit={this.state.hit} callback={this.props.hit.bind(null, this.state.event)} />;
+      callback = this.clickedyClack;
       className = 'mole-patch';
     }
 
-    return <td className={className} onClick={callback}>{child}</td>;
+    return (
+      <td className={className} onClick={callback}>
+        <div style={{position: "relative", width: "200px", height: "200px"}}>
+          <img  src="background.png" style={{position: "absolute", top: 0, left: 0, width: "200px", height: "200px", "z-index": 0}}/>
+          <img src="upper.png" style={{position: "absolute", top: 0, left: 0, width: "200px", height: "100px", "z-index": 1}}/>
+          {child}
+          <img src="lower.png" style={{position: "absolute", top: 100, left: 0, width: "200px", height: "100px", "z-index": 4}}/>
+        </div>
+      </td>
+    );
   },
   getInitialState: function () {
-    return { hit: false };
+    return {
+      hit: false,
+      event: {}
+    };
   },
-  hit: function () {
-    this.setState({hit:true});
+  clickedyClack: function (e) {
+    this.setState({hit:true, event: e});
   }
 });
 
@@ -109,7 +135,7 @@ var Field = React.createClass({
     }
     return (
       <div>
-        <table className="table table-bordered">
+        <table>
         {rows}
         </table>
       </div>

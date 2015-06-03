@@ -21,9 +21,9 @@ var CrowdExperiment = React.createClass({
     if (!this.state.worker.id || !this.state.worker.platform){
       component_to_render = this.workerRegistrationForm()
     }
-    else if (!this.state.worker.survey_completed) {
-      component_to_render = <DemographicSurvey worker={this.state.worker}/>
-    }
+    //else if (!this.state.worker.survey_completed) {
+    //  component_to_render = <DemographicSurvey worker={this.state.worker}/>
+    //}
     // Display Exeriment-Completion Code
     else if (this.state.experiment.completed) {
       component_to_render = <CodeDisplay code={this.state.experiment.code}/>

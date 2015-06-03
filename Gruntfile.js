@@ -55,7 +55,7 @@ module.exports = function (grunt) {
     },
     // Runes nodemon and watch concurrently, and makes sure to display all logs.
     concurrent: {
-      default: ['nodemon', 'watch', 'react', 'browserify'],
+      default: ['react', 'browserify', 'watch', 'nodemon'],
       options: {
         logConcurrentOutput: true
       }
