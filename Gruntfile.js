@@ -62,6 +62,9 @@ module.exports = function (grunt) {
     }
   };
 
+  ///////////////////////////////////////
+  // Browserify Experiment Javascripts //
+  ///////////////////////////////////////
   var glob = require('glob');
   var experiments = glob.sync('experiments/**/app.js');
   experiments.forEach(function (path, n) {
