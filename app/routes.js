@@ -27,6 +27,8 @@ module.exports = function (app) {
     }
   );
 
+  app.get('/survey', controllers.survey);
+
   //app.post('/worker/:id/experiment', worker.register_for_experiment);
   //app.get('/worker/:worker_id');
   //app.get('/worker/:worker_id/revokeConsent/');

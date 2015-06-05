@@ -1,4 +1,5 @@
 var MESSAGE = "Thank you for completing this survey, your response has been recorded.";
+MESSAGE = "Are you a person?";
 
 var DemographicSurvey = React.createClass({
   render: function () {
@@ -20,26 +21,30 @@ var DemographicSurvey = React.createClass({
       "entry.402697505", mturk_id  // MTurk ID
     ];
 
-    var url = url_array.join('');
+    //var url = url_array.join('');
 
+    var url = '/survey';
     return (
-      <div>
-        <iframe id="demographic-survey-iframe" src={url} width={200} width={500}>
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe id="demographic-survey-iframe" src={url} width={675} height={3000} className="embed-responsive-item">
           <p> Unfortunately, your browser does not support this function.</p>
         </iframe>
       </div>
     );
   },
   componentDidMount: function () {
-    setInterval(this.checkIfComplete, 2000);
-  },
-  checkIfComplete: function () {
-
-    var text = ($("#demographic-survey-iframe").contents().find("body").html());
-    if (text.indexOf(MESSAGE) > -1){
-      alert("Woo");
-    }
+    var _this = this;
+    $('#demographic-survey-iframe').load(function () {
+      try {
+        var contentWindow = $(this).get(0).contentWindow.external;
+        console.log(contentWindow);
+      }
+      catch (e){
+        _this.props.callback();
+      }
+    });
   }
 });
+
 
 module.exports = DemographicSurvey;

@@ -81,6 +81,7 @@ var WackAMoleApp = React.createClass({
    * Start Round
    */
   startRound: function () {
+    console.log("startRound");
     var next_round = this.state.round.number + 1;
 
     if (next_round >= this.props.settings.wait_times.length) {
@@ -97,6 +98,10 @@ var WackAMoleApp = React.createClass({
    * Mole Up
    */
   moleBurrow: function () {
+    console.log("moleBurrow");
+    if (this.state.round.timeout_id) {
+      clearTimeout(this.state.round.timeout_id);
+    }
     var wait = this.props.settings.wait_times[this.state.round.number];
     var time_interval = getRandomInt(wait.low, wait.high) * 1000;
     var state = this.state;
@@ -110,15 +115,13 @@ var WackAMoleApp = React.createClass({
    * Mole UP
    */
   moleUp: function () {
+    console.log("moleUp");
     if (this.state.round.timeout_id) {
       clearTimeout(this.state.round.timeout_id);
     }
 
     var wait = this.props.settings.wait_times[this.state.round.number];
     var time_interval = getRandomInt(wait.low, wait.high) * 1000;
-
-    console.log(Date.now());
-
     var state = this.state;
     state.round.mole_row = getRandomInt(1, this.props.settings.dimensions[0]);
     state.round.mole_col = getRandomInt(1, this.props.settings.dimensions[1]);
@@ -127,9 +130,7 @@ var WackAMoleApp = React.createClass({
     state.round.time_start = Date.now();
     state.round.time_interval = time_interval;
     state.round.timeout_id = setTimeout(this.moleDown, time_interval);
-    this.setState(state, function () {
-      console.log("SAVED AFTER UP");
-    });
+    this.setState(state);
   },
 
   /**
@@ -137,10 +138,10 @@ var WackAMoleApp = React.createClass({
    * @param e
    */
   moleMiss: function (e) {
+    console.log("moleMiss");
+    var state = this.state;
     var misses = this.state.round.mouse_misses;
     misses.push({x: e.clientX, y: e.clientY, time: e.timeStamp});
-
-    var state = this.state;
     state.round.score = state.round.score + MISS;
     state.round.mouse_misses = misses;
     this.setState(state);
@@ -151,11 +152,10 @@ var WackAMoleApp = React.createClass({
    * @param e
    */
   moleHit: function (e) {
-    console.log("HIT");
+    console.log("moleHit");
     if (this.state.round.timeout_id) {
       clearTimeout(this.state.round.timeout_id);
     }
-
     var state = this.state;
     state.round.score = this.state.round.score + HIT;
     state.round.hit = true;
@@ -169,6 +169,7 @@ var WackAMoleApp = React.createClass({
    * @param hit
    */
   moleDown: function (hit) {
+    console.log("moleDown");
     if (this.state.round.timeout_id) {
       clearTimeout(this.state.round.timeout_id);
     }
@@ -184,9 +185,9 @@ var WackAMoleApp = React.createClass({
    * End Round
    */
   endRound: function () {
+    console.log("endRound");
     var round = this.state.round;
     var experiment_data = this.state.data;
-    // Fucking javascript passes object by alias or something.
     var d = {
       number: round.number,
       score: round.score,
