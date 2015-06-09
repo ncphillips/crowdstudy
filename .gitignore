@@ -3,12 +3,11 @@ docs/
 *.log
 .idea
 
-experiments/wack_a_mole/public/mturk-clt/bin/mturk.properties
+mturk-clt/bin/mturk.properties
 
 public/scripts/*.js
 public/scripts/**/*.js
-experiments/**/public/scripts/*.js
-experiments/**/public/scripts/**/*.js
+experiments/*
 
 cf_api_key.js
 

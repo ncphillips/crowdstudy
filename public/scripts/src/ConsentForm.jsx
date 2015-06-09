@@ -6,15 +6,17 @@ var ConsentForm = React.createClass({
     return (
       <div>
         <EthicalStatement/>
+        <br/>
         <div>
+          <p>Do you understand the information given above, and want to proceed&#63;</p>
           <div className="form-group row">
             <div className="col-sm-2"></div>
             <div className="col-sm-3">
-              <input type="btn" className="btn btn-success" onClick={this.props.consent} defaultValue="Yes"/>
+              <input type="btn" className="btn btn-success" onClick={this.props.consent} defaultValue="Accept"/>
             </div>
             <div className="col-sm-1"></div>
             <div className="col-sm-3">
-              <input type="btn" className="btn btn-danger"  onClick={this.props.noConsent} defaultValue="No"/>
+              <input type="btn" className="btn btn-danger"  onClick={this.props.noConsent} defaultValue="Reject"/>
             </div>
             <div className="col-sm-2"></div>
           </div>

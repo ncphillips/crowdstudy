@@ -15,18 +15,16 @@ var DemographicSurvey = React.createClass({
     var mturk_id = platform == "=Mechanical+Turk" ? "=" + this.props.worker.id: '';
 
     var url_array = [
-      "https://docs.google.com/a/upei.ca/forms/d/1s0LRC-3N7Bha75F6HrMBbkPBP5nNptIyKvR8ypG4uQs/viewform?",
-      "entry.750975299", platform, "&", // Platform
-      "entry.79988863", cf_id, "&",     // Crowdflower ID
-      "entry.402697505", mturk_id  // MTurk ID
+      "/survey",
+      "?entry.750975299", platform, "&", // Platform
+      "&entry.79988863=" + this.props.worker.id
     ];
 
-    //var url = url_array.join('');
+    var url = url_array.join('');
 
-    var url = '/survey';
     return (
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe id="demographic-survey-iframe" src={url} width={675} height={3000} className="embed-responsive-item">
+        <iframe id="demographic-survey-iframe" src={url} width={675} height={750} className="embed-responsive-item">
           <p> Unfortunately, your browser does not support this function.</p>
         </iframe>
       </div>
