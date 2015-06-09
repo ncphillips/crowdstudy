@@ -43,6 +43,8 @@ module.exports = function (grunt) {
       },
       options: {
         alias: {
+          'CrowdDispatcher': './public/scripts/src/CrowdDispatcher.js',
+          'WorkerStore': './public/scripts/src/WorkerStore.js',
           'CrowdExperiment': './public/scripts/src/CrowdExperiment.js',
           'ConsentForm': './public/scripts/src/ConsentForm.js',
           'CodeDisplay': './public/scripts/src/CodeDisplay.js',
@@ -51,6 +53,11 @@ module.exports = function (grunt) {
           'DemographicSurvey': './public/scripts/src/DemographicSurvey.js',
           'BarCharts': './public/scripts/src/d3components/BarCharts.js'
         }
+      }
+    },
+    mochaTest: {
+      test: {
+        src: ["experiments/**/tests/*/js"]
       }
     },
     // Runes nodemon and watch concurrently, and makes sure to display all logs.
@@ -84,6 +91,7 @@ module.exports = function (grunt) {
   grunt.option('force', true);
 
   // When running `grunt`, the concurrent:default task is run.
-  grunt.registerTask('default', ['concurrent:default'])
+  grunt.registerTask('default', ['concurrent:default']);
+  grunt.registerTask('test', ['env:test', 'mochaTest']);
 
 };
