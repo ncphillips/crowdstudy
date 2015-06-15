@@ -1,3 +1,4 @@
+var WorkerActions = require('WorkerActions');
 var MESSAGE = "Thank you for completing this survey, your response has been recorded.";
 MESSAGE = "Are you a person?";
 
@@ -38,7 +39,8 @@ var DemographicSurvey = React.createClass({
         console.log(contentWindow);
       }
       catch (e){
-        _this.props.callback();
+        var update = {survey_completed: true};
+        WorkerActions.update(_this.props.worker._id, update);
       }
     });
   }

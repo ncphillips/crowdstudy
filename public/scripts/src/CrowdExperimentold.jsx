@@ -1,32 +1,25 @@
 'use strict';
 
-// Stores
-var WorkerStore = require('WorkerStore');
-var ExperimentStore = require('ExperimentStore');
-
-// Actions
-var WorkerActions = require('WorkerActions');
-var ExperimentActions = require('ExperimentActions');
-
-// Components
 var DemographicSurvey = require('DemographicSurvey');
 var WorkerRegistrationForm = require('WorkerRegistrationForm');
 var ConsentForm = require('ConsentForm');
 var CodeDisplay = require('CodeDisplay');
 
+var GIVE_CONSENT_URL = '';
+var REVOKE_CONSENT_URL = '';
+
 /**
- * CrowdExperiment Component-View
+ * CrowdExperiment
+ *
+ * This is a controller-view.
  */
 var CrowdExperiment = React.createClass({
   render: function () {
     var component_to_render = null;
 
     // Collect Worker Info
-    if (!this.state.worker){
+    if (!this.state.worker.id || !this.state.worker.platform){
       component_to_render = this.workerRegistrationForm()
-    }
-    else if (!this.state.experiment){
-      component_to_render = <p>Loading...</p>;
     }
     // If experiment completed -> Display Exeriment-Completion Code
     else if (this.state.experiment.completed) {
@@ -57,58 +50,72 @@ var CrowdExperiment = React.createClass({
     );
   },
 
+  // Setup
   getInitialState: function () {
     return {
-      worker: null,
-      experiment: null
-    }
+      // Worker Information
+      worker: {
+        id: '',
+        platform: ''
+      },
+
+      // State Data to be used by the Experiment.
+      experiment: {
+        code: '',
+        consent: null,
+        completed: false
+      }
+    };
+  },
+  getDefaultProps: function () {
+    return {
+      experiment_name: 'ExampleExperimentName'
+    };
   },
 
-  componentDidMount: function () {
-    WorkerStore.addChangeListener(this.loadWorker);
-    ExperimentStore.addChangeListener(this.loadExperiment);
+
+  // Worker Information
+  workerDidUpdate: function (worker) {
+    console.log(worker);
+    var w = {
+      _id: worker._id,
+      id: worker.id,
+      platform: worker.platform,
+      survey_completed: worker.survey_completed
+    };
+
+    var e = worker.experiments[this.props.experiment_name];
+    this.setState({worker: w, experiment: e});
   },
 
-  loadWorker: function () {
-    this.setState({
-      worker: WorkerStore.get()
-    }, this.registerExperiment);
+  // Survey
+  surveyCompleted: function () {
+    var worker = this.state.worker;
+    worker.survey_completed = true;
+    this.setState({worker: worker})
   },
-  registerExperiment: function () {
-    if (this.state.experiment === null) {
-      ExperimentActions.register(this.state.worker._id, this.props.experiment_name);
-    }
-  },
-  loadExperiment: function () {
-    this.setState({
-      experiment: ExperimentStore.get()
-    });
-  },
-
 
   // Consent
   consent: function () {
-    var _id = this.state.worker._id;
-    var name = this.props.experiment_name;
     var experiment = this.state.experiment;
     experiment.consent = true;
-    ExperimentActions.update(_id, name, experiment);
+    this.setState({experiment: experiment});
   },
   noConsent: function () {
-    var _id = this.state.worker._id;
-    var name = this.props.experiment_name;
     var experiment = this.state.experiment;
     experiment.consent = false;
-    ExperimentActions.update(_id, name, experiment);
+    this.setState({experiment: experiment});
+    // Update Database
   },
   revokeConsent: function () {
-    this.noConsent();
+    this.setState({experiment: {consent: false}});
+    // Update Database
   },
 
   // Sub components.
   workerRegistrationForm: function () {
     return (
-      <WorkerRegistrationForm experiment_name={this.props.experiment_name}>
+      <WorkerRegistrationForm experiment_name={this.props.experiment_name} callback={this.workerDidUpdate}>
         <p>
           We are studying crowd work.
         </p>
@@ -124,13 +131,25 @@ var CrowdExperiment = React.createClass({
 
   // Experiment Completed.
   exit: function (data) {
-    var _id = this.state.worker._id;
-    var name = this.props.experiment_name;
+    // Update database.
     var experiment = this.state.experiment;
     experiment.data = data;
+    experiment.completed = true;
 
-    ExperimentActions.update(_id, name, experiment);
-    ExperimentActions.markComplete(_id, name);
+    $.ajax({
+      url: '/worker/submit',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        worker: this.state.worker,
+        experiment: experiment,
+        experiment_name: this.props.experiment_name
+      },
+      success: this.workerDidUpdate,
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   }
 });
 

@@ -1,10 +1,10 @@
 'use strict';
-var WORKER_REGISTRATION_URL = '/worker/register';
+var WorkerActions = require('WorkerActions');
 /**
  * This React component renders a page for capturing a crowd worker's id and platform.
  *
  *
- * @examle
+ * @example
  *
  * var MyApp = {
  *   workerRegistered: function (updated_state) {
@@ -43,62 +43,13 @@ var WorkerRegistrationForm = React.createClass({
       </div>
     );
   },
-  /**
-   * Default properties for the WorkerIDForm component.
-   * @returns {{url: string, callback: Function}}
-   */
-  getDefaultProps: function () {
-    return {
-      experiment: 'placeholder',
-      callback: function () {
-        console.log("WorkerRegistrationForm callback no provided.");
-      }
-    };
-  },
 
-  /**
-   * Posts the worker ID to the `url` provided.
-   *
-   * Data Posted: {
-   *   worker_id: 12345,
-   *   platform: 'crowdflower',
-   *   experiment_name: "example_experiment"
-   * }
-   *
-   * Data Returned: {
-   *    worker: {
-   *        id: 12345,
-   *        platform: 'crowdflower',
-   *        experiments: {
-   *          example_experiment: {
-   *            completed: false,
-   *            consent: null
-   *          }
-   *        }
-   *        consent: null,
-   *        registered: True
-   * }
-   */
   submitForm: function () {
-    var worker_id = document.getElementById('worker-id').value;
-    var platform = document.getElementById('worker-platform').value;
-
-    $.ajax({
-      url: WORKER_REGISTRATION_URL,
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        worker: {
-          id: worker_id,
-          platform: platform
-        },
-        experiment_name: this.props.experiment_name
-      },
-      success: this.props.callback,
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+    var worker = {
+      id: document.getElementById('worker-id').value,
+      platform: document.getElementById('worker-platform').value
+    };
+    WorkerActions.get_or_create(worker);
   }
 });
 

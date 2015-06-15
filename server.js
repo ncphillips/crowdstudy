@@ -123,6 +123,8 @@ experiments.forEach(function (path, n) {
     log.info('\t Experiment %s - %s', n+1, name);
 });
 
+// @todo – Just load experiments in the config.
+
 // When in the development environment, this provides a tab with some
 // application info in it.
 //debug(app);

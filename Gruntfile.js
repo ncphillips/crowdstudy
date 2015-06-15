@@ -43,8 +43,18 @@ module.exports = function (grunt) {
       },
       options: {
         alias: {
+          // Dispatcher
           'CrowdDispatcher': './public/scripts/src/CrowdDispatcher.js',
-          'WorkerStore': './public/scripts/src/WorkerStore.js',
+
+          // Stores
+          'WorkerStore': './public/scripts/src/Worker/WorkerStore.js',
+          'ExperimentStore': './public/scripts/src/Experiment/ExperimentStore.js',
+
+          // Actions
+          'WorkerActions': './public/scripts/src/Worker/WorkerActions.js',
+          'ExperimentActions': './public/scripts/src/Experiment/ExperimentActions.js',
+
+          // Components
           'CrowdExperiment': './public/scripts/src/CrowdExperiment.js',
           'ConsentForm': './public/scripts/src/ConsentForm.js',
           'CodeDisplay': './public/scripts/src/CodeDisplay.js',
