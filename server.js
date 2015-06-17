@@ -11,7 +11,6 @@ var express = require('express');
 var body_parser = require('body-parser');
 var response_time = require('response-time');
 var session = require('express-session');
-var crowd_platforms = require('./lib/middleware/crowd_platform');
 
 // Used for finding files with regex.
 var glob = require('glob');
@@ -59,8 +58,6 @@ app.use(body_parser.json());
 
 // This tells express where static files can be served from.
 app.use(express.static(__dirname + '/public'));
-
-app.use(crowd_platforms.parsePlatform);
 
 // EJS view engine
 app.set('view engine', 'ejs');

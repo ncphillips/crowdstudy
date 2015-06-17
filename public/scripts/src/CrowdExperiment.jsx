@@ -29,7 +29,7 @@ var CrowdExperiment = React.createClass({
       component_to_render = <p>Loading...</p>;
     }
     // If experiment completed -> Display Exeriment-Completion Code
-    else if (this.state.experiment.completed) {
+    else if (this.state.experiment.completed === true ||  this.state.experiment.completed === 'true' || this.state.experiment.code) {
       component_to_render = <CodeDisplay code={this.state.experiment.code}/>
     }
     // If consent denied -> Display Exit Page

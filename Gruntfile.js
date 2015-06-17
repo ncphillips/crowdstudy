@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function (grunt) {
   // Configure Grunt Tasks
   var grunt_config = {
@@ -28,12 +30,22 @@ module.exports = function (grunt) {
             'public/scripts/*.jsx',
             'public/scripts/**/*.jsx'
           ],
-          dest: '.', // I can't get this to work with a ../build pattern.
+          dest: 'public/scripts/build', // I can't get this to work with a ../build pattern.
           ext: '.js'
 
         }]
       }
-
+    },
+    jslint: {
+      all: {
+        src: [
+          './experiments/**/*.js',
+          './experiments/**/public/scripts/*.js',
+          './experiments/**/public/scripts/**/*.js',
+          './public/scripts/src/*.js',
+          './public/scripts/src/**/*.js'
+        ]
+      }
     },
     browserify: {
       dist: {
@@ -44,24 +56,24 @@ module.exports = function (grunt) {
       options: {
         alias: {
           // Dispatcher
-          'CrowdDispatcher': './public/scripts/src/CrowdDispatcher.js',
+          'CrowdDispatcher': './public/scripts/build/public/scripts/src/CrowdDispatcher.js',
 
           // Stores
-          'WorkerStore': './public/scripts/src/Worker/WorkerStore.js',
-          'ExperimentStore': './public/scripts/src/Experiment/ExperimentStore.js',
+          'WorkerStore': './public/scripts/build/public/scripts/src/Worker/WorkerStore.js',
+          'ExperimentStore': './public/scripts/build/public/scripts/src/Experiment/ExperimentStore.js',
 
           // Actions
-          'WorkerActions': './public/scripts/src/Worker/WorkerActions.js',
-          'ExperimentActions': './public/scripts/src/Experiment/ExperimentActions.js',
+          'WorkerActions': './public/scripts/build/public/scripts/src/Worker/WorkerActions.js',
+          'ExperimentActions': './public/scripts/build/public/scripts/src/Experiment/ExperimentActions.js',
 
           // Components
-          'CrowdExperiment': './public/scripts/src/CrowdExperiment.js',
-          'ConsentForm': './public/scripts/src/ConsentForm.js',
-          'CodeDisplay': './public/scripts/src/CodeDisplay.js',
-          'WorkerRegistrationForm': './public/scripts/src/WorkerRegistrationForm.js',
-          'Ethics': './public/scripts/src/Ethics.js',
-          'DemographicSurvey': './public/scripts/src/DemographicSurvey.js',
-          'BarCharts': './public/scripts/src/d3components/BarCharts.js'
+          'CrowdExperiment': './public/scripts/build/public/scripts/src/CrowdExperiment.js',
+          'ConsentForm': './public/scripts/build/public/scripts/src/ConsentForm.js',
+          'CodeDisplay': './public/scripts/build/public/scripts/src/CodeDisplay.js',
+          'WorkerRegistrationForm': './public/scripts/build/public/scripts/src/WorkerRegistrationForm.js',
+          'Ethics': './public/scripts/build/public/scripts/src/Ethics.js',
+          'DemographicSurvey': './public/scripts/build/public/scripts/src/DemographicSurvey.js',
+          'BarCharts': './public/scripts/build/public/scripts/src/d3components/BarCharts.js'
         }
       }
     },
@@ -72,7 +84,7 @@ module.exports = function (grunt) {
     },
     // Runes nodemon and watch concurrently, and makes sure to display all logs.
     concurrent: {
-      default: ['nodemon', 'watch', 'react', 'browserify'],
+      default: ['nodemon', 'watch', 'react', 'jslint', 'browserify'],
       options: {
         logConcurrentOutput: true
       }
@@ -87,8 +99,8 @@ module.exports = function (grunt) {
   experiments.forEach(function (path, n) {
     var path_a= path.split('/');
     var name = path_a[path_a.length-2];
-    var scripts = ['.', 'experiments', name,'public/scripts/*.js'].join('/');
-    var subscripts = ['.','experiments', name,'public/scripts/**/*.js'].join('/');
+    var scripts = ['./public/scripts/build/experiments', name,'public/scripts/*.js'].join('/');
+    var subscripts = ['./public/scripts/build/experiments', name,'public/scripts/**/*.js'].join('/');
 
     grunt_config.browserify.dist.files['public/scripts/build/' + name + '.js'] = [scripts, subscripts];
   });
@@ -97,6 +109,7 @@ module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('grunt-react');
+  grunt.loadNpmTasks('grunt-jslint');
 
   grunt.option('force', true);
 

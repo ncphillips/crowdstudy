@@ -38,7 +38,6 @@ var WorkerActions = {
 };
 
 function _worker_get_action(worker) {
-  console.log("WorkerActions._worker_get_action: " + worker);
   if (worker instanceof Array) {
     worker = worker[0];
   }
@@ -52,7 +51,6 @@ function _worker_get_action(worker) {
 }
 
 function _worker_update_action(worker) {
-  console.log("WorkerActions._worker_get_action: " + worker);
   var action = {
     actionType: WorkerConst.UPDATE,
     worker: worker

@@ -24,7 +24,7 @@ var DemographicSurvey = React.createClass({
     var url = url_array.join('');
 
     return (
-      <div class="embed-responsive embed-responsive-16by9">
+      <div className="embed-responsive embed-responsive-16by9">
         <iframe id="demographic-survey-iframe" src={url} width={675} height={750} className="embed-responsive-item">
           <p> Unfortunately, your browser does not support this function.</p>
         </iframe>
