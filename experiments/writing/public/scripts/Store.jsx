@@ -1,34 +1,25 @@
 var EventEmitter = require('events').EventEmitter;
+var Dispatcher = require('CrowdDispatcher');
 
-var WritingStore = new EventEmitter();
+var Store = function () {
 
-WritingStore.emitChange = function () {
-  return this.emit(CHANGE_EVENT);
+  var _this = new EventEmitter();
+
+  _this.dispatcher = Dispatcher;
+
+  _this.emitChange = function () {
+    _this.emit('change');
+  };
+
+  _this.addChangeListener = function (callback) {
+    _this.on('change', callback);
+  };
+
+  _this.removeChangeListener = function (callback) {
+    _this.remove('change', callback);
+  };
+
+  return _this;
 };
 
-WritingStore.addChangeListener = function (callback) {
-  this.on(CHANGE_EVENT, callback);
-  return _todos;
-};
-
-WritingStore.removeChangeListener = function (callback) {
-  this.remove(CHANGE_EVENT, callback);
-};
-
-WritingStore.dispatcherIndex = Dispatcher.register(function (payload) {
-  var action = payload.action;
-
-  switch (action.actionType) {
-
-  }
-  return true;
-});
-
-WritingStore.create = function (text) {
-
-};
-
-WritingStore.destroy = function (id) {
-};
-
-module.exports = WritingStore;
+module.exports = Store;

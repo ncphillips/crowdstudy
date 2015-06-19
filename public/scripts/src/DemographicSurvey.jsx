@@ -24,12 +24,16 @@ var DemographicSurvey = React.createClass({
     var url = url_array.join('');
 
     return (
-      <div className="embed-responsive embed-responsive-16by9">
-        <iframe id="demographic-survey-iframe" src={url} width={675} height={750} className="embed-responsive-item">
-          <p> Unfortunately, your browser does not support this function.</p>
-        </iframe>
-      </div>
+      <iframe id="demographic-survey-iframe" src={url} width={675} height={this.state.height}>
+        <p> Unfortunately, your browser does not support this function.</p>
+      </iframe>
     );
+  },
+  getInitialState: function () {
+    return { height: window.innerHeight - 150 }
+  },
+  resetHeight: function () {
+    this.setState({height: window.innerHeight - 150});
   },
   componentDidMount: function () {
     var _this = this;
@@ -43,6 +47,7 @@ var DemographicSurvey = React.createClass({
         WorkerActions.update(_this.props.worker._id, update);
       }
     });
+    window.onresize = this.resetHeight;
   }
 });
 

@@ -127,6 +127,7 @@ var CrowdExperiment = React.createClass({
     var _id = this.state.worker._id;
     var name = this.props.experiment_name;
     var experiment = this.state.experiment;
+    experiment.completed = true;
     experiment.data = data;
 
     ExperimentActions.update(_id, name, experiment);
