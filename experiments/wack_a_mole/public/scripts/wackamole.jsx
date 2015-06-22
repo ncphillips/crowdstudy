@@ -107,7 +107,6 @@ var WackAMoleApp = React.createClass({
     }
   },
   toggleFullScreen: function (f) {
-    console.log("toggllle ", f);
     this.setState({fullscreen: f});
   },
   /**

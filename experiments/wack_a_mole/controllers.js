@@ -1,3 +1,4 @@
+'use strict';
 var config = require('./config');
 
 module.exports.experiment = function (req, res) {
@@ -47,11 +48,14 @@ module.exports.generate_stats = function (req, res, next) {
   }
 };
 
-exports.real_stats = real_stats = function (req, res, next) {
+var real_stats = function (req, res, next) {
   var workers = req.db.collection('workers');
   workers.find({"experiments.wack_a_mole.data": {"$exists": true}}).toArray(function (err, workers) {
-    if (err) return next(err);
-    if (!workers) workers = [];
+    if (err) {
+      return next(err);
+    } else if (!workers) {
+      workers = [];
+    }
     var nr = req.query.num_rounds;
     var stats = {
       num_hits: 0 ,
@@ -71,9 +75,6 @@ exports.real_stats = real_stats = function (req, res, next) {
       else {
         num = nr;
       }
-
-      console.log("WORKER #", index,": ", num, "rounds.");
-
       var sum_time_to_hit = 0;
       for(var i=0; i < num; i++){
         stats.num_hits += rounds[i].hit ? 1: 0;
@@ -93,10 +94,12 @@ exports.real_stats = real_stats = function (req, res, next) {
     next();
   });
 };
+exports.real_stats = real_stats;
 
-exports.fake_stats = fake_stats = function (req, res, next) {
+var fake_stats = function (req, res, next) {
   next();
 };
+exports.fake_stats = fake_stats;
 
 exports.returnStats = function (req, res) {
   res.json(req.stats);
