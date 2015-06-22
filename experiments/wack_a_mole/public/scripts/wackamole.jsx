@@ -1,7 +1,9 @@
 'use strict';
 
+//var React = require('react');
+
 // Components
-var FullscreenButton = require('./components/FullScreenButton');
+var FullScreenButton = require('./components/FullScreenButton');
 var CrowdExperiment = require('CrowdExperiment');
 var Field = require('./components/Field');
 var Stats = require('./components/Stats');
@@ -10,7 +12,7 @@ var Instructions = require('./components/Instructions');
 // Scoring Constants
 var HIT = 2;
 var MISS = -1;
-var DOWN = -2;
+var DOWN = -1;
 
 // Field Dimensions
 var DIMENSIONS = [3, 3];
@@ -30,7 +32,7 @@ var WackAMoleApp = React.createClass({
   render: function () {
     var display = null;
     if (this.state.round.number > 0 && this.state.round.number % STATS_INTERVAL === 0) {
-      display = (<Stats worker={this.props.worker} stats={this._stats()} callback={this.saveQuestion} />);
+      display = (<Stats worker={this.props.worker} round={this.state.round.number} stats={this._stats()} callback={this.saveQuestion} />);
     }
     else if (this.state.round.number >= 0) {
       display = (<Field dimensions={this.props.settings.dimensions} row={this.state.round.mole_row} patch={this.state.round.mole_col} hit={this.moleHit} miss={this.moleMiss}/>);
@@ -39,12 +41,12 @@ var WackAMoleApp = React.createClass({
       display = <Instructions rounds={WAIT_TIMES.length} interval={STATS_INTERVAL} hit={HIT} miss={MISS} down={DOWN}/>;
     }
 
-    var button = this.state.round.number >= 0 ? null: <input type="btn" className="btn btn-block btn-primary" value="Start!" onClick={this.startRound} disabled={this.state.round.number >= 0}/>
+    var button = this.state.round.number >= 0 ? null: <input type="btn" className="btn btn-block btn-primary" value="Start!" onClick={this.startGame} disabled={this.state.round.number >= 0}/>
 
     return (
       <div>
         <h2>Wack-A-Mole</h2>
-        <FullscreenButton></FullscreenButton>
+        <FullScreenButton fullscreen={this.state.fullscreen} callback={this.toggleFullScreen}></FullScreenButton>
         <h3>Score: {this.state.round.score}</h3>
         {display}
         {button}
@@ -73,6 +75,7 @@ var WackAMoleApp = React.createClass({
   },
   getInitialState: function () {
     return {
+      fullscreen: false,
       questions: [],
       data: [],
       round: {
@@ -95,6 +98,17 @@ var WackAMoleApp = React.createClass({
     if (this.state.round.timeout_id) {
       clearTimeout(this.state.round.timeout_id);
     }
+  },
+  startGame: function () {
+    if (this.state.fullscreen){
+      this.startRound();
+    } else {
+      alert("Please enter full-screen mode before starting.");
+    }
+  },
+  toggleFullScreen: function (f) {
+    console.log("toggllle ", f);
+    this.setState({fullscreen: f});
   },
   /**
    * Start Round
@@ -159,12 +173,15 @@ var WackAMoleApp = React.createClass({
    * @param e
    */
   moleMiss: function (e) {
+    if (this.state.round.timeout_id) {
+      clearTimeout(this.state.round.timeout_id);
+    }
     var state = this.state;
-    var misses = this.state.round.mouse_misses;
-    misses.push({x: e.clientX, y: e.clientY, time: e.timeStamp});
     state.round.score = state.round.score + MISS;
-    state.round.mouse_misses = misses;
-    this.setState(state);
+    state.round.hit = false;
+    state.round.time_end = e.timeStamp;
+    state.round.mouse_end = [e.clientX, e.clientY];
+    this.setState(state, this.endRound);
   },
 
   /**
@@ -217,7 +234,7 @@ var WackAMoleApp = React.createClass({
       mole_col: round.mole_col,
       mouse_start: round.mouse_start,
       mouse_end: round.mouse_end,
-      mouse_misses: round.mouse_misses
+      mouse_misses: round.mouse_misses || []
     };
 
     experiment_data.push(d);
@@ -243,7 +260,7 @@ var WackAMoleApp = React.createClass({
     var sum_time_to_hit = 0;
     stats.rounds.forEach(function (round) {
       stats.num_hits   += round.hit ? 1 : 0;
-      stats.num_misses += round.mouse_misses.length + (round.hit ? 0 : 1);
+      stats.num_misses += round.hit ? 0 : 1;
       if (round.hit){
         sum_time_to_hit += (round.time_end - round.time_start);
       }

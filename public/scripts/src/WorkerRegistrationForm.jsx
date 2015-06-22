@@ -23,7 +23,10 @@ var WorkerRegistrationForm = React.createClass({
   render: function () {
     return (
       <div id="worker-id-form">
-        <div id="worker-id-form-additional-instructions">{this.props.children}</div>
+        <div id="worker-id-form-additional-instructions">
+          <p> We are studying crowd work. </p>
+          <p> Before starting, please tell us what platform you are coming from, and what you're worker ID is. </p>
+        </div>
         <div className="form-group">
           <label htmlFor="worker-platform">Platform</label>
           <select id="worker-platform" className="form-control">

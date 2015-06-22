@@ -1,5 +1,8 @@
 'use strict';
 
+// Dependencies
+//var React = require('react');
+
 // Stores
 var WorkerStore = require('WorkerStore');
 var ExperimentStore = require('ExperimentStore');
@@ -23,7 +26,7 @@ var CrowdExperiment = React.createClass({
 
     // Collect Worker Info
     if (!this.state.worker){
-      component_to_render = this.workerRegistrationForm()
+      component_to_render =  <WorkerRegistrationForm experiment_name={this.props.experiment_name}/>
     }
     else if (!this.state.experiment){
       component_to_render = <p>Loading...</p>;
@@ -34,11 +37,11 @@ var CrowdExperiment = React.createClass({
     }
     // If consent denied -> Display Exit Page
     else if (this.state.experiment.consent === false) {
-      component_to_render = (<p>Thank you for your time.</p>);
+      component_to_render = <p>Thank you for your time.</p>;
     }
     // Ask for Consent
     else if (this.state.experiment.consent === null) {
-      component_to_render = this.consentComponent();
+      component_to_render = <ConsentForm consent={this.consent} noConsent={this.noConsent}/>;
     }
     // If survey not completed -> Display
     else if (!this.state.worker.survey_completed) {
@@ -51,12 +54,14 @@ var CrowdExperiment = React.createClass({
 
     return (
       <div>
-        <h1>UPEI HCI Lab Research on Crowd Work</h1>
         {component_to_render}
       </div>
     );
   },
 
+  ///////////////////////
+  // Lifecycle Methods //
+  ///////////////////////
   getInitialState: function () {
     return {
       worker: null,
@@ -69,15 +74,14 @@ var CrowdExperiment = React.createClass({
     ExperimentStore.addChangeListener(this.loadExperiment);
   },
 
+  /////////////////////
+  // Store Callbacks //
+  /////////////////////
+
   loadWorker: function () {
     this.setState({
       worker: WorkerStore.get()
     }, this.registerExperiment);
-  },
-  registerExperiment: function () {
-    if (this.state.experiment === null) {
-      ExperimentActions.register(this.state.worker._id, this.props.experiment_name);
-    }
   },
   loadExperiment: function () {
     this.setState({
@@ -85,8 +89,14 @@ var CrowdExperiment = React.createClass({
     });
   },
 
-
-  // Consent
+  /////////////////////
+  // Action Triggers //
+  /////////////////////
+  registerExperiment: function () {
+    if (this.state.experiment === null) {
+      ExperimentActions.register(this.state.worker._id, this.props.experiment_name);
+    }
+  },
   consent: function () {
     var _id = this.state.worker._id;
     var name = this.props.experiment_name;
@@ -104,25 +114,6 @@ var CrowdExperiment = React.createClass({
   revokeConsent: function () {
     this.noConsent();
   },
-
-  // Sub components.
-  workerRegistrationForm: function () {
-    return (
-      <WorkerRegistrationForm experiment_name={this.props.experiment_name}>
-        <p>
-          We are studying crowd work.
-        </p>
-        <p>
-          Before starting, please tell us what platform you are coming from, and what you're worker ID is.
-        </p>
-      </WorkerRegistrationForm>
-    );
-  },
-  consentComponent: function () {
-    return <ConsentForm consent={this.consent} noConsent={this.noConsent}/>
-  },
-
-  // Experiment Completed.
   exit: function (data) {
     var _id = this.state.worker._id;
     var name = this.props.experiment_name;

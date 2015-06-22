@@ -1,4 +1,6 @@
 'use strict';
+
+//var React = require('react');
 var EthicalStatement = require('Ethics');
 
 var ConsentForm = React.createClass({
@@ -8,7 +10,7 @@ var ConsentForm = React.createClass({
         <EthicalStatement/>
         <br/>
         <div>
-          <p>Do you understand the information given above, and want to proceed&#63;</p>
+          <p><b>Do you understand the information given above, and want to proceed&#63;</b></p>
           <div className="form-group row">
             <div className="col-sm-2"></div>
             <div className="col-sm-3">
