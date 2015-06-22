@@ -10,7 +10,7 @@ var Stats = require('./components/Stats');
 var Instructions = require('./components/Instructions');
 
 // Scoring Constants
-var HIT = 2;
+var HIT = 1;
 var MISS = -1;
 var DOWN = -1;
 
