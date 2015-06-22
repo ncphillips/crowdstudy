@@ -88,7 +88,7 @@ var real_stats = function (req, res, next) {
     var count = workers.length || 1;
     stats.num_hits = stats.num_hits / count;
     stats.num_misses = stats.num_misses / count;
-    stats.score = stats.score / count;
+    stats.score = stats.num_hits - stats.num_misses;
     stats.mean_time_to_hit = stats.mean_time_to_hit / count;
     req.stats = stats;
     next();
