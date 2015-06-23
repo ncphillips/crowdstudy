@@ -1,5 +1,7 @@
 'use strict';
-var WorkerActions = require('WorkerActions');
+if (typeof require !== 'undefined') {
+  var WorkerActions = require('WorkerActions');
+}
 /**
  * This React component renders a page for capturing a crowd worker's id and platform.
  *
@@ -24,6 +26,7 @@ var WorkerRegistrationForm = React.createClass({
     return (
       <div id="worker-id-form">
         <div id="worker-id-form-additional-instructions">
+          <h1 className="text-center">UPEI HCI Lab </h1>
           <p> We are studying crowd work. </p>
           <p> Before starting, please tell us what platform you are coming from, and what you're worker ID is. </p>
         </div>
@@ -56,4 +59,6 @@ var WorkerRegistrationForm = React.createClass({
   }
 });
 
-module.exports = WorkerRegistrationForm;
+if (typeof module !== 'undefined') {
+  module.exports = WorkerRegistrationForm;
+}

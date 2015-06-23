@@ -1,13 +1,41 @@
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/JSXTransformer.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!-- Requirements -->
 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+
+    <!-- Boostrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/crowd-study.css"/>
+
+    <!-- Dispatcher -->
+    <script type="text/jsx" src="/scripts/src/CrowdDispatcher.jsx"></script>
+
+    <!-- Constants -->
+    <script type="text/jsx" src="/scripts/src/Experiment/ExperimentConst.jsx"></script>
+    <script type="text/jsx" src="/scripts/src/Worker/WorkerConst.jsx"></script>
+
+    <!-- Action -->
+    <script type="text/jsx" src="/scripts/src/Experiment/ExperimentActions.jsx"></script>
+    <script type="text/jsx" src="/scripts/src/Worker/WorkerActions.jsx"></script>
+
+    <!-- Stores -->
+    <script type="text/jsx" src="/scripts/src/Worker/WorkerStore.jsx"></script>
+    <script type="text/jsx" src="/scripts/src/Experiment/ExperimentStore.jsx"></script>
+
+    <!-- Views -->
+    <script type="text/jsx" src="/scripts/src/CodeDisplay.jsx"></script>
+
+    <script type="text/jsx" src="/scripts/src/DemographicSurvey.jsx"></script>
+
+    <script type="text/jsx" src="/scripts/src/Ethics.jsx"></script>
+    <script type="text/jsx" src="/scripts/src/ConsentForm.jsx"></script>
+
+    <script type="text/jsx" src="/scripts/src/WorkerRegistrationForm.jsx"></script>
+
+    <script type="text/jsx" src="/scripts/src/CrowdExperiment.jsx"></script>
 </head>
 <body>
 <div class="col-md-3"></div>

@@ -1,12 +1,31 @@
-var Dispatcher = require('CrowdDispatcher');
-var EXPERIMENT_CONST = require('./ExperimentConst');
+'use strict';
+
+if (typeof require !== 'undefined') {
+  var CrowdDispatcher = require('CrowdDispatcher');
+  var ExperimentConst = require('./ExperimentConst');
+  var Events = require('events');
+  var ExperimentStore = new Events.EventEmitter();
+} else {
+  ExperimentStore = {
+    _callbacks: [],
+    on: function (event, callback) {
+      ExperimentStore._callbacks.push(callback);
+    },
+    emit: function () {
+      ExperimentStore._callbacks.forEach(function (callback) {
+        callback();
+      });
+    },
+    removeEventListener: function () {
+
+    }
+  };
+
+}
 
 var EXPERIMENT_EVENTS = {
   CHANGE: 'experiment_change'
 };
-
-var Events = require('events');
-var ExperimentStore = new Events.EventEmitter();
 
 ExperimentStore._experiment = null;
 
@@ -24,12 +43,12 @@ ExperimentStore.removeChangeListener = function(callback) {
 };
 
 // Action Listener
-ExperimentStore.dispatcherIndex = Dispatcher.register(function(action) {
+ExperimentStore.dispatcherIndex = CrowdDispatcher.register(function(action) {
   switch(action.actionType) {
-    case EXPERIMENT_CONST.REGISTER:
+    case ExperimentConst.REGISTER:
       this._setExperiment(action.experiment);
       break;
-    case EXPERIMENT_CONST.UPDATE:
+    case ExperimentConst.UPDATE:
       this._setExperiment(action.experiment);
       break;
 
@@ -49,4 +68,6 @@ ExperimentStore.get = function () {
   return ExperimentStore._experiment;
 };
 
-module.exports = ExperimentStore;
+if (typeof module !== 'undefined') {
+  module.exports = ExperimentStore;
+}

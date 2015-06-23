@@ -1,7 +1,9 @@
-var WORKER_CONST = {
+var WorkerConst = {
   GET: 'worker_get',
   UPDATE: 'worker_update',
   ERROR: 'worker_error'
 };
 
-module.exports = WORKER_CONST;
+if (typeof module !== 'undefined') {
+  module.exports = WorkerConst;
+}

@@ -1,5 +1,9 @@
-var Dispatcher = require('CrowdDispatcher');
-var ExperimentConst = require('./ExperimentConst');
+'use strict';
+
+if (typeof require !== 'undefined') {
+  var CrowdDispatcher = require('CrowdDispatcher');
+  var ExperimentConst = require('./ExperimentConst');
+}
 
 var ExperimentActions = {
   register: function (worker_id, experiment_name) {
@@ -46,7 +50,7 @@ function _experiment_error_action(xhr, status, err) {
     error: err
   };
 
-  Dispatcher.dispatch(action);
+  CrowdDispatcher.dispatch(action);
 }
 
 function _experiment_register_action(name, experiment) {
@@ -57,7 +61,7 @@ function _experiment_register_action(name, experiment) {
     experiment_name: name
   };
 
-  Dispatcher.dispatch(action);
+  CrowdDispatcher.dispatch(action);
 }
 
 function _experiment_update_action(name, experiment) {
@@ -68,7 +72,9 @@ function _experiment_update_action(name, experiment) {
     experiment_name: name
   };
 
-  Dispatcher.dispatch(action);
+  CrowdDispatcher.dispatch(action);
 }
 
-module.exports = ExperimentActions;
+if (typeof module !== 'undefined') {
+  module.exports = ExperimentActions;
+}

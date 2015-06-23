@@ -1,7 +1,9 @@
 'use strict';
 
 //var React = require('react');
-var EthicalStatement = require('Ethics');
+if (typeof require !== 'undefined'){
+  var EthicalStatement = require('Ethics');
+}
 
 var ConsentForm = React.createClass({
   render: function () {
@@ -38,5 +40,7 @@ var ConsentForm = React.createClass({
   }
 });
 
-module.exports = ConsentForm;
+if (typeof module !== 'undefined') {
+  module.exports = ConsentForm;
+}
 

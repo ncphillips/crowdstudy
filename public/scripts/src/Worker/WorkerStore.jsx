@@ -1,14 +1,31 @@
-var Dispatcher = require('CrowdDispatcher');
-var WORKER_CONST = require('./WorkerConst');
-var EXPERIMENT_CONST = require('../Experiment/ExperimentConst');
+'use strict';
+
+if (typeof require !== 'undefined') {
+  var CrowdDispatcher = require('CrowdDispatcher');
+  var WorkerConst = require('./WorkerConst');
+  var Events = require('events');
+  var WorkerStore = new Events.EventEmitter();
+} else {
+  WorkerStore = {
+    _callbacks: [],
+    on: function (event, callback) {
+      WorkerStore._callbacks.push(callback);
+    },
+    emit: function () {
+      WorkerStore._callbacks.forEach(function (callback) {
+        callback();
+      });
+    },
+    removeEventListener: function () {
+
+    }
+  };
+
+}
 
 var WORKER_EVENTS = {
   CHANGE: 'worker_change'
 };
-
-// WorkerStore
-var Events = require('events');
-var WorkerStore = new Events.EventEmitter();
 
 WorkerStore._worker = null;
 
@@ -24,15 +41,15 @@ WorkerStore.removeChangeListener = function(callback) {
   this.removeListener(WORKER_EVENTS.CHANGE, callback);
 };
 
-WorkerStore.dispatcherIndex = Dispatcher.register(function(action) {
+WorkerStore.dispatcherIndex = CrowdDispatcher.register(function(action) {
   switch(action.actionType) {
-    case WORKER_CONST.GET:
+    case WorkerConst.GET:
       WorkerStore._setWorker(action.worker);
       break;
-    case WORKER_CONST.UPDATE:
+    case WorkerConst.UPDATE:
       WorkerStore._setWorker(action.worker);
       break;
-    case EXPERIMENT_CONST.REGISTER:
+    case ExperimentConst.REGISTER:
       WorkerStore._worker.experiments[action.experiment_name] = action.experiment;
       break;
   }
@@ -57,4 +74,6 @@ WorkerStore.get = function () {
   return WorkerStore._worker;
 };
 
-module.exports = WorkerStore;
+if (typeof module !== 'undefined') {
+  module.exports = WorkerStore;
+}

@@ -1,21 +1,23 @@
 'use strict';
 
-// Dependencies
-//var React = require('react');
+if (typeof require !== 'undefined') {
+  // Dependencies
+  //var React = require('react');
 
-// Stores
-var WorkerStore = require('WorkerStore');
-var ExperimentStore = require('ExperimentStore');
+  // Stores
+  var WorkerStore = require('WorkerStore');
+  var ExperimentStore = require('ExperimentStore');
 
-// Actions
-var WorkerActions = require('WorkerActions');
-var ExperimentActions = require('ExperimentActions');
+  // Actions
+  var WorkerActions = require('WorkerActions');
+  var ExperimentActions = require('ExperimentActions');
 
-// Components
-var DemographicSurvey = require('DemographicSurvey');
-var WorkerRegistrationForm = require('WorkerRegistrationForm');
-var ConsentForm = require('ConsentForm');
-var CodeDisplay = require('CodeDisplay');
+  // Components
+  var DemographicSurvey = require('DemographicSurvey');
+  var WorkerRegistrationForm = require('WorkerRegistrationForm');
+  var ConsentForm = require('ConsentForm');
+  var CodeDisplay = require('CodeDisplay');
+}
 
 /**
  * CrowdExperiment Component-View
@@ -126,4 +128,6 @@ var CrowdExperiment = React.createClass({
   }
 });
 
-module.exports = CrowdExperiment;
+if (typeof module !== 'undefined') {
+  module.exports = CrowdExperiment;
+}

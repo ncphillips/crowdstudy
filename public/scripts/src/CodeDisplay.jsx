@@ -17,4 +17,6 @@ var CodeDisplay = React.createClass({
   }
 });
 
-module.exports = CodeDisplay;
+if (typeof module !== 'undefined') {
+  module.exports = CodeDisplay;
+}

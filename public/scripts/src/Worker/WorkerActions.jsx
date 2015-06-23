@@ -1,5 +1,8 @@
-var Dispatcher = require('CrowdDispatcher');
-var WorkerConst = require('./WorkerConst');
+'use strict';
+if (typeof require !== 'undefined') {
+  var CrowdDispatcher = require('CrowdDispatcher');
+  var WorkerConst = require('./WorkerConst');
+}
 
 var WorkerActions = {
   get_or_create: function (worker) {
@@ -47,7 +50,7 @@ function _worker_get_action(worker) {
     worker: worker
   };
 
-  Dispatcher.dispatch(action)
+  CrowdDispatcher.dispatch(action)
 }
 
 function _worker_update_action(worker) {
@@ -55,7 +58,7 @@ function _worker_update_action(worker) {
     actionType: WorkerConst.UPDATE,
     worker: worker
   };
-  Dispatcher.dispatch(action)
+  CrowdDispatcher.dispatch(action)
 }
 
 function _worker_error_action(xhr, status, err) {
@@ -66,7 +69,9 @@ function _worker_error_action(xhr, status, err) {
     error: err
   };
 
-  Dispatcher.dispatch(action);
+  CrowdDispatcher.dispatch(action);
 }
 
-module.exports = WorkerActions;
+if (typeof module !== 'undefined') {
+  module.exports = WorkerActions;
+}

@@ -1,10 +1,12 @@
 'use strict';
 
-// Dependencies
-//var React = require('react');
+if (typeof require !== 'undefined') {
+  // Dependencies
+  //var React = require('react');
 
-// Actions
-var WorkerActions = require('WorkerActions');
+  // Actions
+  var WorkerActions = require('WorkerActions');
+}
 
 var DemographicSurvey = React.createClass({
   render: function () {
@@ -44,4 +46,6 @@ var DemographicSurvey = React.createClass({
   }
 });
 
-module.exports = DemographicSurvey;
+if (typeof module !== 'undefined') {
+  module.exports = DemographicSurvey;
+}

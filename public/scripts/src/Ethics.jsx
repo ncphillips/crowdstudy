@@ -20,4 +20,6 @@ var EthicalStatement = React.createClass({
   }
 });
 
-module.exports = EthicalStatement;
+if (typeof module !== 'undefined') {
+  module.exports = EthicalStatement;
+}
