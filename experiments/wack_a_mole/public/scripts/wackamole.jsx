@@ -8,7 +8,7 @@ if (typeof require !== 'undefined') {
   var CrowdExperiment = require('CrowdExperiment');
   var Field = require('./components/Field').Field;
   var Mole = require('./components/Field').Mole;
-  var Stats = require('./components/Stats');
+  var StatsView = require('./components/StatsView');
   var Instructions = require('./components/Instructions');
 }
 
@@ -44,7 +44,7 @@ var WackAMoleApp = React.createClass({
   render: function () {
     var display = null;
     if (this.state.round.number > 0 && this.state.round.number % STATS_INTERVAL === 0) {
-      display = (<Stats worker={this.props.worker} round={this.state.round.number} stats={this._stats()} callback={this.saveQuestion} />);
+      display = (<StatsView worker={this.props.worker} round={this.state.round.number} stats={this._stats()} callback={this.saveQuestion} />);
     }
     else if (this.state.round.number >= 0) {
       var dim = this.props.settings.dimensions;
@@ -112,6 +112,13 @@ var WackAMoleApp = React.createClass({
         mouse_misses: [] // moleMiss
       }
     }
+  },
+  componentDidMount: function () {
+    var screen_change_events = "webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange";
+    var _this = this;
+    $(document).on(screen_change_events, function () {
+      _this.toggleFullScreen(!_this.state.fullscreen);
+    });
   },
   componentWillUnmount: function () {
     if (this.state.round.timeout_id) {
@@ -233,7 +240,7 @@ var WackAMoleApp = React.createClass({
     state.round.score = state.round.score + DOWN;
     state.round.hit = false;
     state.round.time_end = state.round.time_start + state.round.time_interval;
-    state.round.mouse_end = null;
+    state.round.mouse_end = [mouseX, mouseY];
     this.setState(state, this.endRound);
   },
 
@@ -298,6 +305,8 @@ var WackAMoleApp = React.createClass({
     this.props.exit(output);
   }
 });
+
+
 
 React.render(
   <CrowdExperiment experiment_name="wack_a_mole" experiment_app={WackAMoleApp}/>,
