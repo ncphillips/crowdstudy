@@ -9,22 +9,26 @@ var ConsentForm = React.createClass({
   render: function () {
     return (
       <div>
-        <EthicalStatement/>
-        <br/>
-        <div>
-          <p><b>Do you understand the information given above, and want to proceed&#63;</b></p>
-          <div className="form-group row">
-            <div className="col-sm-2"></div>
-            <div className="col-sm-3">
-              <input type="btn" className="btn btn-success" onClick={this.props.consent} defaultValue="Accept"/>
+        <div className="col-md-3"></div>
+        <div className="col-md-6">
+          <EthicalStatement/>
+          <br/>
+          <div className="row">
+            <p><b>Do you understand the information given above, and want to proceed&#63;</b></p>
+            <div className="form-group row">
+              <div className="col-sm-2"></div>
+              <div className="col-sm-3">
+                <input type="btn" className="btn btn-success" onClick={this.props.consent} defaultValue="Accept"/>
+              </div>
+              <div className="col-sm-1"></div>
+              <div className="col-sm-3">
+                <input type="btn" className="btn btn-danger"  onClick={this.props.noConsent} defaultValue="Reject"/>
+              </div>
+              <div className="col-sm-2"></div>
             </div>
-            <div className="col-sm-1"></div>
-            <div className="col-sm-3">
-              <input type="btn" className="btn btn-danger"  onClick={this.props.noConsent} defaultValue="Reject"/>
-            </div>
-            <div className="col-sm-2"></div>
           </div>
         </div>
+        <div className="col-md-3"></div>
       </div>
     );
   },

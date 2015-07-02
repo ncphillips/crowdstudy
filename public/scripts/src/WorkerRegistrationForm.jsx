@@ -24,28 +24,32 @@ if (typeof require !== 'undefined') {
 var WorkerRegistrationForm = React.createClass({
   render: function () {
     return (
-      <div id="worker-id-form">
-        <div id="worker-id-form-additional-instructions">
-          <h1 className="text-center">UPEI HCI Lab </h1>
-          <p> We are studying crowd work. </p>
-          <p> Before starting, please tell us what platform you are coming from, and what you're worker ID is. </p>
+      <div>
+        <div className="col-md-3"></div>
+        <div id="worker-id-form" className="col-md-6">
+          <div id="worker-id-form-additional-instructions">
+            <h1 className="text-center">UPEI HCI Lab </h1>
+            <p> We are studying crowd work. </p>
+            <p> Before starting, please tell us what platform you are coming from, and what you're worker ID is. </p>
+          </div>
+          <div className="form-group">
+            <label htmlFor="worker-platform">Platform</label>
+            <select id="worker-platform" className="form-control">
+              <option value="crowdflower">CrowdFlower</option>
+              <option value="mturk">Amazaon Mechanical Turk</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="worker_id">Worker ID</label>
+            <input type="text" id="worker-id" name="worker-id" className="form-control"/>
+          </div>
+          <div className="form-group">
+            <input type="button" id="worker-id-button"
+              className="btn btn-primary form-control"
+              value="Submit" onClick={this.submitForm}/>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="worker-platform">Platform</label>
-          <select id="worker-platform" className="form-control">
-            <option value="crowdflower">CrowdFlower</option>
-            <option value="mturk">Amazaon Mechanical Turk</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="worker_id">Worker ID</label>
-          <input type="text" id="worker-id" name="worker-id" className="form-control"/>
-        </div>
-        <div className="form-group">
-          <input type="button" id="worker-id-button"
-            className="btn btn-primary form-control"
-            value="Submit" onClick={this.submitForm}/>
-        </div>
+        <div className="col-md-3"></div>
       </div>
     );
   },

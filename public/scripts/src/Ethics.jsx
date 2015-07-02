@@ -4,7 +4,10 @@
 
 var EthicalStatement = React.createClass({
   render: function () {
-    return  <iframe src="/consent" width="675" height={this.state.height}/>;
+    return  (
+
+          <iframe src="/consent" width="675" height={this.state.height}/>
+    );
   },
   getInitialState: function () {
     return { height: this.iframeHeight() }

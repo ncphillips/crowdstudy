@@ -13,9 +13,15 @@ var DemographicSurvey = React.createClass({
     var url = '/survey';
 
     return (
-      <iframe id="demographic-survey-iframe" src={url} width={675} height={this.state.height}>
-        <p> Unfortunately, your browser does not support this function.</p>
-      </iframe>
+      <div>
+        <div className="col-md-3"></div>
+        <div className="col-md-6">
+          <iframe id="demographic-survey-iframe" src={url} width={675} height={this.state.height}>
+            <p> Unfortunately, your browser does not support this function.</p>
+          </iframe>
+        </div>
+        <div className="col-md-3"></div>
+      </div>
     );
   },
   getInitialState: function () {
@@ -37,7 +43,7 @@ var DemographicSurvey = React.createClass({
         var contentWindow = $(this).get(0).contentWindow.external;
         console.log(contentWindow);
       }
-      // Error once submitted.
+        // Error once submitted.
       catch (e){
         var update = {survey_completed: true};
         WorkerActions.update(_this.props.worker._id, update);
