@@ -1,4 +1,14 @@
+'use strict';
+
 var fs = require('fs');
+
+var _db_name = 'crowdstudydev';
+if (process.env.NODE_ENV === 'production') {
+  _db_name = 'crowdstudy';
+}
+
+
+console.log(_db_name);
 
 /**
  * @module Config
@@ -24,7 +34,7 @@ var config = {
         _db: {
             url: '127.0.0.1',
             port: '27017',
-            name: 'crowdstudy'
+            name: _db_name
         },
         /**
          * Returns the URL for the MongoDB instance.
