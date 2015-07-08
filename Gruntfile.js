@@ -6,14 +6,19 @@ module.exports = function (grunt) {
     // Define the `package.json` file
     pgk: grunt.file.readJSON('package.json'),
 
-    // Runs the application, and watches the `server.js` file and all experiment files.
+    // Runs the application, and watches the `server.js`
+    //file and all experiment files.
     nodemon: {
       dev: {
         script: 'server.js',
         options: {
           nodeArgs: ['--debug'],
           ext: 'js,html',
-          watch: ['server.js', 'experiments/*/*.js', 'experiments/*/views/**/*.jsx']
+          watch: [
+						'server.js',
+						'experiments/*/*.js',
+						'experiments/*/views/**/*.jsx'
+					]
         }
 
       }
@@ -30,7 +35,8 @@ module.exports = function (grunt) {
             'public/scripts/*.jsx',
             'public/scripts/**/*.jsx'
           ],
-          dest: 'public/scripts/build', // I can't get this to work with a ../build pattern.
+					// I can't get this to work with a ../build pattern.
+          dest: 'public/scripts/build',
           ext: '.js'
 
         }]
@@ -56,14 +62,16 @@ module.exports = function (grunt) {
       options: {
         alias: {
           // Dispatcher
-          'CrowdDispatcher': './public/scripts/build/public/scripts/src/CrowdDispatcher.js',
-
+          'CrowdDispatcher': './public/scripts/build/public/scripts/' +
+														 'src/CrowdDispatcher.js',
           // Stores
-          'WorkerStore': './public/scripts/build/public/scripts/src/Worker/WorkerStore.js',
-          'ExperimentStore': './public/scripts/build/public/scripts/src/Experiment/ExperimentStore.js',
-
+          'WorkerStore': './public/scripts/build/public/scripts/src/' +
+												 'Worker/WorkerStore.js',
+          'ExperimentStore': './public/scripts/build/public/scripts/' +
+														 'src/Experiment/ExperimentStore.js',
           // Actions
-          'WorkerActions': './public/scripts/build/public/scripts/src/Worker/WorkerActions.js',
+          'WorkerActions': './public/scripts/build/public/scripts/src/' +
+													 'Worker/WorkerActions.js',
           'ExperimentActions': './public/scripts/build/public/scripts/src/Experiment/ExperimentActions.js',
 
           // Components
@@ -99,8 +107,16 @@ module.exports = function (grunt) {
   experiments.forEach(function (path, n) {
     var path_a= path.split('/');
     var name = path_a[path_a.length-2];
-    var scripts = ['./public/scripts/build/experiments', name,'public/scripts/*.js'].join('/');
-    var subscripts = ['./public/scripts/build/experiments', name,'public/scripts/**/*.js'].join('/');
+    var scripts = [
+				'./public/scripts/build/experiments',
+				name,
+				'public/scripts/*.js'
+		].join('/');
+    var subscripts = [
+			'./public/scripts/build/experiments',
+		  name,
+			'public/scripts/**/*.js'
+		].join('/');
 
     grunt_config.browserify.dist.files['public/scripts/build/' + name + '.js'] = [scripts, subscripts];
   });
