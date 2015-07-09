@@ -25,7 +25,10 @@
     "react": "0.12",
     "flux": "*",
 
-    "socket.io": "^1.0.6"
+    "socket.io": "^1.0.6",
+
+
+    "crowdstudy_worker": "ncphillips/crowdstudy_worker"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
