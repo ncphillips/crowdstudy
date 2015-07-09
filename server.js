@@ -108,12 +108,10 @@ experiments.forEach(function (path, n) {
 });
 
 config.INSTALLED_APPS.forEach(function (name) {
-		var subapp = require(nam);
+		var subapp = require(name).app;
     var endpoint = name.replace('crowdstudy_', '');
 		app.use('/' + name, subapp);
-    if (experiment.sockets) experiment.sockets(config, server);
-
-    log.info('\t %s - %s', n+1, name);
+    log.info('\t %s', endpoint);
 });
 
 // @todo – Just load experiments in the config.
