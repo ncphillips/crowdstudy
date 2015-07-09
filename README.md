@@ -1,8 +1,8 @@
 # Crowd Study
-Starting in March 2015, the UPEI HCI Lab will be conducting a number of 
-experiments related to crowd work. In order to track data gathered from 
-these experiments, we have created CrowdStudy. This application for serving
-files, and collecting results for each experiment.
+The UPEI HCI Lab will be conducting a number of experiments related to 
+crowd work. In order to track data gathered from these experiments, we 
+have created CrowdStudy. This application for serving files, and 
+collecting results for each experiment.
 
 ## Getting Started
 Before you can get started using the Crowd Study platform, you must make sure to sign up for
