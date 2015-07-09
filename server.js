@@ -59,11 +59,6 @@ app.use(express.static(__dirname + '/public'));
 // EJS view engine
 app.set('view engine', 'ejs');
 
-// Here, we set React.js as the view engine.
-//app.set('view engine', 'jsx');
-//app.engine('jsx', jsx_engine);
-
-
 // When running the application in the development environment, this middleware will
 // send a full stack trace to the client when errors occur.
 if (app.get('env') == 'development') {
@@ -94,13 +89,8 @@ app.set('views', __dirname+'/app/views');
 require('./app/routes')(app);
 
 // Register Experiments
-log.info('Lookign for Experiments');
+log.info('Loading Sub-Applications');
 var experiments = glob.sync('experiments/**/app.js');
-
-// We make a globally available list of experiments. I don't like this, but I
-// haven't found out how to get the list from elsewhere.
-// Proposal B: Database
-global.experiments = [];
 experiments.forEach(function (path, n) {
     var path_a= path.split('/');
     var name = path_a[path_a.length-2];
@@ -114,7 +104,15 @@ experiments.forEach(function (path, n) {
 
     if (experiment.sockets) experiment.sockets(config, server);
 
-    log.info('\t Experiment %s - %s', n+1, name);
+    log.info('\t %s - %s', n+1, name);
+});
+
+config.INSTALLED_APPS.forEach(function (name) {
+		var subapp = require(nam);
+		app.use('/' + name, subapp);
+    if (experiment.sockets) experiment.sockets(config, server);
+
+    log.info('\t %s - %s', n+1, name);
 });
 
 // @todo – Just load experiments in the config.
