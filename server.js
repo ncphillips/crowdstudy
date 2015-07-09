@@ -15,9 +15,6 @@ var session = require('express-session');
 // Used for finding files with regex.
 var glob = require('glob');
 
-// React JSX View Engine
-var jsx_engine = require('express-react-views').createEngine({ jsx: { harmony: true } }); // Harmony allows for ES6.
-
 // Debugging
 var debug = require('express-debug');
 
