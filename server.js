@@ -110,7 +110,7 @@ experiments.forEach(function (path, n) {
 config.INSTALLED_APPS.forEach(function (name) {
 		var subapp = require(name).app;
     var endpoint = name.replace('crowdstudy_', '');
-		app.use('/' + name, subapp);
+		app.use('/' + endpoint, subapp);
     log.info('\t %s', endpoint);
 });
 
