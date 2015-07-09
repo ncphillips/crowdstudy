@@ -29,7 +29,7 @@
 
 
     "crowdstudy_worker": "git://github.com/ncphillips/crowdstudy_worker",
-    "crowdstudy_worker": "git://github.com/ncphillips/crowdstudy_pointing_task"
+    "crowdstudy_pointing_task": "git://github.com/ncphillips/crowdstudy_pointing_task"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
