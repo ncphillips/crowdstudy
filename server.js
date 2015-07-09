@@ -90,33 +90,15 @@ require('./app/routes')(app);
 
 // Register Experiments
 log.info('Loading Sub-Applications');
-var experiments = glob.sync('experiments/**/app.js');
-experiments.forEach(function (path, n) {
-    var path_a= path.split('/');
-    var name = path_a[path_a.length-2];
-    var experiment = require('./' + path);
-
-    // Add to experiment list
-    global.experiments.push(name);
-
-    // Use the experiment on i
-    app.use('/' + name, experiment.app);
-
-    if (experiment.sockets) experiment.sockets(config, server);
-
-    log.info('\t %s - %s', n+1, name);
-});
-
 config.INSTALLED_APPS.forEach(function (name) {
-		var subapp = require(name).app;
+    var subapp = require(name).app;
     var endpoint = name.replace('crowdstudy_', '');
-		app.use('/' + endpoint, subapp);
+    app.use('/' + endpoint, subapp);
     log.info('\t %s', endpoint);
 });
 
-// @todo – Just load experiments in the config.
-
 // When in the development environment, this provides a tab with some
+
 // application info in it.
 //debug(app);
 
