@@ -5,7 +5,7 @@ docs/
 *.log
 .idea
 
-mturk-clt/bin/mturk.properties
+1.txt
 
 public/scripts/*.js
 public/scripts/**/*.js
