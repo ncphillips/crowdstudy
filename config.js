@@ -19,8 +19,8 @@ var config = {
     title: 'CrowdStudy',
     email: 'ncphillips@upei.ca',
 
-    // This is an array of active experiment names. Only the experiments named in this array will be loaded.
-    experiments: [
+    // This is an array of subapps to be used by this application.
+    INSTALLED_APPS: [
         'crowdstudy_worker'
     ],
 
