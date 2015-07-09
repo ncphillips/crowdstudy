@@ -1,8 +1,10 @@
+/* jslint node:true */
 'use strict';
 
 // Server Modules
 var http = require('http');
 var https = require('https');
+var log = global.log;
 
 // Express JS
 var express = require('express');
