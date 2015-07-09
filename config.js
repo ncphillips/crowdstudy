@@ -21,7 +21,7 @@ var config = {
 
     // This is an array of active experiment names. Only the experiments named in this array will be loaded.
     experiments: [
-        'worker'
+        'crowdstudy_worker'
     ],
 
     server: {
