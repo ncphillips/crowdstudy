@@ -2,13 +2,7 @@
 
 var fs = require('fs');
 
-var _db_name = 'crowdstudydev';
-if (process.env.NODE_ENV === 'production') {
-  _db_name = 'crowdstudy';
-}
-
-
-console.log(_db_name);
+var _db_name = 'crowdstudy_' + process.env.NODE_ENV
 
 /**
  * @module Config
@@ -16,12 +10,13 @@ console.log(_db_name);
  * This module contains a single config object.
  */
 var config = {
-    title: 'CrowdStudy',
+    title: 'Crowd Study',
     email: 'ncphillips@upei.ca',
 
     // This is an array of subapps to be used by this application.
     INSTALLED_APPS: [
-        'crowdstudy_worker'
+        'crowdstudy_worker',
+				'crowdstudy_pointing_task'
     ],
 
     server: {
