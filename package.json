@@ -28,7 +28,7 @@
     "socket.io": "^1.0.6",
 
 
-    "crowdstudy_worker": "git://github.com/ncphillips/crowdstudy_worker"
+    "crowdstudy_worker": "git://github.com/ncphillips/crowdstudy_worker",
     "crowdstudy_worker": "git://github.com/ncphillips/crowdstudy_pointing_task"
   },
   "devDependencies": {
