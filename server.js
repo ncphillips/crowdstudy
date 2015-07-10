@@ -1,6 +1,9 @@
 /* jslint node:true */
 'use strict';
 
+// A global `log` object using a `bunyan` logger.
+global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
+
 // Server Modules
 var http = require('http');
 var https = require('https');
@@ -23,8 +26,6 @@ var debug = require('express-debug');
 // Create the App
 var app = express();
 
-// A global `log` object using a `bunyan` logger.
-global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
 
 // Configuration
 var config = require('./config');
@@ -77,7 +78,8 @@ app.use(express.static(__dirname + '/public'));
 log.info("\tMongoDB Provided through `req.db`.");
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
-    MongoClient.connect(config.server.db, function (err, db) {
+    var connection_options = {auto_reconnect: false};
+    MongoClient.connect(config.server.db, connection_options,  function (err, db) {
         if (err) {
             log.error(err);
             return next(err);
