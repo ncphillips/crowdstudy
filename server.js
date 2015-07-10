@@ -32,9 +32,11 @@ var config = require('./config');
 // HTTP or HTTPS
 var server = null;
 if (config.server.use_https) {
+    log.info("Using HTTPS");
     server = https.createServer(config.server.https_options, app);
 }
 else {
+    log.info("Using HTTP (NOT Secure)");
     server = http.createServer(app);
 }
 
@@ -42,7 +44,13 @@ else {
 app.locals.title = config.title;
 app.locals.email = config.email;
 
+log.info("Application Info:");
+log.info("\tTitle: %s", app.locals.title);
+log.info("\tEmail: %s", app.locals.email);
+
+log.info('Middleware:');
 // CORS
+log.info("\tAllow CORS");
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -50,27 +58,23 @@ app.use(function (req, res, next) {
 });
 
 // Middleware
+log.info("\tTracking response time.");
+log.info("\tParsing URL Encoded Data.");
+log.info("\tParsing JSON Data.");
 // app.use(session());
 app.use(response_time());
 app.use(body_parser.urlencoded({extended: true}));
 app.use(body_parser.json());
 
+log.info("\tSatic files available at `./public`");
 // This tells express where static files can be served from.
 app.use(express.static(__dirname + '/public'));
-
-// EJS view engine
-app.set('view engine', 'ejs');
-
-// When running the application in the development environment, this middleware will
-// send a full stack trace to the client when errors occur.
-if (app.get('env') == 'development') {
-    app.use(require('errorhandler')());
-}
 
 // MongoDb is used as the database.
 // A connection to Mongo is created every time there is a new request.
 // An object representing that connection is assigned to `req.db` for
 // the controllers to use.
+log.info("\tMongoDB Provided through `req.db`.");
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
     MongoClient.connect(config.server.db, function (err, db) {
@@ -84,6 +88,16 @@ app.use(function (req, res, next) {
     });
 });
 
+log.info('View Engine: EJS');
+// EJS view engine
+app.set('view engine', 'ejs');
+
+// When running the application in the development environment, this middleware will
+// send a full stack trace to the client when errors occur.
+if (app.get('env') == 'development') {
+    app.use(require('errorhandler')());
+}
+
 // Application View Files
 app.set('views', __dirname+'/app/views');
 
@@ -91,34 +105,16 @@ app.set('views', __dirname+'/app/views');
 require('./app/routes')(app);
 
 // Register Experiments
-log.info('Loading Sub-Applications');
-var experiments = glob.sync('experiments/**/app.js');
-experiments.forEach(function (path, n) {
-    var path_a= path.split('/');
-    var name = path_a[path_a.length-2];
-    var experiment = require('./' + path);
-
-    // Add to experiment list
-    global.experiments.push(name);
-
-    // Use the experiment on i
-    app.use('/' + name, experiment.app);
-
-    if (experiment.sockets) experiment.sockets(config, server);
-
-    log.info('\t %s - %s', n+1, name);
-});
-
+log.info('Apps:');
 config.INSTALLED_APPS.forEach(function (name) {
-		var subapp = require(name).app;
+    var subapp = require(name).app;
     var endpoint = name.replace('crowdstudy_', '');
-		app.use('/' + endpoint, subapp);
+    app.use('/' + endpoint, subapp);
     log.info('\t %s', endpoint);
 });
 
-// @todo – Just load experiments in the config.
-
 // When in the development environment, this provides a tab with some
+
 // application info in it.
 //debug(app);
 
