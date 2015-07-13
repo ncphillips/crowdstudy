@@ -1,6 +1,9 @@
 /* jslint node:true */
 'use strict';
 
+// A global `log` object using a `bunyan` logger.
+global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
+
 // Server Modules
 var http = require('http');
 var https = require('https');
@@ -23,8 +26,6 @@ var debug = require('express-debug');
 // Create the App
 var app = express();
 
-// A global `log` object using a `bunyan` logger.
-global.log = require('bunyan').createLogger({name: 'CrowdStudy'});
 
 // Configuration
 var config = require('./config');
