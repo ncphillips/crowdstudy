@@ -96,7 +96,7 @@ app.set('view engine', 'ejs');
 
 // When running the application in the development environment, this middleware will
 // send a full stack trace to the client when errors occur.
-if (app.get('env') == 'development') {
+if (app.get('env') === 'development') {
     app.use(require('errorhandler')());
 }
 
