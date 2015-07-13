@@ -25,9 +25,6 @@
     "react": "0.12",
     "flux": "*",
 
-    "socket.io": "^1.0.6",
-
-
     "crowdstudy_worker": "git://github.com/ncphillips/crowdstudy_worker",
     "crowdstudy_pointing_task": "git://github.com/ncphillips/crowdstudy_pointing_task",
     "crowdstudy_whack_a_mole": "git://github.com/ncphillips/crowdstudy_whack_a_mole",

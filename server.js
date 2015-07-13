@@ -78,7 +78,8 @@ app.use(express.static(__dirname + '/public'));
 log.info("\tMongoDB Provided through `req.db`.");
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
-    MongoClient.connect(config.server.db, function (err, db) {
+    var connection_options = {auto_reconnect: false};
+    MongoClient.connect(config.server.db, connection_options,  function (err, db) {
         if (err) {
             log.error(err);
             return next(err);
@@ -95,7 +96,7 @@ app.set('view engine', 'ejs');
 
 // When running the application in the development environment, this middleware will
 // send a full stack trace to the client when errors occur.
-if (app.get('env') == 'development') {
+if (app.get('env') === 'development') {
     app.use(require('errorhandler')());
 }
 

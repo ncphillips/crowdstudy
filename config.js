@@ -1,8 +1,9 @@
+/* jslint node: true */
 'use strict';
 
 var fs = require('fs');
 
-var _db_name = 'crowdstudy_' + process.env.NODE_ENV
+var _db_name = 'crowdstudy_' + process.env.NODE_ENV;
 
 /**
  * @module Config
@@ -15,8 +16,9 @@ var config = {
 
     // This is an array of subapps to be used by this application.
     INSTALLED_APPS: [
-      'crowdstudy_worker',
-      'crowdstudy_writing_task'
+        'crowdstudy_worker',
+        'crowdstudy_pointing_task',
+        'crowdstudy_whack_a_mole'
     ],
 
     server: {
