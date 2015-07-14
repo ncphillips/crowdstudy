@@ -17,8 +17,8 @@ var config = {
   // This is an array of subapps to be used by this application.
   INSTALLED_APPS: [
     'crowdstudy_worker',
-    'crowdstudy_pointing_task',
-    'crowdstudy_writing_task',
+    //'crowdstudy_pointing_task',
+    //'crowdstudy_writing_task',
     'crowdstudy_whack_a_mole'
   ],
 

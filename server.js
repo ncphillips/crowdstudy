@@ -71,6 +71,7 @@ log.info("\tSatic files available at `./public`");
 // This tells express where static files can be served from.
 app.use(express.static(__dirname + '/public'));
 
+
 // MongoDb is used as the database.
 // A connection to Mongo is created every time there is a new request.
 // An object representing that connection is assigned to `req.db` for
@@ -78,17 +79,31 @@ app.use(express.static(__dirname + '/public'));
 log.info("\tMongoDB Provided through `req.db`.");
 var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
-    var connection_options = {auto_reconnect: false};
+    var connection_options = {
+        server: {
+            socketOptions: {
+                connectTimeoutMS: 1000,
+                socketTimeoutMS: 1000
+            },
+            auto_reconnect: false
+        }
+    };
     MongoClient.connect(config.server.db, connection_options,  function (err, db) {
         if (err) {
             log.error(err);
             return next(err);
         }
 
+        db.on('close', function (reason) { log.info("Mongo Event; close. "); });
+        db.on('reconnect', function (event) { log.info('Mongo Event; reconnect. '); });
+        db.on('timeout', function (event) {
+            log.info(res.statusCode.toString(), req.method, req.originalUrl, ' FROM IP ', req.ip);
+        });
         req.db = db;
         next();
     });
 });
+
 
 log.info('View Engine: EJS');
 // EJS view engine
@@ -115,10 +130,6 @@ config.INSTALLED_APPS.forEach(function (name) {
     log.info('\t %s', endpoint);
 });
 
-// When in the development environment, this provides a tab with some
-
-// application info in it.
-//debug(app);
 
 server.listen(config.server.port, function () {
     var protocol = config.server.use_https ? 'https' : 'http';
