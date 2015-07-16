@@ -50,9 +50,9 @@ var CrowdExperiment = React.createClass({
       component_to_render = <ConsentForm consent={this.consent} noConsent={this.noConsent}/>;
     }
     //// If survey not completed -> Display
-    else if (!this.state.worker.survey_completed) {
-      component_to_render = <DemographicSurvey worker={this.state.worker}/>
-    }
+    //else if (!this.state.worker.survey_completed) {
+    //  component_to_render = <DemographicSurvey worker={this.state.worker}/>
+    //}
     // Run Experiment.
     else if (this.state.experiment.consent) {
       component_to_render = <this.props.experiment_app worker={this.state.worker} data={this.state.experiment} exit={this.exit}/>
@@ -127,6 +127,7 @@ var CrowdExperiment = React.createClass({
     experiment.completed = true;
     experiment.data = data;
 
+    console.log(experiment);
     ExperimentActions.update(_id, name, experiment);
     ExperimentActions.markComplete(_id, name);
   }
