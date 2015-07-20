@@ -64,8 +64,8 @@ log.info("\tParsing URL Encoded Data.");
 log.info("\tParsing JSON Data.");
 // app.use(session());
 app.use(response_time());
-app.use(body_parser.urlencoded({extended: true}));
-app.use(body_parser.json());
+app.use(body_parser.urlencoded({extended: true, parameterLimit: 10000, limit: 1024*1024*10}));
+app.use(body_parser.json({extended: true, parameterLimit: 10000, limit: 1024*1024*10}));
 
 log.info("\tSatic files available at `./public`");
 // This tells express where static files can be served from.
