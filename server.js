@@ -89,10 +89,14 @@ var MongoClient = require('mongodb').MongoClient;
 app.use(function (req, res, next) {
     var connection_options = {
         server: {
+            // The following timeout options set how long a connection to
+            // Mongo should stay open
             socketOptions: {
                 connectTimeoutMS: 1000,
                 socketTimeoutMS: 1000
             },
+            // Since most connections aren't closed manually, this ensures
+            // they remain closed after timeout.
             auto_reconnect: false
         }
     };
