@@ -10,7 +10,13 @@ if (typeof require !== 'undefined') {
 
 var EndSurvey = React.createClass({
   render: function () {
-    var url = '/noComparisonSurvey';
+
+    var experiment = ExperimentStore.get();
+    var url = '/comparisonSurvey';
+
+    if (experiment.feedback_type === 'None') {
+      url = '/noComparisonSurvey';
+    }
 
     return (
       <div>

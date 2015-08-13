@@ -7,6 +7,7 @@ module.exports = function (app) {
 
   app.get('/survey', controllers.survey);
   app.get('/noComparisonSurvey', controllers.no_comparison_survey);
+  app.get('/comparisonSurvey', controllers.comparison_survey);
   app.get('/consent', controllers.consent);
 
 };
