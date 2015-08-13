@@ -64,12 +64,13 @@ var Questions = React.createClass({
   // Others //
   ////////////
   setQuestion: function (){
+    var experiment = ExperimentStore.get();
     var questions = [];
 
-    if (this.props.is_first_feedback) {
-      questions = _questions.first_feedback_questions;
+    if (experiment.feedback_type === 'None' || this.props.is_first_feedback) {
+      questions = _questions.no_comparison;
     } else {
-      questions = _questions.other_feedback_questions;
+      questions = _questions.comparison;
     }
 
     this.setState({questions: questions});
