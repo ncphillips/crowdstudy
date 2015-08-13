@@ -52,6 +52,11 @@ var DemographicSurvey = React.createClass({
   }
 });
 
+function ss() {
+  var worker = WorkerStore.get();
+  WorkerActions.update(worker._id, {survey_completed: true, survey_skipped: true});
+}
+
 if (typeof module !== 'undefined') {
   module.exports = DemographicSurvey;
 }
