@@ -1,10 +1,11 @@
 /* jslint node: true */
 'use strict';
-var PAYMENT = 1;
+var PAYMENT = 74;
 
 var controllers = require('./controllers');
 var crowdflower = require('crowdstudy_crowdflower_api');
 var async = require('async');
+var log = global.log;
 
 module.exports = function (app) {
   app.get('/', controllers.index);
@@ -24,17 +25,16 @@ module.exports = function (app) {
     function parseWorkRecords(req, res, next) {
       req.work_records = [];
       req.judgments.forEach(function (judgment, index) {
+        console.log(judgment.data);
         var experiments = ['pointing_task', 'whack_a_mole', 'writing_task'];
         experiments.map(function (experiment) {
           var code = judgment.data[experiment + '_code'];
-          var click = judgment.data[experiment + '_click'];
-          if (code && click) {
+          if (code) {
             req.work_records.push({
               job_id: judgment.job_id,
               experiment: experiment,
               worker_id: judgment.worker_id,
-              code: code,
-              click: click
+              code: code
             });
           }
         });
@@ -47,13 +47,13 @@ module.exports = function (app) {
       async.forEachSeries(req.work_records, function (wr, callback) {
         workers.find({id: ""+wr.worker_id}).toArray(function (err, workers) {
           if (err) {
-            console.log('Work Record Error (', wr.worker_id, '): ', err);
+            log.error('Work Record Error for Crowdflower Worker ', wr.worker_id, ': ', err);
           }
           else if (workers.length < 1) {
-            console.log('Work Record Error (', wr.worker_id, '): Not Found.');
+            log.error('Work Record Error for Crowdflower Worker ', wr.worker_id, ': Not Found.');
           }
           else if (workers.length > 1) {
-            console.log('Work Record Error (', wr.worker_id, '): ' + workers.length + ' Found.');
+            log.error('Work Record Error for Crowdflower Worker ', wr.worker_id, ': ' + workers.length + ' Found.');
           }
           else {
             var worker = workers[0];
@@ -67,6 +67,7 @@ module.exports = function (app) {
     },
     function giveBonuses(req, res, next) {
       async.forEach(req.work_records, function (wr, callback) {
+
         var r = {
           job_id: wr.job_id,
           worker_id: wr.worker_id,
@@ -77,13 +78,17 @@ module.exports = function (app) {
           r.amount = PAYMENT;
           r.reason = "Thank you for completing our task!";
           crowdflower.middleware.workers.bonus(r, {}, callback);
+          log.info("BONUS: " + r.worker_id + " | AMMOUNT: " + r.amount);
         }
         else {
           r.reason = "Sorry. You failed to provide a valid code.";
           crowdflower.middleware.workers.reject(r, {}, callback);
+          log.info("REJECT: " + r.worker_id + " | REASON: " + r.reason);
         }
-      }, function (a, b, c) {
-        console.log(a, b, c);
+      }, function (err){
+        if (err){
+          log.error(err);
+        }
         next();
       });
     },
