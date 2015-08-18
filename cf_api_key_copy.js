@@ -1,1 +1,1 @@
-exports = "Your Crowdflower API Key here";
+module.exports = "Your Crowdflower API Key here";
