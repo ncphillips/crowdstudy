@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width">
     <base target="_blank">
     <title>Crowd Work Demographic Survey </title>
-    <link rel="stylesheet" type="text/css" href="https://docs.google.com//fonts.googleapis.com/css?family=Roboto:400,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:400,700">
 
     <link href="https://docs.google.com/static/forms/client/css/3565662838-formview_st_ltr.css" type="text/css" rel="stylesheet">
     <style type="text/css">
@@ -234,12 +234,12 @@
             }
         }
 
-    </style><style></style>
+    </style>
 
 
     <link href="https://docs.google.com/static/forms/client/css/3145455273-mobile_formview_st_ltr.css" type="text/css" rel="stylesheet" media="screen and (max-device-width: 721px)">
 
-    <script type="text/javascript">
+    <style></style><style type="text/css"></style><script type="text/javascript">
         /**
          * @license
          *
@@ -271,7 +271,7 @@
          */
         (function(e,t){"function"==typeof define&&define.amd?define(t):"object"==typeof module&&module.exports?module.exports=t():e.H5F=t()})(this,function(){var e,t,a,i,n,r,l,s,o,u,d,c,v,p,f,m,b,h,g,y,w,C,N,A,E,$,x=document,k=x.createElement("input"),q=/^[a-zA-Z0-9.!#$%&'*+-\/=?\^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,M=/[a-z][\-\.+a-z]*:\/\//i,L=/^(input|select|textarea)$/i;return r=function(e,t){var a=!e.nodeType||!1,i={validClass:"valid",invalidClass:"error",requiredClass:"required",placeholderClass:"placeholder",onSubmit:Function.prototype,onInvalid:Function.prototype};if("object"==typeof t)for(var r in i)t[r]===void 0&&(t[r]=i[r]);if(n=t||i,a)for(var s=0,o=e.length;o>s;s++)l(e[s]);else l(e)},l=function(a){var i,r=a.elements,l=r.length,c=!!a.attributes.novalidate;if(g(a,"invalid",o,!0),g(a,"blur",o,!0),g(a,"input",o,!0),g(a,"keyup",o,!0),g(a,"focus",o,!0),g(a,"change",o,!0),g(a,"click",u,!0),g(a,"submit",function(i){return e=!0,t||c||a.checkValidity()?(n.onSubmit.call(a,i),void 0):(w(i),void 0)},!1),!v())for(a.checkValidity=function(){return d(a)};l--;)i=!!r[l].attributes.required,"fieldset"!==r[l].nodeName.toLowerCase()&&s(r[l])},s=function(e){var t=e,a=h(t),n={type:t.getAttribute("type"),pattern:t.getAttribute("pattern"),placeholder:t.getAttribute("placeholder")},r=/^(email|url)$/i,l=/^(input|keyup)$/i,s=r.test(n.type)?n.type:n.pattern?n.pattern:!1,o=p(t,s),u=m(t,"step"),v=m(t,"min"),b=m(t,"max"),g=!(""===t.validationMessage||void 0===t.validationMessage);t.checkValidity=function(){return d.call(this,t)},t.setCustomValidity=function(e){c.call(t,e)},t.validity={valueMissing:a,patternMismatch:o,rangeUnderflow:v,rangeOverflow:b,stepMismatch:u,customError:g,valid:!(a||o||u||v||b||g)},n.placeholder&&!l.test(i)&&f(t)},o=function(e){var t=C(e)||e,a=/^(input|keyup|focusin|focus|change)$/i,r=/^(submit|image|button|reset)$/i,l=/^(checkbox|radio)$/i,u=!0;!L.test(t.nodeName)||r.test(t.type)||r.test(t.nodeName)||(i=e.type,v()||s(t),t.validity.valid&&(""!==t.value||l.test(t.type))||t.value!==t.getAttribute("placeholder")&&t.validity.valid?(A(t,[n.invalidClass,n.requiredClass]),N(t,n.validClass)):a.test(i)?t.validity.valueMissing&&A(t,[n.requiredClass,n.invalidClass,n.validClass]):t.validity.valueMissing?(A(t,[n.invalidClass,n.validClass]),N(t,n.requiredClass)):t.validity.valid||(A(t,[n.validClass,n.requiredClass]),N(t,n.invalidClass)),"input"===i&&u&&(y(t.form,"keyup",o,!0),u=!1))},d=function(t){var a,i,r,l,s,u=!1;if("form"===t.nodeName.toLowerCase()){a=t.elements;for(var d=0,c=a.length;c>d;d++)i=a[d],r=!!i.attributes.disabled,l=!!i.attributes.required,s=!!i.attributes.pattern,"fieldset"!==i.nodeName.toLowerCase()&&!r&&(l||s&&l)&&(o(i),i.validity.valid||u||(e&&i.focus(),u=!0,n.onInvalid.call(t,i)));return!u}return o(t),t.validity.valid},c=function(e){var t=this;t.validationMessage=e},u=function(e){var a=C(e);a.attributes.formnovalidate&&"submit"===a.type&&(t=!0)},v=function(){return E(k,"validity")&&E(k,"checkValidity")},p=function(e,t){if("email"===t)return!q.test(e.value);if("url"===t)return!M.test(e.value);if(t){var i=e.getAttribute("placeholder"),n=e.value;return a=RegExp("^(?:"+t+")$"),n===i?!1:""===n?!1:!a.test(e.value)}return!1},f=function(e){var t={placeholder:e.getAttribute("placeholder")},a=/^(focus|focusin|submit)$/i,r=/^(input|textarea)$/i,l=/^password$/i,s=!!("placeholder"in k);s||!r.test(e.nodeName)||l.test(e.type)||(""!==e.value||a.test(i)?e.value===t.placeholder&&a.test(i)&&(e.value="",A(e,n.placeholderClass)):(e.value=t.placeholder,g(e.form,"submit",function(){i="submit",f(e)},!0),N(e,n.placeholderClass)))},m=function(e,t){var a=parseInt(e.getAttribute("min"),10)||0,i=parseInt(e.getAttribute("max"),10)||!1,n=parseInt(e.getAttribute("step"),10)||1,r=parseInt(e.value,10),l=(r-a)%n;return h(e)||isNaN(r)?"number"===e.getAttribute("type")?!0:!1:"step"===t?e.getAttribute("step")?0!==l:!1:"min"===t?e.getAttribute("min")?a>r:!1:"max"===t?e.getAttribute("max")?r>i:!1:void 0},b=function(e){var t=!!e.attributes.required;return t?h(e):!1},h=function(e){var t=e.getAttribute("placeholder"),a=/^(checkbox|radio)$/i,i=!!e.attributes.required;return!(!i||""!==e.value&&e.value!==t&&(!a.test(e.type)||$(e)))},g=function(e,t,a,i){E(window,"addEventListener")?e.addEventListener(t,a,i):E(window,"attachEvent")&&window.event!==void 0&&("blur"===t?t="focusout":"focus"===t&&(t="focusin"),e.attachEvent("on"+t,a))},y=function(e,t,a,i){E(window,"removeEventListener")?e.removeEventListener(t,a,i):E(window,"detachEvent")&&window.event!==void 0&&e.detachEvent("on"+t,a)},w=function(e){e=e||window.event,e.stopPropagation&&e.preventDefault?(e.stopPropagation(),e.preventDefault()):(e.cancelBubble=!0,e.returnValue=!1)},C=function(e){return e=e||window.event,e.target||e.srcElement},N=function(e,t){var a;e.className?(a=RegExp("(^|\\s)"+t+"(\\s|$)"),a.test(e.className)||(e.className+=" "+t)):e.className=t},A=function(e,t){var a,i,n="object"==typeof t?t.length:1,r=n;if(e.className)if(e.className===t)e.className="";else for(;n--;)a=RegExp("(^|\\s)"+(r>1?t[n]:t)+"(\\s|$)"),i=e.className.match(a),i&&3===i.length&&(e.className=e.className.replace(a,i[1]&&i[2]?" ":""))},E=function(e,t){var a=typeof e[t],i=RegExp("^function|object$","i");return!!(i.test(a)&&e[t]||"unknown"===a)},$=function(e){for(var t=document.getElementsByName(e.name),a=0;t.length>a;a++)if(t[a].checked)return!0;return!1},{setup:r}});
 
-    </script><style type="text/css"></style>
+    </script>
     <link rel="alternate" type="text/xml+oembed" href="https://docs.google.com/forms/d/12PromsTbD-SSZeBOVFBrdKhx2wgtkM1xXHoXpt3YpA8/oembed?url=https://docs.google.com/forms/d/12PromsTbD-SSZeBOVFBrdKhx2wgtkM1xXHoXpt3YpA8/viewform&amp;format=xml">
     <meta property="og:title" content="Crowd Work Demographic Survey "><meta property="og:type" content="article"><meta property="og:site_name" content="Google Docs"><meta property="og:url" content="https://docs.google.com/forms/d/12PromsTbD-SSZeBOVFBrdKhx2wgtkM1xXHoXpt3YpA8/viewform?usp=embed_facebook"><meta property="og:image" content="https://lh4.googleusercontent.com/RWkY1pu1rqMMufR5XZOie-e4a6BMqPdE0d7mXgiN1uPcEcD-ETR-seeDzjDFv3JDMaY=w1200-h630-p"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:description" content="Your responses to the questions below will be kept annonymous and will not be used to judge you personally. We are interested in general trends and how they can help us learn more about crowd workers.
 
@@ -576,6 +576,22 @@ Please answer accurately and honestly. Your responses will be verified before a 
                                         </label></li></ul>
                                 <div class="error-message" id="1175591087_errorMessage"></div>
                                 <div class="required-message">This is a required question</div></div></div></div> <div class="ss-form-question errorbox-good" role="listitem">
+                        <div dir="auto" class="ss-item ss-item-required ss-radio"><div class="ss-form-entry">
+                                <label class="ss-q-item-label" for="entry_1615511125"><div class="ss-q-title">What type of pointing device are you currently using to complete this task?
+                                        <label for="itemView.getDomIdToLabel()" aria-label="(Required field)"></label>
+                                        <span class="ss-required-asterisk" aria-hidden="true">*</span></div>
+                                    <div class="ss-q-help ss-secondary-text" dir="auto"></div></label>
+
+                                <ul class="ss-choices" role="radiogroup" aria-label="What type of pointing device are you currently using to complete this task?  "><li class="ss-choice-item"><label><span class="ss-choice-item-control goog-inline-block"><input type="radio" name="entry.1380358086" value="a mouse" id="group_1380358086_1" role="radio" class="ss-q-radio" aria-label="a mouse" required="" aria-required="true"></span>
+                                            <span class="ss-choice-label">a mouse</span>
+                                        </label></li> <li class="ss-choice-item"><label><span class="ss-choice-item-control goog-inline-block"><input type="radio" name="entry.1380358086" value="a trackpad" id="group_1380358086_2" role="radio" class="ss-q-radio" aria-label="a trackpad" required="" aria-required="true"></span>
+                                            <span class="ss-choice-label">a trackpad</span>
+                                        </label></li> <li class="ss-choice-item"><label><span class="ss-choice-item-control goog-inline-block"><input type="radio" name="entry.1380358086" value="__other_option__" id="group_1380358086_3" role="radio" class="ss-q-radio ss-q-other-toggle" required="" aria-required="true"></span>
+                                            <span class="ss-choice-label">Other:</span></label>
+                                        <span class="ss-q-other-container goog-inline-block"><input type="text" name="entry.1380358086.other_option_response" value="" class="ss-q-other" id="entry_1380358086_other_option_response" dir="auto" aria-label="Other"></span>
+                                    </li></ul>
+                                <div class="error-message" id="1615511125_errorMessage"></div>
+                                <div class="required-message">This is a required question</div></div></div></div> <div class="ss-form-question errorbox-good" role="listitem">
                         <div dir="auto" class="ss-item ss-item-required ss-grid"><div class="ss-form-entry">
                                 <label class="ss-q-item-label" for="entry_1278436069"><div class="ss-q-title">Please rate your agreement with the following statements
                                         <label for="itemView.getDomIdToLabel()" aria-label="(Required field)"></label>
@@ -660,13 +676,14 @@ Please answer accurately and honestly. Your responses will be verified before a 
                                     </li></ul>
                                 <div class="error-message" id="979182047_errorMessage"></div>
                                 <div class="required-message">This is a required question</div></div></div></div>
-                    <input type="hidden" name="draftResponse" value="[,,&quot;3188958092362877157&quot;]
+                    <input type="hidden" name="draftResponse" value="[,,&quot;-6870496848519511016&quot;]
 ">
                     <input type="hidden" name="pageHistory" value="0">
+
                     <input type="hidden" name="fvv" value="0">
 
 
-                    <input type="hidden" name="fbzx" value="3188958092362877157">
+                    <input type="hidden" name="fbzx" value="-6870496848519511016">
 
                     <div class="ss-item ss-navigate"><table id="navigation-table"><tbody><tr><td class="ss-form-entry goog-inline-block" id="navigation-buttons" dir="ltr">
                                     <input type="submit" name="submit" value="Submit" id="ss-submit" class="jfk-button jfk-button-action ">
@@ -689,7 +706,7 @@ Please answer accurately and honestly. Your responses will be verified before a 
         <div id="docs-aria-speakable" class="docs-a11y-ariascreenreader-speakable docs-offscreen" aria-live="assertive" role="region" aria-atomic="" aria-relevant="additions">Screen reader support enabled. </div></div>
 
 
-    <script type="text/javascript" src="https://docs.google.com/static/forms/client/js/4066025181-formviewer_prd.js"></script>
+    <script type="text/javascript" src="https://docs.google.com/static/forms/client/js/1341943891-formviewer_prd.js"></script>
     <script type="text/javascript">H5F.setup(document.getElementById('ss-form'));
         _initFormViewer(
                 "[100,,[[[957925116,[[1,7,[\x221900\x22,\x222010\x22]\n,\x22Please enter a valid year.\x22]\n]\n]\n,[1367828538,[[6,203,[\x2230\x22]\n,\x22Please provide a few more details.\x22]\n]\n]\n,[2116274153,[[1,1,[\x220\x22]\n,\x22Please enter a positive value.\x22]\n]\n]\n]\n]\n]\n");</script></div></body><div></div></html>
