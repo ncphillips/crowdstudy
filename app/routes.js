@@ -66,7 +66,7 @@ module.exports = function (app) {
       }, next);
     },
     function giveBonuses(req, res, next) {
-      req.work_records.forEach(function (wr) {
+      req.work_records.forEach(function (wr, i) {
 
         var r = {
           job_id: wr.job_id,
@@ -80,24 +80,15 @@ module.exports = function (app) {
           setTimeout(function () {
             crowdflower.middleware.workers.bonus(r, {}, function (err) { if (err) { log.error(err); } });
             log.info("BONUS: " + r.worker_id + " | AMOUNT: " + r.amount);
-          }, 1000);
+          }, 1000 * i);
         }
         else {
           r.reason = "Sorry. You failed to provide a valid code.";
           setTimeout(function () {
-            crowdflower.middleware.workers.reject(r, {}, function (err) {
-              if (err) {
-                log.error(err);
-              }
-            });
+            crowdflower.middleware.workers.reject(r, {}, function (err) { if (err) { log.error(err); } });
             log.info("REJECT: " + r.worker_id + " | REASON: " + r.reason);
-          }, 1000);
+          }, 1000 * i);
         }
-      }, function (err){
-        if (err){
-          log.error(err);
-        }
-        next();
       });
     },
     function (req, res) {
