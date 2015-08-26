@@ -155,4 +155,4 @@ _Dispatcher.prototype._stopDispatching = function () {
   this._isDispatching = false;
 };
 
-var Dispatcher = new _Dispatcher();
+var CrowdDispatcher = new _Dispatcher();
