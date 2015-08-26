@@ -81,9 +81,15 @@ _Dispatcher.prototype.waitFor = function (ids) {
  *
  * @param {object} payload
  */
-_Dispatcher.prototype.dispatch = function (payload) {
+_Dispatcher.prototype.dispatch = function (payload, tries) {
   if (this._isDispatching) {
-    throw new Error('Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.');
+    tries = (tries || 0) + 1;
+    if (tries < 15) {
+      setTimeout(this.dispatch.bind(this, payload, tries), 100);
+    }
+    else {
+      throw new Error('Dispatch.dispatch(...): Blocked from dispatching.');
+    }
   }
   this._startDispatching(payload);
   try {
@@ -149,4 +155,4 @@ _Dispatcher.prototype._stopDispatching = function () {
   this._isDispatching = false;
 };
 
-var CrowdDispatcher = new _Dispatcher();
+var Dispatcher = new _Dispatcher();
