@@ -2,10 +2,12 @@
 'use strict';
 var PAYMENT = 74;
 
+var MongoClient = require('mongodb').MongoClient;
 var controllers = require('./controllers');
 var crowdflower = require('crowdstudy_crowdflower_api');
 var async = require('async');
 var log = global.log;
+var config = require('../config');
 
 module.exports = function (app) {
   app.get('/', controllers.index);
@@ -19,13 +21,11 @@ module.exports = function (app) {
     crowdflower.middleware.webhook.parsePayload,
     function findJudgments(req, res, next) {
       req.judgments = req.payload.results.judgments;
-      console.log(req.payload);
       next();
     },
     function parseWorkRecords(req, res, next) {
       req.work_records = [];
       req.judgments.forEach(function (judgment, index) {
-        console.log(judgment.data);
         var experiments = ['pointing_task', 'whack_a_mole', 'writing_task'];
         experiments.map(function (experiment) {
           var code = judgment.data[experiment + '_code'];
@@ -58,7 +58,7 @@ module.exports = function (app) {
           else {
             var worker = workers[0];
             var experiment = worker.experiments[wr.experiment];
-            req.work_records[count].giveBonus = experiment.code === wr.code;
+            req.work_records[count].giveBonus = experiment.code === wr.code && !experiment.paid;
           }
           count++;
           callback();
@@ -78,7 +78,31 @@ module.exports = function (app) {
           r.amount = PAYMENT;
           r.reason = "Thank you for completing our task!";
           setTimeout(function () {
-            crowdflower.middleware.workers.bonus(r, {}, function (err) { if (err) { log.error(err); } });
+            crowdflower.middleware.workers.bonus(r, {}, function (err) {
+              if (err) {
+                log.error(err);
+              }
+              var connection_options = {
+                server: { socketOptions: { connectTimeoutMS: 1000, socketTimeoutMS: 1000 }, auto_reconnect: false }
+              };
+              MongoClient.connect(config.server.db, connection_options,  function (err, db) {
+                if (!err) {
+                  db.collection('workers').find({id: "" + wr.worker_id}).toArray(function (err, workers) {
+                    if (err || !workers.length) {
+                      console.log("Failed to mark worker as paid:", wr.worker_id);
+                    }
+                    else {
+                      var worker = workers[0];
+                      worker.experiments[wr.experiment].paid = true;
+                      db.collection('workers').update({_id: worker._id}, worker, function (a, b, c) {
+                        console.log(a, b, c);
+                        db.close();
+                      });
+                    }
+                  });
+                }
+              });
+            });
             log.info("BONUS: " + r.worker_id + " | AMOUNT: " + r.amount);
           }, 1000 * i);
         }
@@ -90,6 +114,7 @@ module.exports = function (app) {
           }, 1000 * i);
         }
       });
+      next();
     },
     function (req, res) {
       res.status(200).send(req.work_records);
