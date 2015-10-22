@@ -166,7 +166,7 @@ a React component, and then pass it to the CrowdExperiment application. For exam
 
     React.render(
       <CrowdExperiment experiment_name="MyExperiment" experiment_app={MyExperiment}/>,
-      document.getElementById('experiment')
+      document.getElementById('experiment');
     );
 
 #### Workers 
