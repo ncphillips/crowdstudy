@@ -1,48 +1,44 @@
-# Crowd Study
-The UPEI HCI Lab will be conducting a number of experiments related to 
-crowd work. In order to track data gathered from these experiments, we 
-have created CrowdStudy. This application for serving files, and 
-collecting results for each experiment.
+# Crowdstudy
 
-## Getting Started
-Before you can get started using the Crowd Study platform, you must make sure to sign up for
-both Crowdflower and Amazon's Mechanical Turk.
+Crowdstudy is an Node-Express project for running crowd work experiments.
 
-### Crowdflower
+* Access to a Mongo database is provided to middleware via `req.db`.
+* EJS is used for rendering views.
+* Express sub-apps can be used to provide new functionality or experiments.
+
+## Crowdflower
 * [Signup](http://make.crowdflower.com) to be a Crowdflower requester.
 * Go to the [user page](https://make.crowdflower.com/account/user) and copy your API Key.
 * `cp /path/to/crowdstudy/cf_api_key_dummy.js /path/to/crowdstudy/cf_api_key.js`
 * Open `/path/to/crowdstudy/cf_api_key.js` and paste your API Key in the quotes.
 
 
-### Amazon Mechanical Turk
-The following instructions come from `/path/to/crowdstudy/mturk-clt/GetStarted.html`:
-
-* [Sign up](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html) for an Amazon Web Services account.
-* [Sign up](https://requester.mturk.com) to be an Amazon Mechanical Turk requester
-
-#### Setting up the Command Line Tools (NOT IMPLEMENTED)
-This sections describes how to set up the Mechanical Turk Command Line Tools. Currently, Crowd Study does not use
-the mTurk Command Line Tools, but just in case it does in the future, here are some instructions.
-
-* Configure the Command Line Tools to use your AWS identifier:
-    * View the [Security Credentials](https://console.aws.amazon.com/iam/home?#security_credential) page to find or
-    generate your access and security keys. These must be for your root account, not for one of the IAM User accounts.
-    * `cp /path/to/crowdstudy/mturk-clit/bin/mturk.properties_copy /path/to/crowdstudy/mturk-clit/bin/mturk.properties`
-    * Open `mturk-clit/bin/mturk.properties`
-    * On lines 11 and 12, insert your access and secret keys, respectively.
-* Set the `MTURK_CMD_HOME` environment variable to `./mturk-clt`
-    * `echo export MTURK_CMD_HOME="/path/to/crowdstudy/mturk-clt" >> ~/.profile`
-* Make sure you have the Java JRE installed:
-    * The default JRE can be installed with `sudo apt-get install default-jre`, but any other version will do.
-* Set the `JAVA_HOME` environment variable to your Java Standard Edition Runtime Environment (JRE) installation location.
-    * With default-jre, run `echo export JAVA_HOME="/usr/" >> ~/.profile`
-* Test things out by getting your AWS account balance.
-    * `cd /path/to/crowdstudy/mturk-clt/bin/`
-    * `sh getBalance.sh`
-    * This should print something like `Your account balance: $0.00`
-    * **Note:** This MUST be run from within `mturk-clt/bin` directory.
+    // @module cf_api_key.js
+    module.exports = "BWzjrz3NURGCG_NgLrNq";
     
+### Crowdflower Job Setup
+
+Navigate to Crowdflower's [new job page](http://make.crowdflower.com/jobs/new).
+
+Under **Survey Job** click **Get Started**.
+
+Go to the CML Editor.
+
+Set the Title and Instructions to what you want.
+
+Use the following CML, but make sure to replace the link url:
+
+    <h3>
+      <a href="https://example.com/external_experiment" 
+         class="clicked validates-clicked" target="_blank">
+           Follow this link to complete our survey!
+      </a>
+    </h3>
+    <cml:text label="Survey Code" name="code" validates="required" 
+              data-validates-regex-message="Please copy and paste the code here that can be found at the end of the Survey" 
+              default="Enter code here..." instructions="Enter Survey code in this field after completing" />
+              
+  
 ## Server & Framework
 
 The server is written in Javascript using the Expressjs framework. It is
@@ -63,30 +59,28 @@ Run the following commands to install io.js on your machine.
     echo nvm use iojs >> ~/.profile
     source ~/.profile
     
-## Database
+    # Move to the crowdstudy folder, and install node modules
+    cd /path/to/crowdstudy
+    npm install
+
+### Database
 Data is stored in a Mongo database, which is made accessible through `req.db`. By default, there are no models 
 or any other kind of type checking, but feel free to add them as needed. 
 
-Note: req.db is not accessible form socket functions.
-
-
-### The Worker Collection
+#### The Worker Collection
+This is implemented by the [Worker App](http://github.com/ncphillips/crowdstudy_worker)
 Information about workers from Crowdflower and Mechanical Turk will be stored in a 
-MongoDB `workers` collection. Although there is currently no helper functions or 
-validation for these documents, they should have the following structure:
+MongoDB `workers` collection. They have the following structure:
 
     {
+        _id: "ab1ff14fba2516b0",    // MongoDB _id
         id: 1341235,                // The Crowdflower or mTurk ID.
         platform: 'crowdflower',    // A string containing either "crowdflower" or "mturk"
         experiments: {              // Each sub-object here will have whatever format suits the experiment.
-            ajax_interaction: {
-                headers: { ... },
-                img: ['a.jpg', 'c.jpg'],
+            MyExperiment: {
+               data: "Worker Input"
             },
-            example: {
-                name: 'Billy Joel'
-            },
-            external_link: {
+            boopExp: {
                 dob: {
                     year: 1992,
                     month: 2,
@@ -96,115 +90,158 @@ validation for these documents, they should have the following structure:
         }
     }
 
-## View rendering
-Pages are rendered server side using the EJS view engine.
+## Sub Apps
+### Installing Sub Apps
+Sub apps are registered in the `INSTALLED_APPS` array in `config.js`.
 
-Any client side JSX files located in an experiments `experiments/**/public/scripts/` directory are compiled to 
-Javascript when the server starts. The JS files are then compressed and put in `public/scripts/build/experiments/'
-by Browserified, along with the `CrowdExperiments` react component, in which you should wrap your experiment app.
+If your sub app is not loaded using `npm` you should be able to 
+use a relative path in `INSTALLED_APPS` instead.
 
-## Documentation
-Two forms of documentation applications will used in this project: docco and JSDocs.
+### Mounting Sub Apps to URLs
+Sub apps are mounted on a url endpoint matching their name. For example,
+a sub app named `foo` will be accessible from `example.com/foo/`. 
 
-Run `docco *` at the command line to generate docco docs.
+Note that sub apps whose name begins with `crowdstudy_` will be
+mounted without that prefix. e.g. `crowdstudy_bar` will be 
+accessible from `example.com/bar`.
 
-JSDocs is not yet supported.
+### Sub App Structure
 
-## Experiments
-Each experiment is represented by an Express app located in the `experiments` directory. These 
-experiments are mounted on a URL which corresponds to the experiment name. 
+The only real restriction on Sub App design is that the module 
+must expose an `app` property. Crowdstudy looks for this app 
+property when trying to mount the app on its URL.
 
-### Basic App Structure
-Experiment sub-applications have the following structure:
+e.g. `var barApp = require('crowdstudy_bar').app;`
 
-    example/
-        public/
-            images/
-                img_0.png
-                img_1.png
-            scripts/
-                ExampleButton.jsx
-                ExampleButton.js
-                ExampleInput.jsx
-                ExampleInput.js
-        views/
-            MyView.ejs
-        app.js
-        controllers.js
-        routes.js
-        sockets.js
-        
+Current apps use the following structure for their main `js` file:
 
-* app.js – This file exports the experiment as an application. It sets up the experiment specific views, static files, and routes.
-* controller.js – Contains middleware and controller functions for handling requests.
-* routes.js - Is a function which sets up the routes needed for the experiment.
-* sockets.js - (Optional) Exports a function accepting the `config` and `server` objects. This can be used to set up sockets.
-* views/ – Contains EJS views. 
-* public/ – Contains public files specific to this experiment.
-    * scripts/ – `.jsx` files here are compiled to `.js` files in the same directory when the server starts. 
+    var app = require('express')();
 
-Check out example experiment's source code to see how it's being used. 
+    // Tells the application to look for views in `./views` before 
+    // looking in the global views folder..
+    app.set('views', __dirname+'/views');
 
-A couple notes on creating experiments:
+    // Static files are in ./public and are available at this route.
+    // Example:
+    //      <img src="/mole_0.jsx"/>
+    app.use(express.static(__dirname + '/public'));
 
-1. You shouldn't have to change `app.js` for different experiments.
-1. Make sure any scripts being loaded into views are `https` safe.
+    // Loads this application's routes.
+    require('./routes.js')(app);
 
-### Link Example
-Some experiments will be carried out using an link on the job page. This link takes him to a page hosted by this platform
-where he is asked to supply his Crowdflower or mTurk worker id, and complete a survey. After completing the survey, the 
-worker is given code which he must paste into a textfield back on Crowdflower/mTurk. The worker is then given a bonus
-if he has submitted the correct code.
+    module.exports.app = app;
+    module.exports.controllers = require('./controllers');
 
-This experiment is pretty simple: 3 views, 3 routes, 3 controllers, and a couple helper functions.
+This structure sets some things up for static files and routes, but it
+is by no means the only way to write a sub app. As long as the module
+exports the `express` app in an `app` property.
 
-`GET /` calls the `get_survey` controller, which renders `survey.jsx` to show the worker the initial survey page.
+* [Pointing Task](http://github.com/ncphillips/crowdstudy_pointing_task)
+* [Whack a Mole](http://github.com/ncphillips/crowdstudy_whack_a_mole)
+* [Writing Task](http://github.com/ncphillips/crowdstudy_writing_task)
 
-`POST /` calls `post_survey` which validates the form. If it is not valid, then `survey.jsx` is re-rendered with the appropriate errors. If the form
-is valid, then the worker's information is saved to Mongo and a code is generated and displayed by rendering `code_page.jsx`.
+### Crowdstudy React
+A single page [React](https://facebook.github.io/react/) application called
+`CrowdExperiment` has been created to facilitate running 
+crowd experiments. This app does the following things:
 
-If an unexpected error occurs, `error_page.jsx` is rendered.
+ * Registers the Worker using their ID and platform information.
+ * Collects consent from the worker.
+ * Has the worker complete an entrance demographics survey>
+ * Runs the experiment.
+     * this.props._exit()
+ * Has the worker complete an exit survey.
+ * Generates a Confirmation Code for the worker to copy-and-paste back on 
+   the crowd work platform they came from.
+   
+In order to save data collected during the experiment, you will have access to
+the `ExperimentActions` and `ExperimentStore`. Your React component will be 
+passed a `prop` called `_exit`. This is a function that, when called, tells
+the `CrowdExperiment` app that the experiment is over–it then m
+   
+#### Running your Experiment
+In order to take advantage of this, you will need to wrap your experiment in
+a React component, and then pass it to the CrowdExperiment application. For example:
 
-`POST /webhook` is accessed by Crowdflower for when send back the judgments gathered. The `webhook` controller handles this route.
 
-#### Crowdflower Job Setup
+    React.render(
+      <CrowdExperiment experiment_name="MyExperiment" experiment_app={MyExperiment}/>,
+      document.getElementById('experiment')
+    );
 
-Navigate to Crowdflower's [new job page](http://make.crowdflower.com/jobs/new).
+#### Workers 
+The `WorkerStore` and `WorkerActions` objects can be used to interact with
+a worker's information.
 
-Under **Survey Job** click **Get Started**.
+You can have your React Experiment listen for changes to the Worker model 
+by calling `WorkerStore.addChangeListener` inside the `componentDidMount`
+function of a component. Remember to stop listening to the component with
+`WorkerStore.removeChangeListener` inside the `componentWillUnmount`
+function of the component. To get the current Worker object from the
+store, use `WorkerStore.get`. For example:
 
-Go to the CML Editor.
+    var MyExperiment = React.createClass({
+      render: function () { /* ... */ },
+      
+      componentDidMount: function () {
+        // Start listening for changes to the Worker
+        WorkerStore.addChangeListener(this.refreshWorker);
+      },
+      
+      componentWillUnmount: function () {
+        // Stop listening for changes to the Worker
+        WorkerStore.removeChangeListener(this.refreshWorker);
+      },
+      
+      refreshWorker: function () {
+        // Get the worker and update the components State.
+        this.setState({worker: WorkerStore.get()});
+      }
+    });
+    
+Changes can be made to the Worker object by calling 
+`WorkerActions.update`. For example:
 
-Set the Title and Instructions to what you want.
 
-Use the following CML, but make sure to replace the link url:
+    var worker = WorkerStore.get();
+    worker.first_name = 'Billy';
+    worker.last_name = 'Joel';
+    
+    /**
+     * @params worker_id: String
+     * @params worker: object
+     */
+    WorkerActions.update(worker._id, worker);
 
-    <h3>
-      <a href="https://hcilab.csit.upei.ca:8998/external_link" 
-         class="clicked validates-clicked" target="_blank">
-           Follow this link to complete our survey!
-      </a>
-    </h3>
-    <cml:text label="Survey Code" name="code" validates="required" 
-              data-validates-regex-message="Please copy and paste the code here that can be found at the end of the Survey" 
-              default="Enter code here..." instructions="Enter Survey code in this field after completing" />
-              
-              
-#### Mechanical Turk Job Setup
+This will update the worker object both locally and on the server.
 
-Navigate to the mTurk [New Project](https://requester.mturk.com/create/projects/new) page.
+#### Experiments
 
-Select the **Survey Link** template and press **Create Project**.
- 
-Enter the properties as you see fit.
+Experiments can be accessed and modified in a very similar way to Workers, by
+using the `ExperimentStore` and `ExperimentActions` objects.
 
-Change the Survey Link URL on the **Design Layout** page to your URL.
- 
-Save the project and Publish a batch.
+The `ExperimentStore` holds only one experiment at a time. You can get 
+that experiment by calling `ExperimentStore.get`.
 
-## Using CrowdStudy
-To run the CrowdStudy server:
+Experiment objects can be updated using `ExperimentActions.update`. For example:
 
-    grunt | bunyan -o short
+    var worker = WorkerStore.get();
+    var experiment = ExperimentStore.get();
+    
+    experiment.data = "Some new data";
+    
+    /**
+     * @param worker_id: String
+     * @param experiment_name: String
+     * @param experiment: object
+     */
+    ExperimentActions.update(worker._id, 'MyExperiment', experiment);
 
+
+## Running Crowdstudy
+Run the Server: `node server.js`
+
+Crowdstudy names the database it's connected to based off the 
+`NODE_ENV` environment variable. If you want to change the database
+to use, then run this command: `NODE_ENV=production node server.js`
 
